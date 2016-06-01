@@ -15,6 +15,8 @@
 		667A9FD51CFEC619009B1D53 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 667A9FD31CFEC619009B1D53 /* LaunchScreen.storyboard */; };
 		667A9FE01CFEC619009B1D53 /* FanKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FDF1CFEC619009B1D53 /* FanKitTests.m */; };
 		667A9FEB1CFEC619009B1D53 /* FanKitUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FEA1CFEC619009B1D53 /* FanKitUITests.m */; };
+		667A9FFE1CFED527009B1D53 /* UIView+FanAutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FFD1CFED527009B1D53 /* UIView+FanAutoLayout.m */; };
+		667AA0011CFED559009B1D53 /* FanAnimationToll.m in Sources */ = {isa = PBXBuildFile; fileRef = 667AA0001CFED559009B1D53 /* FanAnimationToll.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,11 @@
 		667A9FE61CFEC619009B1D53 /* FanKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FanKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		667A9FEA1CFEC619009B1D53 /* FanKitUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FanKitUITests.m; sourceTree = "<group>"; };
 		667A9FEC1CFEC619009B1D53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		667A9FFC1CFED527009B1D53 /* UIView+FanAutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FanAutoLayout.h"; sourceTree = "<group>"; };
+		667A9FFD1CFED527009B1D53 /* UIView+FanAutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+FanAutoLayout.m"; sourceTree = "<group>"; };
+		667A9FFF1CFED559009B1D53 /* FanAnimationToll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanAnimationToll.h; sourceTree = "<group>"; };
+		667AA0001CFED559009B1D53 /* FanAnimationToll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanAnimationToll.m; sourceTree = "<group>"; };
+		667AA0021CFEDB31009B1D53 /* FanKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanKit.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +88,7 @@
 		667A9FB91CFEC619009B1D53 = {
 			isa = PBXGroup;
 			children = (
+				667A9FF81CFED46A009B1D53 /* Classes */,
 				667A9FC41CFEC619009B1D53 /* FanKit */,
 				667A9FDE1CFEC619009B1D53 /* FanKitTests */,
 				667A9FE91CFEC619009B1D53 /* FanKitUITests */,
@@ -138,6 +146,42 @@
 				667A9FEC1CFEC619009B1D53 /* Info.plist */,
 			);
 			path = FanKitUITests;
+			sourceTree = "<group>";
+		};
+		667A9FF81CFED46A009B1D53 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				667A9FF91CFED46A009B1D53 /* FanKit */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		667A9FF91CFED46A009B1D53 /* FanKit */ = {
+			isa = PBXGroup;
+			children = (
+				667A9FFB1CFED4FF009B1D53 /* Core */,
+				667A9FFA1CFED4C7009B1D53 /* UIKit */,
+				667AA0021CFEDB31009B1D53 /* FanKit.h */,
+			);
+			path = FanKit;
+			sourceTree = "<group>";
+		};
+		667A9FFA1CFED4C7009B1D53 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				667A9FFC1CFED527009B1D53 /* UIView+FanAutoLayout.h */,
+				667A9FFD1CFED527009B1D53 /* UIView+FanAutoLayout.m */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		667A9FFB1CFED4FF009B1D53 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				667A9FFF1CFED559009B1D53 /* FanAnimationToll.h */,
+				667AA0001CFED559009B1D53 /* FanAnimationToll.m */,
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -271,6 +315,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				667A9FCD1CFEC619009B1D53 /* ViewController.m in Sources */,
+				667AA0011CFED559009B1D53 /* FanAnimationToll.m in Sources */,
+				667A9FFE1CFED527009B1D53 /* UIView+FanAutoLayout.m in Sources */,
 				667A9FCA1CFEC619009B1D53 /* AppDelegate.m in Sources */,
 				667A9FC71CFEC619009B1D53 /* main.m in Sources */,
 			);
@@ -498,6 +544,7 @@
 				667A9FF11CFEC619009B1D53 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		667A9FF21CFEC619009B1D53 /* Build configuration list for PBXNativeTarget "FanKitTests" */ = {
 			isa = XCConfigurationList;
@@ -506,6 +553,7 @@
 				667A9FF41CFEC619009B1D53 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		667A9FF51CFEC619009B1D53 /* Build configuration list for PBXNativeTarget "FanKitUITests" */ = {
 			isa = XCConfigurationList;
@@ -514,6 +562,7 @@
 				667A9FF71CFEC619009B1D53 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
