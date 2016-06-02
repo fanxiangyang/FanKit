@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-            一个iOS集成实用工具库
+            一个iOS集成实用工具库,以后会添加更多更多的工具，实用类，封装类，封装小效果
                    DESC
 
   s.homepage     = "https://github.com/fanxiangyang/FanKit"
