@@ -24,7 +24,7 @@ Installation（安装）
 ### 手动安装
 
 1. 下载 FanKit项目。
-2. 将 YYKit项目里面Classes文件夹及内的源文件添加(拖放)到你的工程。
+2. 将 FanKit项目里面Classes文件夹及内的源文件添加(拖放)到你的工程。
 3. 链接以下 frameworks:
     * UIKit
     * CoreFoundation
