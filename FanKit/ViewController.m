@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "FanKit.h"
 
 @interface ViewController ()
 

@@ -12,13 +12,15 @@
 #ifndef FanKit_h
 #define FanKit_h
 
+#import "FanKitHead.h"
 
 #import "FanAnimationToll.h"
+#import "FanDataTool.h"
 
 
-
+#import "FanUIKit.h"
 #import "UIView+FanAutoLayout.h"
-
+#import "UIViewController+FanRoot.h"
 
 
 #endif /* FanKit_h */
