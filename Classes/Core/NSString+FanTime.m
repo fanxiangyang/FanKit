@@ -10,20 +10,20 @@
 
 #define FanMINUTES		60
 #define FanHOURS		3600
-#define FanDAYS		86400
+#define FanDAYS         86400
 #define FanMONTHS		(86400 * 30)
 #define FanYEARS		(86400 * 30 * 12)
 
 @implementation NSString (FanTime)
-/**
- *  字符串转成日期
- *
- *  @param dateStr yyyy-MM-dd hh:mm:ss  至少10个字符串
- *
- *  @return 日期
- */
-+ (NSDate *)fan_stringToDate:(NSString *)dateStr {
-    
+
++ (NSDate *)fan_stringToDate:(NSString *)dateStr isGMT:(BOOL)isGMT{
+    if (isGMT) {
+        return  [[self class]fan_stringToDate:dateStr timeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    }else{
+        return  [[self class]fan_stringToDate:dateStr timeZone:[NSTimeZone localTimeZone]];
+    }
+}
++ (NSDate *)fan_stringToDate:(NSString *)dateStr timeZone:(NSTimeZone *)timeZone{
     if (10 > [dateStr length]) {
         
         return [NSDate date];
@@ -78,21 +78,11 @@
     [comps setSecond:	[sec integerValue]];
     
     NSCalendar *gregorian = [NSCalendar autoupdatingCurrentCalendar];
+    gregorian.timeZone=timeZone;
     NSDate *returnDate = [gregorian dateFromComponents:comps];
     return returnDate;
 }
-
-/**
- *  格式化日期（几年，几天前，几点前）
- *
- *  @param dateStr yyyy-MM-dd hh:mm:ss  至少10个字符串
- *
- *  @return （几年，几天前，几点前）
- */
-+ (NSString *)fan_stringFromCurrent:(NSString *)dateStr {
-    
-    NSDate *earlierDate = [NSString fan_stringToDate:dateStr];
-    
++ (NSString *)fan_stringFromDate:(NSDate *)earlierDate{
     NSDate *sysDate = [NSDate date];
     double timeInterval = [sysDate timeIntervalSinceDate:earlierDate];
     
@@ -142,6 +132,20 @@
     }
     return [NSString stringWithFormat:@"%ld 秒以前", (long)timeInterval];
 }
+/**
+ *  格式化日期（几年，几天前，几点前）
+ *
+ *  @param dateStr yyyy-MM-dd hh:mm:ss  至少10个字符串
+ *  @param isGMT   是否是标准时间（GMT格林威治时间）否：本地时区
+ *
+ *  @return （几年，几天前，几点前）
+ */
++ (NSString *)fan_stringFromCurrent:(NSString *)dateStr isGMT:(BOOL)isGMT{
+    
+    NSDate *earlierDate = [NSString fan_stringToDate:dateStr isGMT:isGMT];
+    return [[self class]fan_stringFromDate:earlierDate];
+    
+}
 
 /**
  *  时间戳转化为时间字符串
@@ -169,9 +173,9 @@
  *  直接汉字          昨天
  *  今天时刻          21:15
  */
-+ (NSString *)fan_getTheRightTimeWith:(id)timeObj{
++ (NSString *)fan_getTheRightTimeWith:(id)timeObj isGMT:(BOOL)isGMT{
     NSString *returnStr;//返回字符串
-    NSTimeInterval timeNum=0.0;
+    NSTimeInterval timeNum=0.0;//本地的
     
     if([timeObj isKindOfClass:[NSDate class]])
     {
@@ -194,7 +198,7 @@
                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                 [formatter setDateFormat:@"YYYY/MM/dd"];
                 //设置时区 NSDataFormatter默认输出格林威治时间，要输出本地时间要设置时区 ，跟北京时间差8小时
-                [formatter setTimeZone:[NSTimeZone localTimeZone]];
+                [formatter setTimeZone:isGMT?[NSTimeZone timeZoneWithName:@"GMT"]:[NSTimeZone localTimeZone]];
                 NSDate *theDate =  [formatter dateFromString:timeStr];
                 timeNum = [theDate timeIntervalSince1970];
             }else{
@@ -207,7 +211,7 @@
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
             //设置时区 NSDataFormatter默认输出格林威治时间，要输出本地时间要设置时区 ，跟北京时间差8小时
-            [formatter setTimeZone:[NSTimeZone localTimeZone]];
+            [formatter setTimeZone:isGMT?[NSTimeZone timeZoneWithName:@"GMT"]:[NSTimeZone localTimeZone]];
             NSDate *theDate =  [formatter dateFromString:timeStr];
             timeNum = [theDate timeIntervalSince1970];
         }
@@ -224,7 +228,7 @@
     [dateFormatter1 setTimeZone:[NSTimeZone localTimeZone]];
     NSString *currentDateStr1 = [dateFormatter1 stringFromDate:[NSDate date]];
     
-    NSTimeInterval timeNowNum = [[NSString fan_stringToDate:currentDateStr1]timeIntervalSince1970];
+    NSTimeInterval timeNowNum = [[NSString fan_stringToDate:currentDateStr1 isGMT:NO]timeIntervalSince1970];
     
     //要处理的date
     NSDate *lastDate = [NSDate dateWithTimeIntervalSince1970:timeNum];

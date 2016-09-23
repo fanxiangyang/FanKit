@@ -51,6 +51,7 @@
 +(UIButton*)fan_createButtonWithFrame:(CGRect)frame target:(id)target action:(SEL)action title:(NSString*)title titleColor:(UIColor *)titleColor;
 +(UIButton*)fan_createButtonWithFrame:(CGRect)frame imageName:(NSString*)imageName target:(id)target action:(SEL)action title:(NSString*)title titleColor:(UIColor *)titleColor;
 #pragma mark --创建UITextField
++(UITextField*)fan_createTextFieldWithFrame:(CGRect)frame placeholder:(NSString*)placeholder Font:(float)font backgoundColor:(UIColor*)bgColor;
 +(UITextField*)fan_createTextFieldWithFrame:(CGRect)frame placeholder:(NSString*)placeholder leftImageView:(UIImageView*)imageView rightImageView:(UIView*)rightImageView Font:(float)font;
 
 #pragma mark 创建UIScrollView
@@ -59,4 +60,7 @@
 +(UIPageControl*)fan_createPageControlWithFram:(CGRect)frame;
 #pragma mark 创建UISlider
 +(UISlider*)fan_createSliderWithFrame:(CGRect)rect thumbImage:(NSString*)imageName;
++(UISlider*)fan_createSliderWithFrame:(CGRect)rect thumbImage:(NSString*)imageName target:(id)target action:(SEL)action;
+#pragma mark 创建UISwitch
++(UISwitch *)fan_createSwitchWithFrame:(CGRect)rect target:(id)target action:(SEL)action;
 @end

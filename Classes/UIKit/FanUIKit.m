@@ -206,7 +206,7 @@
     label.backgroundColor=[UIColor clearColor];
     label.font=[UIFont systemFontOfSize:font];
     //单词折行
-    label.lineBreakMode=NSLineBreakByWordWrapping;
+    //    label.lineBreakMode=NSLineBreakByWordWrapping;
     //默认字体颜色是白色
     //    label.textColor=[UIColor blackColor];
     //自适应（行数~字体大小按照设置大小进行设置）
@@ -250,7 +250,7 @@
     return imageView ;
 }
 
-+(UITextField*)fan_createTextFieldWithFrame:(CGRect)frame placeholder:(NSString*)placeholder leftImageView:(UIImageView*)imageView rightImageView:(UIView*)rightImageView Font:(float)font
++(UITextField*)fan_createTextFieldWithFrame:(CGRect)frame placeholder:(NSString*)placeholder leftImageView:(UIView*)imageView rightImageView:(UIView*)rightImageView Font:(float)font
 {
     UITextField*textField=[[UITextField alloc]initWithFrame:frame];
     //灰色提示框
@@ -261,7 +261,7 @@
     //边框
     //textField.borderStyle=UITextBorderStyleLine;
     //键盘类型
-    textField.keyboardType=UIKeyboardTypeEmailAddress;
+    textField.keyboardType=UIKeyboardTypeDefault;
     //关闭首字母大写
     textField.autocapitalizationType=NO;
     //清除按钮
@@ -281,6 +281,34 @@
     textField.textColor=[UIColor blackColor];
     return textField ;
 }
++(UITextField*)fan_createTextFieldWithFrame:(CGRect)frame placeholder:(NSString*)placeholder Font:(float)font backgoundColor:(UIColor*)bgColor;
+{
+    UITextField*textField=[[UITextField alloc]initWithFrame:frame];
+    //灰色提示框
+    textField.placeholder=placeholder;
+    //文字对齐方式
+    textField.textAlignment=NSTextAlignmentLeft;
+    //    textField.secureTextEntry=YES;
+    //边框
+    textField.borderStyle=UITextBorderStyleRoundedRect;
+    //键盘类型
+    textField.keyboardType=UIKeyboardTypeDefault;
+    //关闭首字母大写
+    textField.autocapitalizationType=NO;
+    //清除按钮
+    textField.clearButtonMode=YES;
+    //自定义键盘
+    //textField.inputView
+    //字体
+    textField.font=[UIFont systemFontOfSize:font];
+    //字体颜色
+    textField.textColor=[UIColor blackColor];
+    if (bgColor) {
+        textField.backgroundColor=bgColor;
+    }
+    return textField ;
+}
+
 +(UIScrollView*)fan_createScrollViewWithFrame:(CGRect)frame contentSize:(CGSize)size
 {
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:frame];
@@ -305,11 +333,27 @@
     slider.minimumValue = 0;
     slider.maximumValue = 1;
     [slider setThumbImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-    slider.maximumTrackTintColor = [UIColor grayColor];
-    slider.minimumTrackTintColor = [UIColor yellowColor];
+    //    slider.maximumTrackTintColor = [UIColor grayColor];
+    //    slider.minimumTrackTintColor = [UIColor blueColor];
     slider.continuous = YES;
     slider.enabled = YES;
     return slider ;
+}
++(UISlider*)fan_createSliderWithFrame:(CGRect)rect thumbImage:(NSString*)imageName target:(id)target action:(SEL)action
+{
+    UISlider *slider = [[UISlider alloc]initWithFrame:rect];
+    slider.minimumValue = 0;
+    slider.maximumValue = 1;
+    [slider setThumbImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    [slider addTarget:target action:action forControlEvents:UIControlEventValueChanged];
+    slider.continuous = YES;
+    slider.enabled = YES;
+    return slider ;
+}
++(UISwitch *)fan_createSwitchWithFrame:(CGRect)rect target:(nullable id)target action:(SEL)action{
+    UISwitch *st=[[UISwitch alloc]initWithFrame:rect];
+    [st addTarget:target action:action forControlEvents:UIControlEventValueChanged];
+    return st;
 }
 
 //+(NSString *)platformString{

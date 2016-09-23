@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6617410D1D2B637C005A5221 /* FanRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6617410C1D2B637C005A5221 /* FanRootViewController.m */; };
+		661741101D2B63EE005A5221 /* FanNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6617410F1D2B63EE005A5221 /* FanNavigationController.m */; };
+		661741131D2B66D5005A5221 /* FanKitTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 661741121D2B66D5005A5221 /* FanKitTableViewController.m */; };
+		666C8D1E1D4B2B7E0071E6CD /* NSDictionary+FanNull.m in Sources */ = {isa = PBXBuildFile; fileRef = 666C8D1D1D4B2B7E0071E6CD /* NSDictionary+FanNull.m */; };
 		667A9FC71CFEC619009B1D53 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FC61CFEC619009B1D53 /* main.m */; };
 		667A9FCA1CFEC619009B1D53 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FC91CFEC619009B1D53 /* AppDelegate.m */; };
 		667A9FCD1CFEC619009B1D53 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FCC1CFEC619009B1D53 /* ViewController.m */; };
@@ -53,6 +57,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6617410B1D2B637C005A5221 /* FanRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanRootViewController.h; sourceTree = "<group>"; };
+		6617410C1D2B637C005A5221 /* FanRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanRootViewController.m; sourceTree = "<group>"; };
+		6617410E1D2B63EE005A5221 /* FanNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanNavigationController.h; sourceTree = "<group>"; };
+		6617410F1D2B63EE005A5221 /* FanNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanNavigationController.m; sourceTree = "<group>"; };
+		661741111D2B66D5005A5221 /* FanKitTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanKitTableViewController.h; sourceTree = "<group>"; };
+		661741121D2B66D5005A5221 /* FanKitTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanKitTableViewController.m; sourceTree = "<group>"; };
+		666C8D1C1D4B2B7E0071E6CD /* NSDictionary+FanNull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+FanNull.h"; sourceTree = "<group>"; };
+		666C8D1D1D4B2B7E0071E6CD /* NSDictionary+FanNull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+FanNull.m"; sourceTree = "<group>"; };
 		667A9FC21CFEC619009B1D53 /* FanKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FanKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		667A9FC61CFEC619009B1D53 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		667A9FC81CFEC619009B1D53 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -134,6 +146,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		661741091D2B6268005A5221 /* Viewcontrollers */ = {
+			isa = PBXGroup;
+			children = (
+				6617410A1D2B6315005A5221 /* RootViewcontroller */,
+				661741111D2B66D5005A5221 /* FanKitTableViewController.h */,
+				661741121D2B66D5005A5221 /* FanKitTableViewController.m */,
+			);
+			path = Viewcontrollers;
+			sourceTree = "<group>";
+		};
+		6617410A1D2B6315005A5221 /* RootViewcontroller */ = {
+			isa = PBXGroup;
+			children = (
+				6617410B1D2B637C005A5221 /* FanRootViewController.h */,
+				6617410C1D2B637C005A5221 /* FanRootViewController.m */,
+				6617410E1D2B63EE005A5221 /* FanNavigationController.h */,
+				6617410F1D2B63EE005A5221 /* FanNavigationController.m */,
+			);
+			path = RootViewcontroller;
+			sourceTree = "<group>";
+		};
 		667A9FB91CFEC619009B1D53 = {
 			isa = PBXGroup;
 			children = (
@@ -158,6 +191,7 @@
 		667A9FC41CFEC619009B1D53 /* FanKit */ = {
 			isa = PBXGroup;
 			children = (
+				661741091D2B6268005A5221 /* Viewcontrollers */,
 				667A9FC81CFEC619009B1D53 /* AppDelegate.h */,
 				667A9FC91CFEC619009B1D53 /* AppDelegate.m */,
 				667A9FCB1CFEC619009B1D53 /* ViewController.h */,
@@ -212,6 +246,8 @@
 		66A507171D06E1AA00D5EC34 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				666C8D1C1D4B2B7E0071E6CD /* NSDictionary+FanNull.h */,
+				666C8D1D1D4B2B7E0071E6CD /* NSDictionary+FanNull.m */,
 				66A507181D06E1AA00D5EC34 /* FanAnimationToll.h */,
 				66A507191D06E1AA00D5EC34 /* FanAnimationToll.m */,
 				66B396531D2A144900A40A06 /* FanDataTool.h */,
@@ -373,6 +409,7 @@
 				TargetAttributes = {
 					667A9FC11CFEC619009B1D53 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = NW3X9NZ9UP;
 					};
 					667A9FDA1CFEC619009B1D53 = {
 						CreatedOnToolsVersion = 7.3;
@@ -436,6 +473,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6617410D1D2B637C005A5221 /* FanRootViewController.m in Sources */,
 				66B396651D2A3F2200A40A06 /* FanDragBubbleView.m in Sources */,
 				66B396801D2A52B400A40A06 /* FanShowAlertView.m in Sources */,
 				66B396711D2A480600A40A06 /* NSObject+FanDictionary.m in Sources */,
@@ -445,7 +483,10 @@
 				66A5071E1D06E1AA00D5EC34 /* FanAnimationToll.m in Sources */,
 				66B396881D2A532000A40A06 /* FanLockNodeView.m in Sources */,
 				66B396581D2A150200A40A06 /* FanUIKit.m in Sources */,
+				661741131D2B66D5005A5221 /* FanKitTableViewController.m in Sources */,
+				661741101D2B63EE005A5221 /* FanNavigationController.m in Sources */,
 				66B396741D2A496300A40A06 /* NSString+FanTime.m in Sources */,
+				666C8D1E1D4B2B7E0071E6CD /* NSDictionary+FanNull.m in Sources */,
 				66B396871D2A532000A40A06 /* FanGesturePasswordView.m in Sources */,
 				667A9FCA1CFEC619009B1D53 /* AppDelegate.m in Sources */,
 				66B396611D2A3F0C00A40A06 /* FanSideslipManager.m in Sources */,
@@ -599,6 +640,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = NW3X9NZ9UP;
 				INFOPLIST_FILE = FanKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fan.FanKit;
@@ -610,6 +652,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = NW3X9NZ9UP;
 				INFOPLIST_FILE = FanKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fan.FanKit;
