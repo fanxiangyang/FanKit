@@ -41,8 +41,8 @@ FanKit该项目最低支持 iOS 7.0。
 
 Function Example(功能事例)
 ==============
-### Example List（功能列表）
-![动画](https://github.com/fanxiangyang/FanKit/blob/master/Document/DemoList.png?raw=true)
+### 1.Example List（功能列表）
+<img src="https://github.com/fanxiangyang/FanKit/blob/master/Document/DemoList.png?raw=true" width="320">
 
 Like(喜欢)
 ==============
