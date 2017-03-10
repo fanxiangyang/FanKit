@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FanKit.h"
+#import "UIViewController+FanRoot.h"
+
 
 @interface FanRootViewController : UIViewController
+
+-(void)fan_jumpVCWithName:(NSString *)name;
 
 @end

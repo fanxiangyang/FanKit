@@ -7,6 +7,7 @@
 //
 
 #import "FanUIKit.h"
+#import <sys/sysctl.h>
 
 @implementation FanUIKit
 
@@ -195,6 +196,24 @@
 
 
 /***************************************创建UI******************************************/
++(UILabel*)fan_createLabelWithFrame:(CGRect)frame text:(NSString*)text textColor:(UIColor *)textColor
+{
+    UILabel*label=[[UILabel alloc]initWithFrame:frame];
+    //限制行数
+    //    label.numberOfLines=0;
+    //对齐方式
+    label.textAlignment=NSTextAlignmentLeft;
+    label.backgroundColor=[UIColor clearColor];
+    //    label.font=[UIFont systemFontOfSize:font];
+    //单词折行
+    //    label.lineBreakMode=NSLineBreakByWordWrapping;
+    //默认字体颜色是白色
+    label.textColor=textColor;
+    //自适应（行数~字体大小按照设置大小进行设置）
+    //label.adjustsFontSizeToFitWidth=YES;
+    label.text=text;
+    return label;
+}
 
 +(UILabel*)fan_createLabelWithFrame:(CGRect)frame Font:(int)font Text:(NSString*)text
 {
@@ -249,7 +268,15 @@
     imageView.userInteractionEnabled=YES;
     return imageView ;
 }
-
++(UIImageView*)fan_createImageViewWithBundleFrame:(CGRect)frame imageBundleName:(NSString*)imageName{
+    UIImageView*imageView=[[UIImageView alloc]initWithFrame:frame];
+    if (imageName) {
+        NSString *imgPath=[[NSBundle mainBundle]pathForResource:[imageName stringByDeletingPathExtension] ofType:[imageName pathExtension]];
+        imageView.image=[UIImage imageWithContentsOfFile:imgPath];
+    }
+    imageView.userInteractionEnabled=YES;
+    return imageView ;
+}
 +(UITextField*)fan_createTextFieldWithFrame:(CGRect)frame placeholder:(NSString*)placeholder leftImageView:(UIView*)imageView rightImageView:(UIView*)rightImageView Font:(float)font
 {
     UITextField*textField=[[UITextField alloc]initWithFrame:frame];
@@ -355,62 +382,99 @@
     [st addTarget:target action:action forControlEvents:UIControlEventValueChanged];
     return st;
 }
++(id)fan_classFromName:(NSString *)aClassName{
+    Class cl=NSClassFromString(aClassName);
+    if (cl) {
+        id cls=[[cl alloc]init];
+        return cls;
+    }
+    return nil;
+}
+#pragma mark 返回设备类型
 
-//+(NSString *)platformString{
-//    // Gets a string with the device model
-//    size_t size;
-//    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-//    char *machine = malloc(size);
-//    sysctlbyname("hw.machine", machine, &size, NULL, 0);
-//    NSString *platform = [NSString stringWithCString:machine encoding:NSUTF8StringEncoding];
-//    free(machine);
-//    NSDictionary* d = nil;
-//    if (d == nil)
-//    {
-//        d = @{
-//              @"iPhone1,1": @"iPhone 2G",
-//              @"iPhone1,2": @"iPhone 3G",
-//              @"iPhone2,1": @"iPhone 3GS",
-//              @"iPhone3,1": @"iPhone 4",
-//              @"iPhone3,2": @"iPhone 4",
-//              @"iPhone3,3": @"iPhone 4 (CDMA)",
-//              @"iPhone4,1": @"iPhone 4S",
-//              @"iPhone5,1": @"iPhone 5",
-//              @"iPhone5,2": @"iPhone 5 (GSM+CDMA)",
-//
-//              @"iPod1,1": @"iPod Touch (1 Gen)",
-//              @"iPod2,1": @"iPod Touch (2 Gen)",
-//              @"iPod3,1": @"iPod Touch (3 Gen)",
-//              @"iPod4,1": @"iPod Touch (4 Gen)",
-//              @"iPod5,1": @"iPod Touch (5 Gen)",
-//
-//              @"iPad1,1": @"iPad",
-//              @"iPad1,2": @"iPad 3G",
-//              @"iPad2,1": @"iPad 2 (WiFi)",
-//              @"iPad2,2": @"iPad 2",
-//              @"iPad2,3": @"iPad 2 (CDMA)",
-//              @"iPad2,4": @"iPad 2",
-//              @"iPad2,5": @"iPad Mini (WiFi)",
-//              @"iPad2,6": @"iPad Mini",
-//              @"iPad2,7": @"iPad Mini (GSM+CDMA)",
-//              @"iPad3,1": @"iPad 3 (WiFi)",
-//              @"iPad3,2": @"iPad 3 (GSM+CDMA)",
-//              @"iPad3,3": @"iPad 3",
-//              @"iPad3,4": @"iPad 4 (WiFi)",
-//              @"iPad3,5": @"iPad 4",
-//              @"iPad3,6": @"iPad 4 (GSM+CDMA)",
-//
-//              @"i386": @"Simulator",
-//              @"x86_64": @"Simulator"
-//              };
-//    }
-//    NSString* ret = [d objectForKey: platform];
-//
-//    if (ret == nil)
-//    {
-//        return platform;
-//    }
-//    return ret;
-//}
++(NSString *)fan_platformString{
+    // Gets a string with the device model
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    char *machine = malloc(size);
+    sysctlbyname("hw.machine", machine, &size, NULL, 0);
+    NSString *platform = [NSString stringWithCString:machine encoding:NSUTF8StringEncoding];
+    free(machine);
+    NSDictionary* d = nil;
+    if (d == nil)
+    {
+        d = @{
+              @"iPhone1,1": @"iPhone 2G",
+              @"iPhone1,2": @"iPhone 3G",
+              @"iPhone2,1": @"iPhone 3GS",
+              @"iPhone3,1": @"iPhone 4",
+              @"iPhone3,2": @"iPhone 4",
+              @"iPhone3,3": @"iPhone 4 (CDMA)",
+              @"iPhone4,1": @"iPhone 4S",
+              @"iPhone5,1": @"iPhone 5 (CDMA)",
+              @"iPhone5,2": @"iPhone 5 (GSM+CDMA)",
+              @"iPhone5,3": @"iPhone 5C (CDMA)",
+              @"iPhone5,4": @"iPhone 5C (GSM+CDMA)",
+              @"iPhone6,1": @"iPhone 5S (CDMA)",
+              @"iPhone6,2": @"iPhone 5S (GSM+CDMA)",
+              @"iPhone7,1": @"iPhone 6 Plus",
+              @"iPhone7,2": @"iPhone 6",
+              @"iPhone8,1": @"iPhone 6S",
+              @"iPhone8,2": @"iPhone 6S Plus",
+              @"iPhone9,1": @"iPhone 7",
+              @"iPhone9,2": @"iPhone 7 Plus",
+
+
+              @"iPod1,1": @"iPod Touch (1 Gen)",
+              @"iPod2,1": @"iPod Touch (2 Gen)",
+              @"iPod3,1": @"iPod Touch (3 Gen)",
+              @"iPod4,1": @"iPod Touch (4 Gen)",
+              @"iPod5,1": @"iPod Touch (5 Gen)",
+              @"iPod7,1": @"iPod Touch (6 Gen)",
+
+              @"iPad1,1": @"iPad",
+              @"iPad1,2": @"iPad 3G",
+              @"iPad2,1": @"iPad 2 (WiFi)",
+              @"iPad2,2": @"iPad 2",
+              @"iPad2,3": @"iPad 2 (CDMA)",
+              @"iPad2,4": @"iPad 2",
+              @"iPad2,5": @"iPad Mini (WiFi)",
+              @"iPad2,6": @"iPad Mini",
+              @"iPad2,7": @"iPad Mini (GSM+CDMA)",
+              @"iPad3,1": @"iPad 3 (WiFi)",
+              @"iPad3,2": @"iPad 3 (GSM+CDMA)",
+              @"iPad3,3": @"iPad 3",
+              @"iPad3,4": @"iPad 4 (WiFi)",
+              @"iPad3,5": @"iPad 4",
+              @"iPad3,6": @"iPad 4 (GSM+CDMA)",
+              @"iPad4,1": @"iPad air",
+              @"iPad4,2": @"iPad air",
+              @"iPad4,3": @"iPad air",
+              @"iPad4,4": @"iPad mini 2",
+              @"iPad4,5": @"iPad mini 2",
+              @"iPad4,6": @"iPad mini 2",
+              @"iPad4,7": @"iPad mini 3",
+              @"iPad4,8": @"iPad mini 3",
+              @"iPad4,9": @"iPad mini 3",
+              @"iPad5,1": @"iPad mini 4",
+              @"iPad5,2": @"iPad mini 4",
+              @"iPad5,3": @"iPad air 2",
+              @"iPad5,4": @"iPad air 2",
+              
+              @"iPad6,3": @"iPad Pro 9.7",
+              @"iPad6,7": @"iPad Pro 12.9",
+
+              @"i386": @"Simulator",
+              @"x86_64": @"Simulator"
+              };
+    }
+    NSString* ret = [d objectForKey: platform];
+
+    if (ret == nil)
+    {
+        return platform;
+    }
+    return ret;
+}
 
 @end

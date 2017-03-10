@@ -17,13 +17,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.view.backgroundColor=[UIColor whiteColor];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+-(void)fan_jumpVCWithName:(NSString *)name{
+    UIViewController *vc=[FanUIKit fan_classFromName:name];
+    if (vc) {
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
 /*
 #pragma mark - Navigation
 

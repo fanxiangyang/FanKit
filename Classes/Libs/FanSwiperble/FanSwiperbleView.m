@@ -334,7 +334,12 @@ int signum(CGFloat n) { return (n < 0) ? -1 : (n > 0) ? +1 : 0; }
 - (void)loadNextSwipeableViewsIfNeeded {
     NSInteger numViews = self.containerView.subviews.count;
     NSMutableSet *newViews = [NSMutableSet set];
-    for (NSInteger i = numViews; i < FanShowViewsNumber; i++) {
+    NSInteger fanShowViewsNumber=FanShowViewsNumber;
+    if ([self.dataSource respondsToSelector:@selector(numberOfSwipeableShow)]) {
+        fanShowViewsNumber = [self.dataSource numberOfSwipeableShow];
+    }
+
+    for (NSInteger i = numViews; i < fanShowViewsNumber; i++) {
         UIView *nextView = [self nextSwipeableView];
         if (nextView) {
             [self.containerView addSubview:nextView];

@@ -11,13 +11,14 @@
 
 #ifndef FanKit_h
 #define FanKit_h
-
+//一些常用宏
 #import "FanKitHead.h"
 
+//工厂类
 #import "FanAnimationToll.h"
 #import "FanDataTool.h"
 
-
+//基本类和扩展
 #import "FanUIKit.h"
 #import "UIView+FanAutoLayout.h"
 #import "UIViewController+FanRoot.h"

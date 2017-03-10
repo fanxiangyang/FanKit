@@ -37,7 +37,7 @@
  */
 + (NSString *)fan_stringFromCurrent:(NSString *)dateStr isGMT:(BOOL)isGMT;
 /**
- *  格式化日期（几年，几天前，几点前
+ *  格式化日期（几年，几天前，几点前)
  *
  *  @param earlierDate 日期
  *

@@ -34,6 +34,7 @@ typedef NS_ENUM(NSUInteger, FanSwipeableViewDirection) {
 @protocol FanSwipeableViewDataSource <NSObject>
 
 @required
+-(NSInteger)numberOfSwipeableShow;
 - (UIView *)nextViewForSwipeableView:(FanSwiperbleView *)swipeableView;
 
 @end

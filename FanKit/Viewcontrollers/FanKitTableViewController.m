@@ -7,6 +7,8 @@
 //
 
 #import "FanKitTableViewController.h"
+#import "FanKit.h"
+#import "FanCommonViewController.h"
 
 @interface FanKitTableViewController ()
 
@@ -28,11 +30,18 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    self.dataArray=[@[@"Annition",@"Annition2",@"Annition3"]mutableCopy];
-    self.detailArray=[@[@"基本的动画类",@"Annition2",@"Annition2"]mutableCopy];
+    //@"UIKit",@"Core",@"Libs
+    self.dataArray=[@[@[@"Create Control",@"AutoLayout",@"VC Category"] ,@[@"Animation",@"Byte Core/File Operation",@"Time/Date"] ,@[@"Swiperble",@"GesturePassword",@"Alert",@"DragBubble",@"sideslip"] ] mutableCopy];
+    self.detailArray=[@[@[@"FanUIKit.h",@"UIView+FanAutoLayout.h",@"UIViewController+FanRoot.h"] ,@[@"FanAnimationToll.h",@"FanDataTool.h",@"NSString+FanTime.h"] ,@[@"FanSwiperbleView.h",@"FanGesturePasswordView.h",@"FanShowView",@"FanDragBubbleView.h",@"FanSideslipManager.h"] ] mutableCopy];
 
 //    [self.tableView registerNib:[UINib nibWithNibName:@"" bundle:nil] forCellReuseIdentifier:@"Cell"];
 //    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+    
+    
+//    NSString *ipon=[FanUIKit fan_platformString];
+    
+//    self.tableView.tableHeaderView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, FanScreenWidth, 0.1)];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -44,12 +53,18 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 //#warning Incomplete implementation, return the number of sections
-    return 1;
+    return 3;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 0.0001;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 30;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 //#warning Incomplete implementation, return the number of rows
-    return 3;
+    return [(NSArray *)self.dataArray[section] count];
 }
 
 
@@ -57,11 +72,71 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 
-    cell.textLabel.text=self.dataArray[indexPath.row];
-    cell.detailTextLabel.text=self.detailArray[indexPath.row];
+    cell.textLabel.text=self.dataArray[indexPath.section][indexPath.row];
+    cell.detailTextLabel.text=self.detailArray[indexPath.section][indexPath.row];
     return cell;
 }
+//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+//    
+//    return nil;
+//}
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    switch (section) {
+        case 0:
+        {
+            return @"UIKit";
+        }
+            break;
+        case 1:
+        {
+            return @"Core";
+        }
+            break;
+        case 2:
+        {
+            return @"Libs";
+        }
+            break;
+            
+        default:
+            return @"";
+            break;
+    }
+}
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section==0) {
+        
+    }else if (indexPath.section==1){
+        if (indexPath.row==0) {
+            [self fan_jumpCommonViewController:@{@"Title":@"Animation",@"Class":@"FanAnimationToll.h/m",@"Demo":@"https://github.com/fanxiangyang/FanAnimationToll"}];
+        }
+    }else if (indexPath.section==2){
+        if (indexPath.row==0) {
+            [self fan_jumpVCWithName:@"FanSwiperbleViewController"];
+        }else if (indexPath.row==1) {
+            [self fan_jumpVCWithName:@"FanGesturePasswordViewController"];
+        }else if (indexPath.row==2) {
+            [self fan_jumpCommonViewController:@{@"Title":@"FanShowView",@"Class":@"FanShowView文件夹",@"Demo":@"https://github.com/fanxiangyang/FanShowView"}];
+        }else if (indexPath.row==4) {
+            [self fan_jumpCommonViewController:@{@"Title":@"FanSideslipManager",@"Class":@"FanSideslipManager.h/m",@"Demo":@"https://github.com/fanxiangyang/FanQQSideslipManager"}];
+        }
+    }
+    
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+-(void)fan_jumpCommonViewController:(NSDictionary *)dic{
+    FanCommonViewController *cVC=[[FanCommonViewController alloc]init];
+    cVC.rootDictionary=dic;
+    [self.navigationController pushViewController:cVC animated:YES];
+}
+-(void)fan_jumpVCWithName:(NSString *)name{
+    UIViewController *vc=[FanUIKit fan_classFromName:name];
+    if (vc) {
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
 
 /*
 // Override to support conditional editing of the table view.

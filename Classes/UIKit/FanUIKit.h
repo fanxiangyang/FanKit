@@ -43,9 +43,13 @@
 
 /***************************************创建UI******************************************/
 #pragma mark --创建Label
++(UILabel*)fan_createLabelWithFrame:(CGRect)frame text:(NSString*)text textColor:(UIColor *)textColor;
 +(UILabel*)fan_createLabelWithFrame:(CGRect)frame Font:(int)font Text:(NSString*)text;
 #pragma mark --创建imageView
 +(UIImageView*)fan_createImageViewWithFrame:(CGRect)frame ImageName:(NSString*)imageName;
+//主要图片
++(UIImageView*)fan_createImageViewWithBundleFrame:(CGRect)frame imageBundleName:(NSString*)imageName;
+
 #pragma mark --创建button
 +(UIButton*)fan_createButtonWithFrame:(CGRect)frame imageName:(NSString*)imageName target:(id)target action:(SEL)action;
 +(UIButton*)fan_createButtonWithFrame:(CGRect)frame target:(id)target action:(SEL)action title:(NSString*)title titleColor:(UIColor *)titleColor;
@@ -63,4 +67,13 @@
 +(UISlider*)fan_createSliderWithFrame:(CGRect)rect thumbImage:(NSString*)imageName target:(id)target action:(SEL)action;
 #pragma mark 创建UISwitch
 +(UISwitch *)fan_createSwitchWithFrame:(CGRect)rect target:(id)target action:(SEL)action;
+
+#pragma mark 创建UIViewController
+
++(id)fan_classFromName:(NSString *)aClassName;
+/***************************************创建UI  End******************************************/
+
+#pragma mark 返回设备类型
+
++(NSString *)fan_platformString;
 @end

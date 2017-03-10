@@ -37,6 +37,13 @@
 		66B396871D2A532000A40A06 /* FanGesturePasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B396841D2A532000A40A06 /* FanGesturePasswordView.m */; };
 		66B396881D2A532000A40A06 /* FanLockNodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B396861D2A532000A40A06 /* FanLockNodeView.m */; };
 		66B3968C1D2A536400A40A06 /* FanSwiperbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B3968B1D2A536400A40A06 /* FanSwiperbleView.m */; };
+		66E81A551E7253B8008E887E /* FanTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E81A541E7253B8008E887E /* FanTestViewController.m */; };
+		66E81A5F1E72A791008E887E /* FanCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E81A5E1E72A791008E887E /* FanCommonViewController.m */; };
+		66E81A621E72B782008E887E /* FanGesturePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E81A611E72B782008E887E /* FanGesturePasswordViewController.m */; };
+		66E81A651E72C069008E887E /* FanSwiperbleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66E81A641E72C069008E887E /* FanSwiperbleViewController.m */; };
+		66E81A681E72C319008E887E /* swip1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 66E81A661E72C319008E887E /* swip1.jpg */; };
+		66E81A691E72C319008E887E /* swip2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 66E81A671E72C319008E887E /* swip2.jpg */; };
+		66E81A6B1E72C326008E887E /* peerImage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66E81A6A1E72C326008E887E /* peerImage@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +126,17 @@
 		66B396861D2A532000A40A06 /* FanLockNodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanLockNodeView.m; sourceTree = "<group>"; };
 		66B3968A1D2A536400A40A06 /* FanSwiperbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanSwiperbleView.h; sourceTree = "<group>"; };
 		66B3968B1D2A536400A40A06 /* FanSwiperbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanSwiperbleView.m; sourceTree = "<group>"; };
+		66E81A531E7253B8008E887E /* FanTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanTestViewController.h; sourceTree = "<group>"; };
+		66E81A541E7253B8008E887E /* FanTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanTestViewController.m; sourceTree = "<group>"; };
+		66E81A5D1E72A791008E887E /* FanCommonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanCommonViewController.h; sourceTree = "<group>"; };
+		66E81A5E1E72A791008E887E /* FanCommonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanCommonViewController.m; sourceTree = "<group>"; };
+		66E81A601E72B782008E887E /* FanGesturePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanGesturePasswordViewController.h; sourceTree = "<group>"; };
+		66E81A611E72B782008E887E /* FanGesturePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanGesturePasswordViewController.m; sourceTree = "<group>"; };
+		66E81A631E72C069008E887E /* FanSwiperbleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanSwiperbleViewController.h; sourceTree = "<group>"; };
+		66E81A641E72C069008E887E /* FanSwiperbleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanSwiperbleViewController.m; sourceTree = "<group>"; };
+		66E81A661E72C319008E887E /* swip1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = swip1.jpg; sourceTree = "<group>"; };
+		66E81A671E72C319008E887E /* swip2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = swip2.jpg; sourceTree = "<group>"; };
+		66E81A6A1E72C326008E887E /* peerImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "peerImage@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,9 +167,15 @@
 		661741091D2B6268005A5221 /* Viewcontrollers */ = {
 			isa = PBXGroup;
 			children = (
+				66E81A5C1E72A775008E887E /* CommonViewController */,
+				66E81A581E7261CC008E887E /* LibsViewController */,
+				66E81A571E7261BF008E887E /* CoreViewController */,
+				66E81A561E7261B1008E887E /* UIKitViewController */,
 				6617410A1D2B6315005A5221 /* RootViewcontroller */,
 				661741111D2B66D5005A5221 /* FanKitTableViewController.h */,
 				661741121D2B66D5005A5221 /* FanKitTableViewController.m */,
+				66E81A531E7253B8008E887E /* FanTestViewController.h */,
+				66E81A541E7253B8008E887E /* FanTestViewController.m */,
 			);
 			path = Viewcontrollers;
 			sourceTree = "<group>";
@@ -191,6 +215,7 @@
 		667A9FC41CFEC619009B1D53 /* FanKit */ = {
 			isa = PBXGroup;
 			children = (
+				66E81A591E727792008E887E /* images */,
 				661741091D2B6268005A5221 /* Viewcontrollers */,
 				667A9FC81CFEC619009B1D53 /* AppDelegate.h */,
 				667A9FC91CFEC619009B1D53 /* AppDelegate.m */,
@@ -342,6 +367,50 @@
 			path = FanSwiperble;
 			sourceTree = "<group>";
 		};
+		66E81A561E7261B1008E887E /* UIKitViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UIKitViewController;
+			sourceTree = "<group>";
+		};
+		66E81A571E7261BF008E887E /* CoreViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CoreViewController;
+			sourceTree = "<group>";
+		};
+		66E81A581E7261CC008E887E /* LibsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				66E81A601E72B782008E887E /* FanGesturePasswordViewController.h */,
+				66E81A611E72B782008E887E /* FanGesturePasswordViewController.m */,
+				66E81A631E72C069008E887E /* FanSwiperbleViewController.h */,
+				66E81A641E72C069008E887E /* FanSwiperbleViewController.m */,
+			);
+			path = LibsViewController;
+			sourceTree = "<group>";
+		};
+		66E81A591E727792008E887E /* images */ = {
+			isa = PBXGroup;
+			children = (
+				66E81A6A1E72C326008E887E /* peerImage@2x.png */,
+				66E81A661E72C319008E887E /* swip1.jpg */,
+				66E81A671E72C319008E887E /* swip2.jpg */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		66E81A5C1E72A775008E887E /* CommonViewController */ = {
+			isa = PBXGroup;
+			children = (
+				66E81A5D1E72A791008E887E /* FanCommonViewController.h */,
+				66E81A5E1E72A791008E887E /* FanCommonViewController.m */,
+			);
+			path = CommonViewController;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -404,7 +473,7 @@
 		667A9FBA1CFEC619009B1D53 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "凡向阳";
 				TargetAttributes = {
 					667A9FC11CFEC619009B1D53 = {
@@ -446,9 +515,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66E81A6B1E72C326008E887E /* peerImage@2x.png in Resources */,
+				66E81A681E72C319008E887E /* swip1.jpg in Resources */,
 				667A9FD51CFEC619009B1D53 /* LaunchScreen.storyboard in Resources */,
 				667A9FD21CFEC619009B1D53 /* Assets.xcassets in Resources */,
 				667A9FD01CFEC619009B1D53 /* Main.storyboard in Resources */,
+				66E81A691E72C319008E887E /* swip2.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,17 +556,21 @@
 				66B396881D2A532000A40A06 /* FanLockNodeView.m in Sources */,
 				66B396581D2A150200A40A06 /* FanUIKit.m in Sources */,
 				661741131D2B66D5005A5221 /* FanKitTableViewController.m in Sources */,
+				66E81A621E72B782008E887E /* FanGesturePasswordViewController.m in Sources */,
 				661741101D2B63EE005A5221 /* FanNavigationController.m in Sources */,
 				66B396741D2A496300A40A06 /* NSString+FanTime.m in Sources */,
 				666C8D1E1D4B2B7E0071E6CD /* NSDictionary+FanNull.m in Sources */,
 				66B396871D2A532000A40A06 /* FanGesturePasswordView.m in Sources */,
+				66E81A5F1E72A791008E887E /* FanCommonViewController.m in Sources */,
 				667A9FCA1CFEC619009B1D53 /* AppDelegate.m in Sources */,
+				66E81A551E7253B8008E887E /* FanTestViewController.m in Sources */,
 				66B396611D2A3F0C00A40A06 /* FanSideslipManager.m in Sources */,
 				66B396551D2A144900A40A06 /* FanDataTool.m in Sources */,
 				667A9FC71CFEC619009B1D53 /* main.m in Sources */,
 				66B3968C1D2A536400A40A06 /* FanSwiperbleView.m in Sources */,
 				66B3967E1D2A52B400A40A06 /* FanActionSheetView.m in Sources */,
 				66B3967F1D2A52B400A40A06 /* FanShareView.m in Sources */,
+				66E81A651E72C069008E887E /* FanSwiperbleViewController.m in Sources */,
 				66B3965C1D2A1F9A00A40A06 /* UIViewController+FanRoot.m in Sources */,
 				66A5071F1D06E1AA00D5EC34 /* UIView+FanAutoLayout.m in Sources */,
 				66B396681D2A416600A40A06 /* NSNull+FanNull.m in Sources */,
@@ -566,8 +642,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -611,8 +689,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
