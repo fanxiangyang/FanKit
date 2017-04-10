@@ -157,7 +157,7 @@
     animation.removedOnCompletion=NO;
     animation.fillMode=kCAFillModeForwards;
     animation.repeatCount= repeatCount;
-    animation.delegate= self;
+//    animation.delegate = self;
     return animation;
 }
 /** 围绕三维坐标轴旋转（单个动画时间+3D)
@@ -177,7 +177,7 @@
     animation.removedOnCompletion=NO;
     animation.fillMode=kCAFillModeForwards;
     animation.repeatCount= INT_MAX;
-    animation.delegate= self;
+//    animation.delegate= self;
     return animation;
 }
 /**左右晃动:是偏移量移动*/
