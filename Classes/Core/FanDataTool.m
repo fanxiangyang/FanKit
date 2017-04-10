@@ -23,6 +23,11 @@
     }
     return data;
 }
+/** 16进制字符串转long Int  没有对输入进行校验*/
++(long)fan_hexToInLong:(NSString *)hexString{
+    unsigned long longInt=strtoul([hexString UTF8String], 0, 16);
+    return longInt;
+}
 /** data转换成16进制字符串  */
 +(NSString *)fan_dataToHexString:(NSData *)data{
     Byte *bytehex =(Byte *) data.bytes;

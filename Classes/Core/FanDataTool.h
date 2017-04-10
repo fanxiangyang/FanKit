@@ -48,6 +48,8 @@
 #pragma mark - 数据进制转换和解析
 /**16进制字符串转data*/
 +(NSData *)fan_hexToBytes:(NSString *)hexString;
+/** 16进制字符串转long Int  没有对输入进行校验*/
++(long)fan_hexToInLong:(NSString *)hexString;
 /** data转换成16进制字符串  */
 +(NSString *)fan_dataToHexString:(NSData *)data;
 /**10进制字符串转16进制字符串(字符个数）*/
