@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "FanKit"
-  s.version      = "0.0.3"
+  s.version      = "0.0.4"
   s.summary      = "A Cocoa Tool Kit of iOS components."
   s.description  = <<-DESC
             一个iOS集成实用工具库,以后会添加更多更多的工具，实用类，封装类，封装小效果
