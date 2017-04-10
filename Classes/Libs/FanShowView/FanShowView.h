@@ -73,7 +73,8 @@ typedef NS_ENUM(NSInteger,FanShowViewStyle) {
 
 @property(nonatomic,assign)FanShowViewStyle showViewStyle;
 
-@property(nonatomic,weak)id /*<FanShowViewDelegate>*/ delegate;
+//@property(nonatomic,weak)id /*<FanShowViewDelegate>*/ delegate;
+@property(nonatomic,weak)id delegate;
 
 @property(nonatomic,strong)NSMutableArray * dataArray;
 @property(nonatomic,assign)CGFloat contentHeight;
