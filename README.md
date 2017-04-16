@@ -17,7 +17,7 @@ Installation（安装）
 ==============
 ### CocoaPods
 
-1. Add `pod "FanKit"` to your Podfile.
+1. Add `pod 'FanKit','~> 0.0.2'` to your Podfile.
 2. Run `pod install` or `pod update`.
 3. Import "FanKit.h".
 
@@ -26,10 +26,10 @@ Installation（安装）
 1. 下载 FanKit项目。
 2. 将 FanKit项目里面Classes文件夹及内的源文件添加(拖放)到你的工程。
 3. 链接以下 frameworks:
-    * UIKit
-    * CoreFoundation
-    * CoreGraphics
-    * QuartzCore
+   * UIKit
+   * CoreFoundation
+   * CoreGraphics
+   * QuartzCore
 4. 在项目pch中导入 `FanKit.h`,其他的功能自行选择。
 
 Requirements(系统要求)
@@ -47,7 +47,5 @@ Function Example(功能事例)
 
 Like(喜欢)
 ==============
-#### 有问题请直接在文章下面留言。
-#### 喜欢此系列文章可以点击上面右侧的 Star 哦，变成 Unstar 就可以了！ 
-### 开发人：凡向阳
-#### Email:fanxiangyang_heda@163.com
+#### 有问题请直接在文章下面留言,喜欢就给个Star(小星星)吧！ 
+#### Email:fqsyfan@gmail.com
