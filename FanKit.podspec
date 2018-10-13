@@ -22,9 +22,9 @@ Pod::Spec.new do |s|
   s.author             = { "fanxiangyang" => "fqsyfan@gmail.com" }
   # s.social_media_url   = "http://twitter.com/fanxiangyang"
 
-  s.platform     = :ios, "7.0"
+  s.platform     = :ios, "8.0"
 
-  s.ios.deployment_target = "7.0"
+  s.ios.deployment_target = "8.0"
   # s.osx.deployment_target = "10.7"
   # s.watchos.deployment_target = "2.0"
   # s.tvos.deployment_target = "9.0"
@@ -38,6 +38,7 @@ Pod::Spec.new do |s|
 
   # s.resource  = "icon.png"
   # s.resources = "Resources/*.png"
+  s.resources = "Classes/Core/FanKit.bundle"
 
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
 

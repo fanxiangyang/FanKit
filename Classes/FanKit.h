@@ -17,13 +17,14 @@
 //工厂类
 #import "FanAnimationToll.h"
 #import "FanDataTool.h"
+#import "FanToolBox.h"
 
 //基本类和扩展
 #import "FanUIKit.h"
 #import "UIView+FanAutoLayout.h"
 #import "UIViewController+FanRoot.h"
 #import "NSDictionary+FanNull.h"
-
+#import "NSBundle+FanKit.h"
 
 
 #endif /* FanKit_h */

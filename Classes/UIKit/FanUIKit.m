@@ -8,6 +8,7 @@
 
 #import "FanUIKit.h"
 #import <sys/sysctl.h>
+#import <Accelerate/Accelerate.h>
 
 @implementation FanUIKit
 
@@ -36,6 +37,7 @@
         // NSString class method: boundingRectWithSize:options:attributes:context is
         // available only on ios7.0 sdk.
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        //        paragraphStyle.lineSpacing=lineSpace;
         //考虑换行的影响(以后待修改）
         //[paragraphStyle setLineBreakMode:NSLineBreakByWordWrapping];//考虑换行的影响
         [paragraphStyle setLineBreakMode:textView.textContainer.lineBreakMode];
@@ -44,7 +46,7 @@
             paragraphStyle.minimumLineHeight = textView.font.pointSize+lineSpace;
         }
         
-        NSDictionary *attributes = @{ NSFontAttributeName: textView.font, NSParagraphStyleAttributeName : paragraphStyle };
+        NSDictionary *attributes = @{ NSFontAttributeName: textView.font,NSForegroundColorAttributeName:textView.textColor, NSParagraphStyleAttributeName : paragraphStyle };
         
         textView.attributedText=[[NSAttributedString alloc]initWithString:textView.text attributes:attributes];
         
@@ -62,25 +64,25 @@
  *  根据换行方式和字体的大小，已经计算的范围来确定字符串的size
  */
 +(CGSize)fan_currentSizeWithContent:(NSString *)content font:(UIFont *)font cgSize:(CGSize)cgsize{
-//    CGFloat version=[[UIDevice currentDevice].systemVersion floatValue];
+    //    CGFloat version=[[UIDevice currentDevice].systemVersion floatValue];
     
     NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
-
+    
     CGSize size=[content boundingRectWithSize:cgsize options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:dic context:nil].size;
     //计算size， 7之后有新的方法
-//    if (version>=7.0) {
-//        //得到一个设置字体属性的字典
-//        NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
-//        //optinos 前两个参数是匹配换行方式去计算，最后一个参数是匹配字体去计算
-//        //attributes 传入的字体
-//        //boundingRectWithSize 计算的范围
-//        size=[content boundingRectWithSize:cgsize options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:dic context:nil].size;
-//    }else{
-//        //ios7以前
-//        //根据字号和限定范围还有换行方式计算字符串的size，label中的font 和linbreak要与此一致
-//        //CGSizeMake(215, 999) 横向最大计算到215，纵向Max999
-//        size=[content sizeWithFont:font constrainedToSize:cgsize lineBreakMode:NSLineBreakByCharWrapping];
-//    }
+    //    if (version>=7.0) {
+    //        //得到一个设置字体属性的字典
+    //        NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
+    //        //optinos 前两个参数是匹配换行方式去计算，最后一个参数是匹配字体去计算
+    //        //attributes 传入的字体
+    //        //boundingRectWithSize 计算的范围
+    //        size=[content boundingRectWithSize:cgsize options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:dic context:nil].size;
+    //    }else{
+    //        //ios7以前
+    //        //根据字号和限定范围还有换行方式计算字符串的size，label中的font 和linbreak要与此一致
+    //        //CGSizeMake(215, 999) 横向最大计算到215，纵向Max999
+    //        size=[content sizeWithFont:font constrainedToSize:cgsize lineBreakMode:NSLineBreakByCharWrapping];
+    //    }
     return size;
 }
 #pragma mark - 字节个数
@@ -184,15 +186,223 @@
     UIImage *sendImage = [[UIImage alloc] initWithCGImage:imageRefRect];
     
     /******截取图片保存的位置，如果想要保存，请把return向后移动*********/
-    //    UIImageWriteToSavedPhotosAlbum(sendImage, nil, nil, nil);
-    //    CGImageRelease(imageRefRect);
-    /***************/
+    //    CGImageRelease(imageRef);//加入这个会崩溃，不知道为什么
+    CGImageRelease(imageRefRect);
     
     return sendImage;
 }
++ (UIImage *)fan_openglSnapshotImage:(UIView *)openGLView{
+    //图片位图的大小
+    CGSize size = openGLView.frame.size;
+    UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
+    //View 内的图像放到size位图的位置
+    CGRect rect = openGLView.bounds;
+    //  自iOS7开始它允许你截取一个UIView或者其子类中的内容，并且以位图的形式（bitmap）保存到UIImage中
+    [openGLView drawViewHierarchyInRect:rect afterScreenUpdates:YES];
+    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return snapshotImage;
+    //AVCaptureVideoPreviewLayer 和 AVSampleBufferDisplayLayer可以用这个获取一个View，但是能添加，不能再截图
+    //    UIView *snapView = [self snapshotViewAfterScreenUpdates:YES];
+    
+}
++ (UIImage *)fan_gaussianBlurImage:(UIImage *)image
+{
+    CIImage *ciImage = [[CIImage alloc]initWithImage:image];
+    
+    CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
+    [filter setValue:ciImage forKey:kCIInputImageKey];
+    [filter setValue:@0.3f forKey: @"inputRadius"];
+    CIImage *result = [filter valueForKey:kCIOutputImageKey];
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CGImageRef outImage = [context createCGImage: result fromRect:[result extent]];
+    UIImage * blurImage = [UIImage imageWithCGImage:outImage];
+    CGImageRelease(outImage);
+    
+    return blurImage;
+}
 
+/**
+ 高斯模糊（对用content截图，opengl截图的图片发红处理高斯模糊）
+ 
+ @param image 图片
+ @param blur 1-100（最好是1-25）
+ @return 高斯模糊图片
+ */
++(UIImage *)fan_accelerateBlurWithImage:(UIImage *)image blurNumber:(CGFloat)blur
+{
+    if(image==nil){
+        return nil;
+    }
+    int boxSize = blur;
+    if (blur<1) {
+        boxSize=1;
+    }
+    if (blur>100) {
+        boxSize=100;
+    }
+    boxSize = boxSize - (boxSize % 2) + 1;
+    
+    CGImageRef img = image.CGImage;
+    
+    vImage_Buffer inBuffer, outBuffer, rgbOutBuffer;
+    vImage_Error error;
+    
+    void *pixelBuffer, *convertBuffer;
+    
+    CGDataProviderRef inProvider = CGImageGetDataProvider(img);
+    CFDataRef inBitmapData = CGDataProviderCopyData(inProvider);
+    
+    convertBuffer = malloc( CGImageGetBytesPerRow(img) * CGImageGetHeight(img) );
+    rgbOutBuffer.width = CGImageGetWidth(img);
+    rgbOutBuffer.height = CGImageGetHeight(img);
+    rgbOutBuffer.rowBytes = CGImageGetBytesPerRow(img);
+    rgbOutBuffer.data = convertBuffer;
+    
+    inBuffer.width = CGImageGetWidth(img);
+    inBuffer.height = CGImageGetHeight(img);
+    inBuffer.rowBytes = CGImageGetBytesPerRow(img);
+    inBuffer.data = (void *)CFDataGetBytePtr(inBitmapData);
+    
+    pixelBuffer = malloc( CGImageGetBytesPerRow(img) * CGImageGetHeight(img) );
+    
+    if (pixelBuffer == NULL) {
+        NSLog(@"No pixelbuffer");
+    }
+    
+    outBuffer.data = pixelBuffer;
+    outBuffer.width = CGImageGetWidth(img);
+    outBuffer.height = CGImageGetHeight(img);
+    outBuffer.rowBytes = CGImageGetBytesPerRow(img);
+    
+    void *rgbConvertBuffer = malloc( CGImageGetBytesPerRow(img) * CGImageGetHeight(img) );
+    vImage_Buffer outRGBBuffer;
+    outRGBBuffer.width = CGImageGetWidth(img);
+    outRGBBuffer.height = CGImageGetHeight(img);
+    outRGBBuffer.rowBytes = CGImageGetBytesPerRow(img);//3
+    outRGBBuffer.data = rgbConvertBuffer;
+    
+    error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
+    //    error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
+    
+    if (error) {
+        NSLog(@"error from convolution %ld", error);
+    }
+    const uint8_t mask[] = {2, 1, 0, 3};
+    
+    vImagePermuteChannels_ARGB8888(&outBuffer, &rgbOutBuffer, mask, kvImageNoFlags);
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef ctx = CGBitmapContextCreate(rgbOutBuffer.data,
+                                             rgbOutBuffer.width,
+                                             rgbOutBuffer.height,
+                                             8,
+                                             rgbOutBuffer.rowBytes,
+                                             colorSpace,
+                                             kCGImageAlphaNoneSkipLast);
+    CGImageRef imageRef = CGBitmapContextCreateImage(ctx);
+    UIImage *returnImage = [UIImage imageWithCGImage:imageRef];
+    
+    //clean up
+    CGContextRelease(ctx);
+    
+    free(pixelBuffer);
+    free(convertBuffer);
+    free(rgbConvertBuffer);
+    CFRelease(inBitmapData);
+    
+    CGColorSpaceRelease(colorSpace);
+    CGImageRelease(imageRef);
+    
+    return returnImage;
+}
+/**
+ 高斯模糊（直接对原图片高斯模糊）
+ 
+ @param image 图片
+ @param blur 1-100（最好是1-25）
+ @return 高斯模糊图片
+ */
++(UIImage *)fan_accelerateBlurShortWithImage:(UIImage *)image blurNumber:(CGFloat)blur
+{
+    if(image==nil){
+        return nil;
+    }
+    int boxSize = blur;
+    if (blur<1||blur>100) {
+        boxSize=25;
+    }
+    boxSize = boxSize - (boxSize % 2) + 1;
+    
+    CGImageRef img = image.CGImage;
+    
+    vImage_Buffer inBuffer, outBuffer;
+    vImage_Error error;
+    
+    void *pixelBuffer;
+    
+    CGDataProviderRef inProvider = CGImageGetDataProvider(img);
+    CFDataRef inBitmapData = CGDataProviderCopyData(inProvider);
+    
+    inBuffer.width = CGImageGetWidth(img);
+    inBuffer.height = CGImageGetHeight(img);
+    inBuffer.rowBytes = CGImageGetBytesPerRow(img);
+    
+    inBuffer.data = (void*)CFDataGetBytePtr(inBitmapData);
+    
+    pixelBuffer = malloc(CGImageGetBytesPerRow(img) *
+                         CGImageGetHeight(img));
+    
+    if(pixelBuffer == NULL)
+        NSLog(@"No pixelbuffer");
+    
+    outBuffer.data = pixelBuffer;
+    outBuffer.width = CGImageGetWidth(img);
+    outBuffer.height = CGImageGetHeight(img);
+    outBuffer.rowBytes = CGImageGetBytesPerRow(img);
+    
+    error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
+    
+    if (error) {
+        NSLog(@"error from convolution %ld", error);
+    }
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef ctx = CGBitmapContextCreate(
+                                             outBuffer.data,
+                                             outBuffer.width,
+                                             outBuffer.height,
+                                             8,
+                                             outBuffer.rowBytes,
+                                             colorSpace,
+                                             kCGImageAlphaNoneSkipLast);
+    CGImageRef imageRef = CGBitmapContextCreateImage (ctx);
+    UIImage *returnImage = [UIImage imageWithCGImage:imageRef];
+    
+    //clean up
+    CGContextRelease(ctx);
+    CGColorSpaceRelease(colorSpace);
+    
+    free(pixelBuffer);
+    CFRelease(inBitmapData);
+    
+    CGColorSpaceRelease(colorSpace);
+    CGImageRelease(imageRef);
+    
+    return returnImage;
+}
++(void)fan_addBlurEffectToView:(UIView *)toView{
+    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
+    effectView.frame = CGRectMake(0, 0, toView.frame.size.width, toView.frame.size.height);
+    [toView addSubview:effectView];
+}
 
-
++(UIImage *)fan_stretchableImage:(UIImage *)image{
+    UIImage *returnImage = [image stretchableImageWithLeftCapWidth:floorf(image.size.width/2) topCapHeight:floorf(image.size.height/2)];
+    image=nil;
+    return returnImage;
+}
 
 
 /***************************************创建UI******************************************/
@@ -237,6 +447,7 @@
 {
     UIButton*button=[UIButton buttonWithType:UIButtonTypeSystem];
     button.frame=frame;
+    //    button.tintColor=[UIColor grayColor];
     if (title) {
         [button setTitle:title forState:UIControlStateNormal];
         [button setTitleColor:titleColor forState:UIControlStateNormal];
@@ -382,6 +593,22 @@
     [st addTarget:target action:action forControlEvents:UIControlEventValueChanged];
     return st;
 }
++(UIViewController *)fan_viewControllerFrom:(UIView *)view{
+    UIResponder *responder = view;
+    while ((responder = [responder nextResponder])) {
+        if ([responder isKindOfClass:[UIViewController class]]) {
+            return (UIViewController *)responder;
+        }
+    }
+    return nil;
+}
++(void)fan_removeViewTag:(NSInteger)tag fromeView:(UIView *)view{
+    UIView *removeView=[view viewWithTag:tag];
+    if (removeView) {
+        [removeView removeFromSuperview];
+        removeView = nil;
+    }
+}
 +(id)fan_classFromName:(NSString *)aClassName{
     Class cl=NSClassFromString(aClassName);
     if (cl) {
@@ -421,17 +648,31 @@
               @"iPhone7,2": @"iPhone 6",
               @"iPhone8,1": @"iPhone 6S",
               @"iPhone8,2": @"iPhone 6S Plus",
+              @"iPhone8,4": @"iPhone SE",
               @"iPhone9,1": @"iPhone 7",
+              @"iPhone9,3": @"iPhone 7",
               @"iPhone9,2": @"iPhone 7 Plus",
-
-
+              @"iPhone9,4": @"iPhone 7 Plus",
+              @"iPhone10,1": @"iPhone 8",
+              @"iPhone10,4": @"iPhone 8",
+              @"iPhone10,2": @"iPhone 8 Plus",
+              @"iPhone10,5": @"iPhone 8 Plus",
+              @"iPhone10,3": @"iPhone X",
+              @"iPhone10,6": @"iPhone X",
+              
+              @"iPhone11,8": @"iPhone XR",
+              @"iPhone11,2": @"iPhone XS",
+              @"iPhone11,4": @"iPhone XS Max",
+              @"iPhone11,6": @"iPhone XS Max",
+              
+              
               @"iPod1,1": @"iPod Touch (1 Gen)",
               @"iPod2,1": @"iPod Touch (2 Gen)",
               @"iPod3,1": @"iPod Touch (3 Gen)",
               @"iPod4,1": @"iPod Touch (4 Gen)",
               @"iPod5,1": @"iPod Touch (5 Gen)",
               @"iPod7,1": @"iPod Touch (6 Gen)",
-
+              
               @"iPad1,1": @"iPad",
               @"iPad1,2": @"iPad 3G",
               @"iPad2,1": @"iPad 2 (WiFi)",
@@ -462,14 +703,27 @@
               @"iPad5,4": @"iPad air 2",
               
               @"iPad6,3": @"iPad Pro 9.7",
+              @"iPad6,4": @"iPad Pro 9.7",
               @"iPad6,7": @"iPad Pro 12.9",
-
+              @"iPad6,8": @"iPad Pro 12.9",
+              
+              @"iPad6,11": @"iPad 2017 9.7",
+              @"iPad6,12": @"iPad 2017 9.7",
+              
+              @"iPad7,1": @"iPad Pro 12.9",
+              @"iPad7,2": @"iPad Pro 12.9",
+              @"iPad7,3": @"iPad Pro 10.5",
+              @"iPad7,4": @"iPad Pro 10.5",
+              @"iPad7,5": @"iPad 2018 9.7",
+              @"iPad7,6": @"iPad 2018 9.7",
+              
+              
               @"i386": @"Simulator",
               @"x86_64": @"Simulator"
               };
     }
     NSString* ret = [d objectForKey: platform];
-
+    
     if (ret == nil)
     {
         return platform;

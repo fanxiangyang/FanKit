@@ -8,6 +8,11 @@
 
 #import "FanDataTool.h"
 
+//获取IP
+#include <ifaddrs.h>
+#include <arpa/inet.h>
+
+
 @implementation FanDataTool
 
 #pragma mark - 数据进制转换和解析
@@ -55,10 +60,25 @@
     }
     return hexString;
 }
-
+/**16进制字符串转asc字符串*/
++(NSString *)fan_hexToAscString:(NSString *)hexString{
+    NSMutableString *ascString=[[NSMutableString alloc]init];
+    for (int i=0; i<hexString.length/2; i++) {
+        NSString *as=[hexString substringWithRange:NSMakeRange(i*2, 2)];
+        if([as isEqualToString:@"00"]){
+            [ascString appendString:@"0"];
+        }else{
+            unsigned long red=strtoul([as UTF8String], 0, 16);
+            Byte b=red;
+            [ascString appendFormat:@"%c",b];
+        }
+    }
+    
+    return ascString;
+}
 
 #pragma mark - socket字节编码
-
+//判断系统是否是大端还是小端
 +(BOOL)fan_isLittleEndian
 {
     int32_t i = 1;
@@ -74,13 +94,13 @@
     return ret;
 }
 
-+(NSData *)fan_pack_int16:(int)val
++(NSData *)fan_pack_int16:(int)val bigEndian:(BOOL)bigEndian
 {
     char myByteArray[] = {0,0};
     myByteArray[0]=val & 0xff;
     myByteArray[1]=(val>>8) & 0xff;
     
-    if([[self class] fan_isLittleEndian])
+    if(!bigEndian)
     {
         myByteArray[1]=val & 0xff;
         myByteArray[0]=(val>>8) & 0xff;
@@ -93,11 +113,11 @@
     return ret;
 }
 
-+(NSData *)fan_pack_int32:(int)val
++(NSData *)fan_pack_int32:(int)val bigEndian:(BOOL)bigEndian
 {
     char myByteArray[] = {0,0,0,0};
     
-    if([[self class] fan_isLittleEndian])
+    if(!bigEndian)
     {
         myByteArray[3]=val & 0xff;
         myByteArray[2]=(val>>8) & 0xff;
@@ -115,33 +135,38 @@
     return ret;
 }
 
-+(int)fan_unpack_int8:(NSData *)data
++(int8_t)fan_unpack_int8:(NSData *)data
 {
     NSUInteger len = [data length];
     Byte *by=(Byte *)malloc(len);
     memcpy(by, [data bytes], len);
-    int ret=by[0] & 0xff;
+    int8_t ret=by[0] & 0xff;
     free(by);
     return ret;
     
 }
-+(int)fan_unpack_int16:(NSData *)data
++(int16_t)fan_unpack_int16:(NSData *)data bigEndian:(BOOL)bigEndian
 {
     NSUInteger len = [data length];
     Byte *by=(Byte *)malloc(len);
     memcpy(by, [data bytes], len);
-    
-    int ret=((by[0] & 0xFF) << 8) + (by[1] & 0xff);
+    int16_t ret=((by[0] & 0xFF) << 8) + (by[1] & 0xff);
+    if (bigEndian) {
+        ret=((by[1] & 0xFF) << 8) + (by[0] & 0xff);
+    }
     free(by);
     return ret;
 }
-+(int)fan_unpack_int32:(NSData *)data
++(int32_t)fan_unpack_int32:(NSData *)data bigEndian:(BOOL)bigEndian
 {
     NSUInteger len = [data length];
     Byte *by=(Byte *)malloc(len);
     memcpy(by, [data bytes], len);
-    int ret=((by[0] & 0xFF) << 24) + ((by[1] & 0xFF) << 16) + ((by[2] & 0xFF) << 8) + (by[3] & 0xff);
-    //by[3] << 24 + ((by[2] & 0xFF) << 16) + ((by[1] & 0xFF) << 8) + (by[0] & 0xFF);
+    int32_t ret = ((by[0] & 0xFF) << 24) + ((by[1] & 0xFF) << 16) + ((by[2] & 0xFF) << 8) + (by[3] & 0xff);
+    if (bigEndian) {
+        ret=(by[3] << 24) + ((by[2] & 0xFF) << 16) + ((by[1] & 0xFF) << 8) + (by[0] & 0xFF);
+        
+    }
     free(by);
     return ret;
 }
@@ -158,7 +183,7 @@
 +(NSData *)fan_pack_string16:(NSString*)str
 {
     NSData *bytes = [str dataUsingEncoding:NSUTF8StringEncoding];
-    NSData *nd = [[self class] fan_pack_int16:(int)[bytes length]];
+    NSData *nd = [[self class] fan_pack_int16:(int)[bytes length] bigEndian:YES];
     NSMutableData *data=[NSMutableData dataWithData:nd];
     [data appendData:bytes];
     return data;
@@ -176,98 +201,33 @@
 +(NSString *)fan_unpack_string16:(NSData*)data;
 {
     NSData *intdata= [data subdataWithRange:(NSRange){0, 2}];
-    int len=[[self class] fan_unpack_int16:intdata];
+    int len=[[self class] fan_unpack_int16:intdata bigEndian:YES];
     NSString *ret = [[NSString alloc]initWithData:[data subdataWithRange:(NSRange){2,len}] encoding:NSUTF8StringEncoding];
     return ret;
 }
-#pragma mark - 文件操作
 
-+(NSString *)fan_cachePath{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cachePath = ([paths count] > 0) ? [paths objectAtIndex:0] : [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Caches"] ;
-    return cachePath;
-}
-//文件夹copy
-+(void)fan_copyAtDirPath:(NSString *)srcDirPath toDirPath:(NSString *)toDirPath isRemoveOld:(BOOL)isRemoveOld{
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    //当前srcDirPath目录下全路径（包含文件夹）  ***/**.png
-    NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtPath:srcDirPath];
-    for (NSString *fileStr in enumerator) {
-        NSString *fileAllPath=[[toDirPath stringByAppendingPathComponent:fileStr] stringByDeletingLastPathComponent];
-        BOOL isDir;
-        if (![fileManager fileExistsAtPath:fileAllPath isDirectory:&isDir])
-        {
-            [fileManager createDirectoryAtPath:fileAllPath withIntermediateDirectories:YES attributes:nil error:nil];
-        }
-        if (isRemoveOld) {
-            //只移除文件，不移除路径
-            if (!isDir) {
-                [fileManager removeItemAtPath:[toDirPath stringByAppendingPathComponent:fileStr] error:nil];
+
+//必须在有网的情况下才能获取手机的IP地址
++ (NSString *)fan_IPAdress {
+    NSString *address = @"1.1.1.1";
+    struct ifaddrs *interfaces = NULL;
+    struct ifaddrs *temp_addr = NULL;
+    int success = 0;
+    success = getifaddrs(&interfaces);
+    if (success == 0) { // 0 表示获取成功
+        temp_addr = interfaces;
+        while (temp_addr != NULL) {
+            if( temp_addr->ifa_addr->sa_family == AF_INET) {
+                // Check if interface is en0 which is the wifi connection on the iPhone
+                if ([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:@"en0"]) {
+                    address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in  *)temp_addr->ifa_addr)->sin_addr)];
+                }
             }
+            temp_addr = temp_addr->ifa_next;
         }
-        [fileManager copyItemAtPath:[srcDirPath stringByAppendingPathComponent:fileStr] toPath:[toDirPath stringByAppendingPathComponent:fileStr] error:nil];
     }
-}
-/**删除目录下所有文件*/
-+ (BOOL)fan_deleteFilesAtPath:(NSString *)filePath
-{
-    NSFileManager* manager = [NSFileManager defaultManager];
-    
-    if (![manager fileExistsAtPath:filePath]){
-        return YES;
-    }else{
-        
-    }
-    NSEnumerator *childFilesEnumerator = [[manager subpathsAtPath:filePath] objectEnumerator];
-    NSString* fileName;
-    while ((fileName = [childFilesEnumerator nextObject]) != nil)
-    {
-        NSString* fileAbsolutePath = [filePath stringByAppendingPathComponent:fileName];
-        NSError *error;
-        [manager removeItemAtPath:fileAbsolutePath error:&error];
-    }
-    
-    return YES;
-}
-/**
- *  请求文件（夹）路径的所有文件大小
- *
- *  @param path 文件（夹）路径
- *
- *  @return 返回大小，字节
- */
-- (unsigned long long)fan_fileSizeFromPath:(NSString *)path
-{
-    if (path==nil) {
-        //如果文件路径不存在，取到应用缓存路径Caches(同级别的有Cookies）
-        NSString *caches=[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)firstObject];
-        //        path=[caches stringByAppendingPathComponent:@"default"];
-        path=caches;
-    }
-    // 文件管理者
-    NSFileManager *mgr = [NSFileManager defaultManager];
-    // 是否为文件夹
-    BOOL isDirectory = NO;
-    // 这个路径是否存在
-    BOOL exists = [mgr fileExistsAtPath:path isDirectory:&isDirectory];
-    // 路径不存在
-    if (exists == NO) return 0;
-    
-    if (isDirectory) { // 文件夹
-        // 总大小
-        NSInteger size = 0;
-        // 获得文件夹中的所有内容
-        NSDirectoryEnumerator *enumerator = [mgr enumeratorAtPath:path];
-        for (NSString *subpath in enumerator) {
-            // 获得全路径
-            NSString *fullSubpath = [path stringByAppendingPathComponent:subpath];
-            // 获得文件属性
-            size += [mgr attributesOfItemAtPath:fullSubpath error:nil].fileSize;
-        }
-        return size;
-    } else { // 文件
-        return [mgr attributesOfItemAtPath:path error:nil].fileSize;
-    }
+    freeifaddrs(interfaces);
+    return address;
 }
 
 @end

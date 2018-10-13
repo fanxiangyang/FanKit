@@ -54,5 +54,38 @@
     }
     return value;
 }
-
+-(BOOL)fan_boolForKey:(id)aKey{
+    NSNumber *value=[self objectForKey:aKey];
+    if([value isKindOfClass:[NSNumber class]]){
+        return [value boolValue];
+    }else if([value isKindOfClass:[NSString class]]){
+        return [@([value integerValue]) boolValue];
+    }
+    return NO;
+}
+-(NSInteger)fan_integerForKey:(id)aKey{
+    NSNumber *value=[self objectForKey:aKey];
+    if([value isKindOfClass:[NSNumber class]]){
+        return [value integerValue];
+    }else if([value isKindOfClass:[NSString class]]){
+        return [value integerValue];
+    }
+    return 0;
+}
+-(double)fan_doubleForKey:(id)aKey{
+    NSNumber *value=[self objectForKey:aKey];
+    if([value isKindOfClass:[NSNumber class]]){
+        return [value doubleValue];
+    }else if([value isKindOfClass:[NSString class]]){
+        return [value doubleValue];
+    }
+    return 0.0f;
+}
+-(NSString *)fan_stringForKey:(id)aKey{
+    NSString *value=[self objectForKey:aKey];
+    if([value isKindOfClass:[NSString class]]){
+        return value;;
+    }
+    return @"";
+}
 @end

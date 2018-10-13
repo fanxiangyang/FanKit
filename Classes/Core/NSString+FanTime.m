@@ -7,12 +7,13 @@
 //
 
 #import "NSString+FanTime.h"
+#import "NSBundle+FanKit.h"
 
-#define FanMINUTES		60
-#define FanHOURS		3600
+#define FanMINUTES        60
+#define FanHOURS        3600
 #define FanDAYS         86400
-#define FanMONTHS		(86400 * 30)
-#define FanYEARS		(86400 * 30 * 12)
+#define FanMONTHS        (86400 * 30)
+#define FanYEARS        (86400 * 30 * 12)
 
 @implementation NSString (FanTime)
 
@@ -70,12 +71,12 @@
     }
     
     NSDateComponents *comps = [[NSDateComponents alloc] init];
-    [comps setYear:		[year integerValue]];
-    [comps setMonth:	[month integerValue]];
-    [comps setDay:		[day integerValue]];
-    [comps setHour:		[hr integerValue]];
-    [comps setMinute:	[mn integerValue]];
-    [comps setSecond:	[sec integerValue]];
+    [comps setYear:        [year integerValue]];
+    [comps setMonth:    [month integerValue]];
+    [comps setDay:        [day integerValue]];
+    [comps setHour:        [hr integerValue]];
+    [comps setMinute:    [mn integerValue]];
+    [comps setSecond:    [sec integerValue]];
     
     NSCalendar *gregorian = [NSCalendar autoupdatingCurrentCalendar];
     gregorian.timeZone=timeZone;
@@ -89,48 +90,48 @@
     NSInteger yearsAgo = timeInterval / FanYEARS;
     if (1 < yearsAgo) {
         
-        return [NSString stringWithFormat:@"%ld 年以前", (long)yearsAgo];
+        return [NSString stringWithFormat:@"%ld %@", (long)yearsAgo,[NSBundle fan_localizedStringForKey:@"FanKit_yearAgo" value:@"年以前"]];
     } else if (1 == yearsAgo) {
         
-        return @"1 年以前";
+        return [NSString stringWithFormat:@"1 %@",[NSBundle fan_localizedStringForKey:@"FanKit_yearAgo" value:@"年以前"]];
     }
     
     NSInteger monthsAgo = timeInterval / FanMONTHS;
     if (1 < monthsAgo) {
         
-        return [NSString stringWithFormat:@"%ld 月以前", (long)monthsAgo];;
+        return [NSString stringWithFormat:@"%ld %@", (long)monthsAgo,[NSBundle fan_localizedStringForKey:@"FanKit_monthAgo" value:@"月以前"]];;
     } else if (1 == monthsAgo) {
         
-        return [NSString stringWithFormat:@"1 月以前"];
+        return [NSString stringWithFormat:@"1 %@",[NSBundle fan_localizedStringForKey:@"FanKit_monthAgo" value:@"月以前"]];
     }
     
     NSInteger daysAgo = timeInterval / FanDAYS;
     if (1 < daysAgo) {
         
-        return [NSString stringWithFormat:@"%ld 天以前", (long)daysAgo];
+        return [NSString stringWithFormat:@"%ld %@", (long)daysAgo,[NSBundle fan_localizedStringForKey:@"FanKit_dayAgo" value:@"天以前"]];
     } else if (1 == daysAgo) {
         
-        return @"1 天以前";
+        return [NSString stringWithFormat:@"1 %@",[NSBundle fan_localizedStringForKey:@"FanKit_dayAgo" value:@"天以前"]];
     }
     
     NSInteger hoursAgo = timeInterval / FanHOURS;
     if (1 < hoursAgo) {
         
-        return [NSString stringWithFormat:@"%ld 小时以前", (long)hoursAgo];
+        return [NSString stringWithFormat:@"%ld %@", (long)hoursAgo,[NSBundle fan_localizedStringForKey:@"FanKit_hourAgo" value:@"小时以前"]];
     } else if (1 == hoursAgo) {
         
-        return @"1小时以前";
+        return [NSString stringWithFormat:@"1 %@",[NSBundle fan_localizedStringForKey:@"FanKit_hourAgo" value:@"小时以前"]];
     }
     
     NSInteger minutesAgo = timeInterval / FanMINUTES;
     if (1 < minutesAgo) {
         
-        return [NSString stringWithFormat:@"%ld 分钟以前", (long)minutesAgo];
+        return [NSString stringWithFormat:@"%ld %@", (long)minutesAgo,[NSBundle fan_localizedStringForKey:@"FanKit_minuteAgo" value:@"分钟以前"]];
     } else if (1 == minutesAgo) {
         
-        return @"1 分钟以前";
+        return [NSString stringWithFormat:@"1 %@",[NSBundle fan_localizedStringForKey:@"FanKit_minuteAgo" value:@"分钟以前"]];
     }
-    return [NSString stringWithFormat:@"%ld 秒以前", (long)timeInterval];
+    return [NSString stringWithFormat:@"%ld %@", (long)timeInterval,[NSBundle fan_localizedStringForKey:@"FanKit_secondAgo" value:@"秒以前"]];
 }
 /**
  *  格式化日期（几年，几天前，几点前）
@@ -247,7 +248,7 @@
             returnStr = [formatter stringFromDate:lastDate];
         }else if (betweenDay == 1){
             //昨天
-            returnStr = @"昨天";
+            returnStr = [NSBundle fan_localizedStringForKey:@"FanKit_yesterday" value:@"昨天"];
         }else{
             [formatter setDateFormat:@"YYYY-MM-dd"];
             returnStr = [formatter stringFromDate:lastDate];
@@ -257,5 +258,13 @@
     }
     
     return returnStr;
+}
++(NSDateComponents *)fan_componentsFromTimeStamp:(NSString *)stamp{
+    NSTimeInterval time=[stamp doubleValue];
+    NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
+    NSCalendar *calendar = [NSCalendar currentCalendar];//当前用户的calendar
+    NSDateComponents * components = [calendar components:NSCalendarUnitYear | NSCalendarUnitSecond | NSCalendarUnitMinute | NSCalendarUnitMonth | NSCalendarUnitHour | NSCalendarUnitDay fromDate:detaildate];
+    [components setTimeZone:[NSTimeZone localTimeZone]];
+    return components;
 }
 @end

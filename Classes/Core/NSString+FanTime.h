@@ -64,5 +64,11 @@
  *  今天时刻          21:15
  */
 + (NSString *)fan_getTheRightTimeWith:(id)timeObj isGMT:(BOOL)isGMT;
-
+/**
+ 时间戳转化成年月日
+ 
+ @param stamp 时间戳
+ @return 年月日对象
+ */
++(NSDateComponents *)fan_componentsFromTimeStamp:(NSString *)stamp;
 @end

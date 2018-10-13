@@ -18,28 +18,28 @@
  *  @return 无
  */
 #define Fan_ENCODE(intType, _member,mutableData) \
-    do { \
-            intType member = _member;          \
-            NSInteger size = sizeof(intType);\
-        switch (size) { \
-        case 1: \
-            [mutableData appendBytes:&member length:1]; break; \
-        case 2: { \
-            UInt16 temp = htons(member);\
-            [mutableData appendBytes:&temp length:2];\
-        } break;\
-        case 4: {\
-            UInt32 temp = htonl(member); \
-            [mutableData appendBytes:&temp length:4]; \
-        } break; \
-        case 8: { \
-            UInt64 temp = htonll(member);  /**dthtonll(member)*/ \
-            [mutableData appendBytes:&temp length:8]; \
-        } break; \
-        default:\
-            NSLog(@"不支持的int型字节编码"); break; \
-        } \
-    } while (0)
+do { \
+intType member = _member;          \
+NSInteger size = sizeof(intType);\
+switch (size) { \
+case 1: \
+[mutableData appendBytes:&member length:1]; break; \
+case 2: { \
+UInt16 temp = htons(member);\
+[mutableData appendBytes:&temp length:2];\
+} break;\
+case 4: {\
+UInt32 temp = htonl(member); \
+[mutableData appendBytes:&temp length:4]; \
+} break; \
+case 8: { \
+UInt64 temp = htonll(member);  /**dthtonll(member)*/ \
+[mutableData appendBytes:&temp length:8]; \
+} break; \
+default:\
+NSLog(@"不支持的int型字节编码"); break; \
+} \
+} while (0)
 
 
 @interface FanDataTool : NSObject
@@ -54,16 +54,19 @@
 +(NSString *)fan_dataToHexString:(NSData *)data;
 /**10进制字符串转16进制字符串(字符个数）*/
 +(NSString *)fan_tenToHexString:(NSString *)tenString digit:(NSUInteger)digit;
-
+/**16进制字符串转asc字符串*/
++(NSString *)fan_hexToAscString:(NSString *)hexString;//3132->12
 
 #pragma mark - socket字节编码
-+(int)fan_unpack_int8:(NSData *)data;
-+(int)fan_unpack_int16:(NSData *)data;
-+(int)fan_unpack_int32:(NSData *)data;
+//判断系统是否是大端还是小端
++(BOOL)fan_isLittleEndian;
++(int8_t)fan_unpack_int8:(NSData *)data;
++(int16_t)fan_unpack_int16:(NSData *)data bigEndian:(BOOL)bigEndian;
++(int32_t)fan_unpack_int32:(NSData *)data bigEndian:(BOOL)bigEndian;
 
 +(NSData *)fan_pack_int8:(int)val;
-+(NSData *)fan_pack_int16:(int)val;
-+(NSData *)fan_pack_int32:(int)val;
++(NSData *)fan_pack_int16:(int)val bigEndian:(BOOL)bigEndian;
++(NSData *)fan_pack_int32:(int)val bigEndian:(BOOL)bigEndian;
 
 +(NSData *)fan_pack_string8:(NSString*)str;
 +(NSData *)fan_pack_string16:(NSString*)str;
@@ -71,17 +74,7 @@
 +(NSString *)fan_unpack_string8:(NSData*)data;
 +(NSString *)fan_unpack_string16:(NSData*)data;
 
-#pragma mark - 文件操作
-/** 缓存路径*/
-+(NSString *)fan_cachePath;
-/** copy文件夹下所有子文件和文件夹，放到目标文件夹下 是否移除旧文件*/
-+(void)fan_copyAtDirPath:(NSString *)srcDirPath toDirPath:(NSString *)toDirPath isRemoveOld:(BOOL)isRemoveOld;
-/**删除目录下所有文件*/
-+ (BOOL)fan_deleteFilesAtPath:(NSString *)filePath;
-
-/** 请求文件（夹）路径的所有文件大小（字节）*/
-- (unsigned long long)fan_fileSizeFromPath:(NSString *)path;
-
-//删除文件下大于7天的文件
+//必须在有网的情况下才能获取手机的IP地址
++ (NSString *)fan_IPAdress;
 
 @end

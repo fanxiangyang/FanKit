@@ -24,6 +24,12 @@ typedef NS_ENUM(NSUInteger,FanObject) {
 -(id)fan_objectForKey:(id)aKey;
 -(id)fan_objectForKey:(id)aKey type:(FanObject)objType;
 
+-(BOOL)fan_boolForKey:(id)aKey;
+-(NSInteger)fan_integerForKey:(id)aKey;
+-(double)fan_doubleForKey:(id)aKey;
+-(NSString *)fan_stringForKey:(id)aKey;
+
+
 
 
 @end

@@ -38,9 +38,17 @@
 
 /** 截屏*/
 +(UIImage*)fan_beginImageContext:(CGRect)rect fromView:(UIView*)view;
-
-
-
+/** OpenGL截图*/
++ (UIImage *)fan_openglSnapshotImage:(UIView *)openGLView;
+/** 高斯模糊*/
++ (UIImage *)fan_gaussianBlurImage:(UIImage *)image;
+/** 没有白边的高斯模糊 blur 1-100 */
++(UIImage *)fan_accelerateBlurWithImage:(UIImage *)image blurNumber:(CGFloat)blur;
+/** 没有白边的高斯模糊（解决发红情况） blur 1-100 (最好1-25)*/
++(UIImage *)fan_accelerateBlurShortWithImage:(UIImage *)image blurNumber:(CGFloat)blur;
++(void)fan_addBlurEffectToView:(UIView *)toView;//添加毛玻璃
+/** 拉伸图片，边缘不拉伸，图片的一半*/
++(UIImage *)fan_stretchableImage:(UIImage *)image;
 /***************************************创建UI******************************************/
 #pragma mark --创建Label
 +(UILabel*)fan_createLabelWithFrame:(CGRect)frame text:(NSString*)text textColor:(UIColor *)textColor;
@@ -56,7 +64,7 @@
 +(UIButton*)fan_createButtonWithFrame:(CGRect)frame imageName:(NSString*)imageName target:(id)target action:(SEL)action title:(NSString*)title titleColor:(UIColor *)titleColor;
 #pragma mark --创建UITextField
 +(UITextField*)fan_createTextFieldWithFrame:(CGRect)frame placeholder:(NSString*)placeholder Font:(float)font backgoundColor:(UIColor*)bgColor;
-+(UITextField*)fan_createTextFieldWithFrame:(CGRect)frame placeholder:(NSString*)placeholder leftImageView:(UIImageView*)imageView rightImageView:(UIView*)rightImageView Font:(float)font;
++(UITextField*)fan_createTextFieldWithFrame:(CGRect)frame placeholder:(NSString*)placeholder leftImageView:(UIView*)imageView rightImageView:(UIView*)rightImageView Font:(float)font;
 
 #pragma mark 创建UIScrollView
 +(UIScrollView*)fan_createScrollViewWithFrame:(CGRect)frame contentSize:(CGSize)size;
@@ -69,7 +77,9 @@
 +(UISwitch *)fan_createSwitchWithFrame:(CGRect)rect target:(id)target action:(SEL)action;
 
 #pragma mark 创建UIViewController
-
++(UIViewController *)fan_viewControllerFrom:(UIView *)view;
+//移除tag值的View
++(void)fan_removeViewTag:(NSInteger)tag fromeView:(UIView *)view;
 +(id)fan_classFromName:(NSString *)aClassName;
 /***************************************创建UI  End******************************************/
 
