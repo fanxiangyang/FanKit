@@ -221,16 +221,17 @@
             backView.hidden = YES;
             fillColorForCute = [UIColor clearColor];
             [shapeLayer removeFromSuperlayer];
+            __weak typeof(self) weakSelf=self;
             [UIView animateWithDuration:0.5 delay:0.0f usingSpringWithDamping:0.4f initialSpringVelocity:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                frontView.center = oldBackViewCenter;
+                self->frontView.center = self->oldBackViewCenter;
             } completion:^(BOOL finished) {
                 
                 if (finished) {
-                    if (_showGameCenterAnimation) {
-                        [self AddAniamtionLikeGameCenterBubble];
+                    if (weakSelf.showGameCenterAnimation) {
+                        [weakSelf AddAniamtionLikeGameCenterBubble];
                     }
-                    [displayLink invalidate];
-                    displayLink = nil;
+                    [self->displayLink invalidate];
+                    self->displayLink = nil;
                 }
                 
             }];

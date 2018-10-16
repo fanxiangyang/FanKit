@@ -11,13 +11,13 @@ FanKit 是一组庞大、功能丰富的 iOS 组件。
 
 * Core 			— 基本类型及常用工厂类。
 * UIKit		 	— UI方面的类及工厂方法。
-* Libs		 	— 自定义的小效果。
+* Libs		 	— 自定义的小效果。（后期版本会移除此目录，自己喜欢可以自己下载demo使用）
 
 Installation（安装）
 ==============
 ### CocoaPods
 
-1. Add `pod 'FanKit','~> 0.0.2'` to your Podfile.
+1. Add `pod 'FanKit','~> 0.1.0'` to your Podfile.
 2. Run `pod install` or `pod update`.
 3. Import "FanKit.h".
 
@@ -44,7 +44,18 @@ Function Example(功能事例)
 ### 1.Example List（功能列表）
 <img src="https://github.com/fanxiangyang/FanKit/blob/master/Document/DemoList.png?raw=true" width="320">     <img src="https://github.com/fanxiangyang/FanKit/blob/master/Document/password.png?raw=true" width="320">
 
+更新历史(Version Update)
+==============
+### Release 0.0.1-0.0.3
+* 基本库，很多不是很完善
+
+### Release 0.1.0
+* 添加部分语言本地化，
+* 移除不太通用的方法，
+* 完善和添加部分方法，使用更加方便,特别在layer层绘图。
+
 Like(喜欢)
 ==============
 #### 有问题请直接在文章下面留言,喜欢就给个Star(小星星)吧！ 
-#### Email:fqsyfan@gmail.com
+#### Email: fqsyfan@gmail.com
+#### Email: fanxiangyang_heda@163.com 
