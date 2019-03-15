@@ -8,11 +8,6 @@
 
 #import "FanDataTool.h"
 
-//获取IP
-#include <ifaddrs.h>
-#include <arpa/inet.h>
-
-
 @implementation FanDataTool
 
 #pragma mark - 数据进制转换和解析
@@ -100,7 +95,7 @@
     myByteArray[0]=val & 0xff;
     myByteArray[1]=(val>>8) & 0xff;
     
-    if(!bigEndian)
+    if(bigEndian)
     {
         myByteArray[1]=val & 0xff;
         myByteArray[0]=(val>>8) & 0xff;
@@ -117,7 +112,7 @@
 {
     char myByteArray[] = {0,0,0,0};
     
-    if(!bigEndian)
+    if(bigEndian)
     {
         myByteArray[3]=val & 0xff;
         myByteArray[2]=(val>>8) & 0xff;
@@ -131,6 +126,27 @@
     }
     
     
+    NSData *ret=[NSData dataWithBytes:myByteArray length:4];
+    return ret;
+}
+
++(NSData *)fan_pack_float32:(float)val bigEndian:(BOOL)bigEndian
+{
+    float valf=val;
+    char myByteArray[] = {0,0,0,0};
+    char *temp=(char *)(&valf);
+    if(bigEndian)
+    {
+        myByteArray[3]=temp[0];
+        myByteArray[2]=temp[1];
+        myByteArray[1]=temp[2];
+        myByteArray[0]=temp[3];
+    }else{
+        myByteArray[3]=temp[3];
+        myByteArray[2]=temp[2];
+        myByteArray[1]=temp[1];
+        myByteArray[0]=temp[0];
+    }
     NSData *ret=[NSData dataWithBytes:myByteArray length:4];
     return ret;
 }
@@ -150,9 +166,9 @@
     NSUInteger len = [data length];
     Byte *by=(Byte *)malloc(len);
     memcpy(by, [data bytes], len);
-    int16_t ret=((by[0] & 0xFF) << 8) + (by[1] & 0xff);
+    int16_t ret=((by[1] & 0xFF) << 8) + (by[0] & 0xff);
     if (bigEndian) {
-        ret=((by[1] & 0xFF) << 8) + (by[0] & 0xff);
+        ret=((by[0] & 0xFF) << 8) + (by[1] & 0xff);
     }
     free(by);
     return ret;
@@ -162,15 +178,35 @@
     NSUInteger len = [data length];
     Byte *by=(Byte *)malloc(len);
     memcpy(by, [data bytes], len);
-    int32_t ret = ((by[0] & 0xFF) << 24) + ((by[1] & 0xFF) << 16) + ((by[2] & 0xFF) << 8) + (by[3] & 0xff);
+    int32_t ret=(by[3] << 24) + ((by[2] & 0xFF) << 16) + ((by[1] & 0xFF) << 8) + (by[0] & 0xFF);
     if (bigEndian) {
-        ret=(by[3] << 24) + ((by[2] & 0xFF) << 16) + ((by[1] & 0xFF) << 8) + (by[0] & 0xFF);
-        
+        ret = ((by[0] & 0xFF) << 24) + ((by[1] & 0xFF) << 16) + ((by[2] & 0xFF) << 8) + (by[3] & 0xff);
     }
     free(by);
     return ret;
 }
-
++(float)fan_unpack_float32:(NSData *)data bigEndian:(BOOL)bigEndian
+{
+    NSUInteger len = [data length];
+    Byte *by=(Byte *)malloc(len);
+    memcpy(by, [data bytes], len);
+    float valf=0.0;
+    char *temp=(char *)(&valf);
+    if(bigEndian)
+    {
+        temp[3]=by[0];
+        temp[2]=by[1];
+        temp[1]=by[2];
+        temp[0]=by[3];
+    }else{
+        temp[3]=by[3];
+        temp[2]=by[2];
+        temp[1]=by[1];
+        temp[0]=by[0];
+    }
+    free(by);
+    return valf;
+}
 +(NSData *)fan_pack_string8:(NSString*)str
 {
     NSData *bytes = [str dataUsingEncoding:NSUTF16LittleEndianStringEncoding];
@@ -205,29 +241,4 @@
     NSString *ret = [[NSString alloc]initWithData:[data subdataWithRange:(NSRange){2,len}] encoding:NSUTF8StringEncoding];
     return ret;
 }
-
-
-//必须在有网的情况下才能获取手机的IP地址
-+ (NSString *)fan_IPAdress {
-    NSString *address = @"1.1.1.1";
-    struct ifaddrs *interfaces = NULL;
-    struct ifaddrs *temp_addr = NULL;
-    int success = 0;
-    success = getifaddrs(&interfaces);
-    if (success == 0) { // 0 表示获取成功
-        temp_addr = interfaces;
-        while (temp_addr != NULL) {
-            if( temp_addr->ifa_addr->sa_family == AF_INET) {
-                // Check if interface is en0 which is the wifi connection on the iPhone
-                if ([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:@"en0"]) {
-                    address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in  *)temp_addr->ifa_addr)->sin_addr)];
-                }
-            }
-            temp_addr = temp_addr->ifa_next;
-        }
-    }
-    freeifaddrs(interfaces);
-    return address;
-}
-
 @end

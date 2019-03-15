@@ -18,28 +18,28 @@
  *  @return 无
  */
 #define Fan_ENCODE(intType, _member,mutableData) \
-do { \
-intType member = _member;          \
-NSInteger size = sizeof(intType);\
-switch (size) { \
-case 1: \
-[mutableData appendBytes:&member length:1]; break; \
-case 2: { \
-UInt16 temp = htons(member);\
-[mutableData appendBytes:&temp length:2];\
-} break;\
-case 4: {\
-UInt32 temp = htonl(member); \
-[mutableData appendBytes:&temp length:4]; \
-} break; \
-case 8: { \
-UInt64 temp = htonll(member);  /**dthtonll(member)*/ \
-[mutableData appendBytes:&temp length:8]; \
-} break; \
-default:\
-NSLog(@"不支持的int型字节编码"); break; \
-} \
-} while (0)
+    do { \
+        intType member = _member;          \
+        NSInteger size = sizeof(intType);\
+        switch (size) { \
+        case 1: \
+            [mutableData appendBytes:&member length:1]; break; \
+        case 2: { \
+            UInt16 temp = htons(member);\
+            [mutableData appendBytes:&temp length:2];\
+        } break;\
+        case 4: {\
+            UInt32 temp = htonl(member); \
+            [mutableData appendBytes:&temp length:4]; \
+        } break; \
+        case 8: { \
+            UInt64 temp = htonll(member);  /**dthtonll(member)*/ \
+            [mutableData appendBytes:&temp length:8]; \
+        } break; \
+        default:\
+            NSLog(@"不支持的int型字节编码"); break; \
+        } \
+    } while (0)
 
 
 @interface FanDataTool : NSObject
@@ -63,10 +63,12 @@ NSLog(@"不支持的int型字节编码"); break; \
 +(int8_t)fan_unpack_int8:(NSData *)data;
 +(int16_t)fan_unpack_int16:(NSData *)data bigEndian:(BOOL)bigEndian;
 +(int32_t)fan_unpack_int32:(NSData *)data bigEndian:(BOOL)bigEndian;
++(NSData *)fan_pack_float32:(float)val bigEndian:(BOOL)bigEndian;
 
 +(NSData *)fan_pack_int8:(int)val;
 +(NSData *)fan_pack_int16:(int)val bigEndian:(BOOL)bigEndian;
 +(NSData *)fan_pack_int32:(int)val bigEndian:(BOOL)bigEndian;
++(float)fan_unpack_float32:(NSData *)data bigEndian:(BOOL)bigEndian;
 
 +(NSData *)fan_pack_string8:(NSString*)str;
 +(NSData *)fan_pack_string16:(NSString*)str;
@@ -74,7 +76,5 @@ NSLog(@"不支持的int型字节编码"); break; \
 +(NSString *)fan_unpack_string8:(NSData*)data;
 +(NSString *)fan_unpack_string16:(NSData*)data;
 
-//必须在有网的情况下才能获取手机的IP地址
-+ (NSString *)fan_IPAdress;
 
 @end

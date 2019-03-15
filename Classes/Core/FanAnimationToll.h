@@ -47,7 +47,7 @@
 /**点移动:移动的是偏移量*/
 +(CABasicAnimation *)fan_movepoint:(CGPoint )point;
 /**动画放大和缩小:放大倍数+动画次数 */
-+(CABasicAnimation *)fan_scaleMax:(float)multiple orginMin:(float)orginMultiple durTimes:(float)time Rep:(float)repeatTimes;
++(CABasicAnimation *)fan_scaleFrom:(float)multiple toMultiple:(float)toMultiple durTimes:(float)time Rep:(float)repeatTimes;
 /**组合动画:动画时间+动画次数 */
 +(CAAnimationGroup *)fan_groupAnimation:(NSArray *)animationAry durTimes:(float)time Rep:(float)repeatTimes; //组合动画
 

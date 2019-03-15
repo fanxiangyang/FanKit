@@ -105,19 +105,19 @@
 }
 /**动画放大和缩小
  
-*
-*multiple 放大的倍数
-*orginMultiple最小的倍数
-*time 持续的时间
-*repeatTimes 重复的次数
-*/
-+(CABasicAnimation *)fan_scaleMax:(float)multiple orginMin:(float)orginMultiple durTimes:(float)time Rep:(float)repeatTimes
+ *
+ *multiple 开始的倍数
+ *toMultiple 结束的倍数
+ *time 持续的时间
+ *repeatTimes 重复的次数
+ */
++(CABasicAnimation *)fan_scaleFrom:(float)multiple toMultiple:(float)toMultiple durTimes:(float)time Rep:(float)repeatTimes
 {
     CABasicAnimation *animation=[CABasicAnimation animationWithKeyPath:@"transform.scale"];
-    animation.fromValue=[NSNumber numberWithFloat:orginMultiple];
-    animation.toValue=[NSNumber numberWithFloat:multiple];
+    animation.fromValue=[NSNumber numberWithFloat:multiple];
+    animation.toValue=[NSNumber numberWithFloat:toMultiple];
     animation.duration=time;
-    animation.autoreverses=YES;
+    animation.autoreverses=YES;//逆向动画，如果设置为NO,就不会逆向缩放回去了
     animation.repeatCount=repeatTimes;
     animation.removedOnCompletion=NO;
     animation.fillMode=kCAFillModeForwards;

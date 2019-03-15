@@ -32,5 +32,8 @@
 #pragma mark - 其他
 /** 获取WiFi ssid*/
 +(NSString *)fan_wifiInfo_ssid;
-
+///必须在有网的情况下才能获取手机的IP地址
++ (NSString *)fan_IPAdress;
+///获取是否打开WiFi
++ (BOOL)fan_isOpenWiFi;
 @end

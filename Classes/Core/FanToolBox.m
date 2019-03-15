@@ -9,6 +9,9 @@
 #import "FanToolBox.h"
 //获取WiFi
 #import <SystemConfiguration/CaptiveNetwork.h>
+#include <ifaddrs.h>
+#include <arpa/inet.h>
+#include <net/if.h>
 
 @implementation FanToolBox
 
@@ -164,9 +167,10 @@
 #pragma mark - 其他
 
 +(NSString *)fan_wifiInfo_ssid{
+    NSString *ssid;
+#if TARGET_OS_IOS
     NSArray *ifs=(__bridge_transfer id)CNCopySupportedInterfaces();
     id info = nil;
-    NSString *ssid;
     for (NSString *ifnam in ifs) {
         info=(__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
         //        NSLog(@"22222:%@=>%@",ifnam,info);
@@ -178,7 +182,51 @@
             break;
         }
     }
+#endif
     return ssid;
 }
+//必须在有网的情况下才能获取手机的IP地址
++ (NSString *)fan_IPAdress {
+    NSString *address = @"0.0.0.0";
+    struct ifaddrs *interfaces = NULL;
+    struct ifaddrs *temp_addr = NULL;
+    int success = 0;
+    success = getifaddrs(&interfaces);
+    if (success == 0) { // 0 表示获取成功
+        temp_addr = interfaces;
+        while (temp_addr != NULL) {
+            if( temp_addr->ifa_addr->sa_family == AF_INET) {
+                // Check if interface is en0 which is the wifi connection on the iPhone
+                if ([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:@"en0"]) {
+                    address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in  *)temp_addr->ifa_addr)->sin_addr)];
+                    
+                    //                    //广播地址--10.22.70.255
+                    //                    NSLog(@"广播地址--%@",[NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_dstaddr)->sin_addr)]);
+                    //                    //本机地址--10.22.70.111
+                    //                    NSLog(@"本机地址--%@",[NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)]);
+                    //                    //子网掩码地址--255.255.255.0
+                    //                    NSLog(@"子网掩码地址--%@",[NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_netmask)->sin_addr)]);
+                    //                    //端口地址--en0
+                    //                    NSLog(@"端口地址--%@",[NSString stringWithUTF8String:temp_addr->ifa_name]);
+                }
+            }
+            temp_addr = temp_addr->ifa_next;
+        }
+    }
+    freeifaddrs(interfaces);
+    return address;
+}
 
++ (BOOL)fan_isOpenWiFi{
+    NSCountedSet * cset = [NSCountedSet new];
+    struct ifaddrs *interfaces;
+    if( ! getifaddrs(&interfaces) ) {
+        for( struct ifaddrs *interface = interfaces; interface; interface = interface->ifa_next) {
+            if ( (interface->ifa_flags & IFF_UP) == IFF_UP ) {
+                [cset addObject:[NSString stringWithUTF8String:interface->ifa_name]];
+            }
+        }
+    }
+    return [cset countForObject:@"awdl0"] > 1 ? YES : NO;
+}
 @end
