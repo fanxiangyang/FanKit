@@ -63,27 +63,50 @@
 /** 根据文本的内容，计算字符串的大小
  *  根据换行方式和字体的大小，已经计算的范围来确定字符串的size
  */
-+(CGSize)fan_currentSizeWithContent:(NSString *)content font:(UIFont *)font cgSize:(CGSize)cgsize{
-    //    CGFloat version=[[UIDevice currentDevice].systemVersion floatValue];
-    
++(CGSize)fan_textSizeWithMaxSize:(CGSize)maxSize text:(NSString *)text font:(UIFont *)font{
     NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
-    
-    CGSize size=[content boundingRectWithSize:cgsize options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:dic context:nil].size;
-    //计算size， 7之后有新的方法
-    //    if (version>=7.0) {
-    //        //得到一个设置字体属性的字典
-    //        NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
-    //        //optinos 前两个参数是匹配换行方式去计算，最后一个参数是匹配字体去计算
-    //        //attributes 传入的字体
-    //        //boundingRectWithSize 计算的范围
-    //        size=[content boundingRectWithSize:cgsize options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:dic context:nil].size;
-    //    }else{
-    //        //ios7以前
-    //        //根据字号和限定范围还有换行方式计算字符串的size，label中的font 和linbreak要与此一致
-    //        //CGSizeMake(215, 999) 横向最大计算到215，纵向Max999
-    //        size=[content sizeWithFont:font constrainedToSize:cgsize lineBreakMode:NSLineBreakByCharWrapping];
-    //    }
+    CGSize size=[text boundingRectWithSize:maxSize options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:dic context:nil].size;
     return size;
+}
++(CGSize)fan_textSizeWithMaxSize:(CGSize)maxSize text:(NSString *)text font:(UIFont *)font lineSpace:(CGFloat)lineSpace wordSpace:(CGFloat)wordSpace{
+    NSMutableDictionary *dic=[NSMutableDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil];
+    
+    if (lineSpace>0.0f) {
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.lineSpacing=lineSpace;
+        //考虑换行的影响(以后待修改）
+        [paragraphStyle setLineBreakMode:NSLineBreakByWordWrapping];//考虑换行的影响
+        [dic setObject:paragraphStyle forKey:NSParagraphStyleAttributeName];
+    }
+    if (wordSpace>0.0f) {
+        //字间距
+        [dic setObject:@(wordSpace) forKey:NSKernAttributeName];
+    }
+    CGSize size=[text boundingRectWithSize:maxSize options:NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:dic context:nil].size;
+    
+    return size;
+}
++(void)fan_changeSpaceFromlabel:(UILabel *)label lineSpace:(CGFloat)lineSpace wordSpace:(CGFloat)wordSpace{
+    NSString *labelText = label.text;
+    NSMutableAttributedString *attributedString=[label.attributedText mutableCopy];
+    NSMutableDictionary *dic=[[NSMutableDictionary alloc]init];
+    if (lineSpace>0.0f) {
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.lineSpacing=lineSpace;
+        //考虑换行的影响(以后待修改）
+        //        [paragraphStyle setLineBreakMode:NSLineBreakByWordWrapping];//考虑换行的影响
+        [paragraphStyle setLineBreakMode:label.lineBreakMode];
+        
+        [dic setObject:paragraphStyle forKey:NSParagraphStyleAttributeName];
+    }
+    if (wordSpace>0.0f) {
+        //字间距
+        [dic setObject:@(wordSpace) forKey:NSKernAttributeName];
+    }
+    [attributedString addAttributes:dic range:NSMakeRange(0, labelText.length)];
+    
+    label.attributedText = attributedString;
+    [label sizeToFit];
 }
 #pragma mark - 字节个数
 +(NSUInteger) fan_unicodeLengthOfString: (NSString *) text {
@@ -164,6 +187,32 @@
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+}
+/** 通过UIcolor获取一张图片圆角 */
++ (UIImage *)fan_ImageWithColor:(UIColor *)color frame:(CGRect)rect cornerRadius:(CGFloat)cornerRadius{
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    int w  = rect.size.width;
+    int h = rect.size.height;
+    int c = cornerRadius;
+    CGContextMoveToPoint(context, 0, c);
+    CGContextAddArcToPoint(context, 0, 0, c, 0, c);
+    CGContextAddLineToPoint(context, w-c, 0);
+    CGContextAddArcToPoint(context, w, 0, w, c, c);
+    CGContextAddLineToPoint(context, w, h-c);
+    CGContextAddArcToPoint(context, w, h, w-c, h, c);
+    CGContextAddLineToPoint(context, c, h);
+    CGContextAddArcToPoint(context, 0, h, 0, h-c, c);
+    CGContextAddLineToPoint(context, 0, c);
+    CGContextClosePath(context);
+    // 先裁剪 context，再画图，就会在裁剪后的 path 中画
+    CGContextClip(context);
+    CGContextDrawPath(context, kCGPathFill);
     CGContextFillRect(context, rect);
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -616,6 +665,11 @@
         return cls;
     }
     return nil;
+}
++(void)fan_addTapGestureTarget:(id)target action:(SEL)action toView:(UIView *)tapView{
+    UITapGestureRecognizer *imageTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:target action:action];
+    tapView.userInteractionEnabled=YES;
+    [tapView addGestureRecognizer:imageTapGesture];
 }
 #pragma mark 返回设备类型
 

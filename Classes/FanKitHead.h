@@ -9,6 +9,8 @@
 #ifndef FanKitHead_h
 #define FanKitHead_h
 
+#import "FanUIKit.h"
+
 
 //系统版本号
 #define Fan_iOS_Version [[[UIDevice currentDevice] systemVersion] floatValue]
@@ -28,7 +30,8 @@
 
 //颜色
 #define FanColor(r,g,b,a)   [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
-
+///不带#的6位 488fjj 颜色值
+#define FanHexColor(hex)   [FanUIKit fan_colorFromHexColor:hex]
 //本地化
 #define FanLocalizedString(key) NSLocalizedString(key, @"")
 #define FanLocalizedStringFromTable(key,tbl) NSLocalizedStringFromTable(key, tbl, @"")

@@ -121,7 +121,7 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
  @param alertBlock 按钮回调
  @return self
  */
-+ (instancetype)fan_showAlertHUDTitle:(NSString *)textStr subTitle:(NSString *_Nonnull)subTitle buttonTitles:(NSArray*_Nullable)btnTitleArray  alertBlock:(FanProgressHUDAlertBlock _Nullable )alertBlock;
++ (instancetype _Nullable )fan_showAlertHUDTitle:(NSString *_Nullable)textStr subTitle:(NSString *_Nullable)subTitle buttonTitles:(NSArray*_Nullable)btnTitleArray  alertBlock:(FanProgressHUDAlertBlock _Nullable )alertBlock;
 + (instancetype _Nullable )fan_showAlertHUDTitle:(NSString *_Nullable)textStr subTitle:( NSString * _Nonnull )subTitle buttonTitle:(NSString *_Nullable)buttonTitle alertBlock:(FanProgressHUDAlertBlock _Nullable)alertBlock;
 /**
  弹窗类似系统对话框
@@ -152,8 +152,8 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
 
 #pragma mark - 子类调用的方法
 
--(void)buttonClick:(UIButton *)btn;
--(CGSize)fan_currentSizeWithContent:(NSString *)content font:(UIFont *)font cgSize:(CGSize)cgsize;
+-(void)buttonClick:(UIButton *_Nullable)btn;
+-(CGSize)fan_currentSizeWithContent:(NSString *_Nullable)content font:(UIFont *_Nullable)font cgSize:(CGSize)cgsize;
 - (void)commonInit;//继承要执行父类方法
 
 @end

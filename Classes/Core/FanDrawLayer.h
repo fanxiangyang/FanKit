@@ -10,7 +10,15 @@
 #import <UIKit/UIKit.h>
 
 @interface FanDrawLayer : NSObject
-
+/**
+ 画椭圆线
+ 
+ @param frame frame
+ @param lineWidth 线宽
+ @param lineColor 线颜色
+ @return layer
+ */
++(CAShapeLayer *)fan_ovalInRect:(CGRect)frame lineWidth:(CGFloat)lineWidth lineColor:(UIColor *)lineColor;
 /**
  画直线段
  
@@ -128,4 +136,12 @@
  @return 箭头气泡弹窗
  */
 +(CAShapeLayer *)fan_arrowPopupFrame:(CGRect)frame arrowHeight:(CGFloat)arrowHeight arrowOffsetX:(CGFloat)arrowOffsetX cornerRadius:(CGFloat)radius lineWith:(CGFloat)lineWidth lineColor:(UIColor *)lineColor fillColor:(UIColor*)fillColor;
+/**
+ 左右尖角的矩形<___>遮罩
+ 
+ @param frame frame
+ @param arrowWidth 尖角宽度
+ @return layer
+ */
++(CAShapeLayer *)fan_arrowPopupleftRightMaskFrame:(CGRect)frame arrowWidth:(CGFloat)arrowWidth;
 @end

@@ -25,6 +25,7 @@
 		667A9FD51CFEC619009B1D53 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 667A9FD31CFEC619009B1D53 /* LaunchScreen.storyboard */; };
 		667A9FE01CFEC619009B1D53 /* FanKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FDF1CFEC619009B1D53 /* FanKitTests.m */; };
 		667A9FEB1CFEC619009B1D53 /* FanKitUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FEA1CFEC619009B1D53 /* FanKitUITests.m */; };
+		6683109122842F1500444009 /* FanColorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6683109022842F1500444009 /* FanColorView.m */; };
 		66A5071E1D06E1AA00D5EC34 /* FanAnimationToll.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A507191D06E1AA00D5EC34 /* FanAnimationToll.m */; };
 		66A5071F1D06E1AA00D5EC34 /* UIView+FanAutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A5071D1D06E1AA00D5EC34 /* UIView+FanAutoLayout.m */; };
 		66B396551D2A144900A40A06 /* FanDataTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B396541D2A144900A40A06 /* FanDataTool.m */; };
@@ -105,6 +106,8 @@
 		667A9FE61CFEC619009B1D53 /* FanKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FanKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		667A9FEA1CFEC619009B1D53 /* FanKitUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FanKitUITests.m; sourceTree = "<group>"; };
 		667A9FEC1CFEC619009B1D53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6683108F22842F1500444009 /* FanColorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanColorView.h; sourceTree = "<group>"; };
+		6683109022842F1500444009 /* FanColorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanColorView.m; sourceTree = "<group>"; };
 		66A507181D06E1AA00D5EC34 /* FanAnimationToll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanAnimationToll.h; sourceTree = "<group>"; };
 		66A507191D06E1AA00D5EC34 /* FanAnimationToll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanAnimationToll.m; sourceTree = "<group>"; };
 		66A5071A1D06E1AA00D5EC34 /* FanKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanKit.h; sourceTree = "<group>"; };
@@ -312,6 +315,8 @@
 		66A5071B1D06E1AA00D5EC34 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				6683108F22842F1500444009 /* FanColorView.h */,
+				6683109022842F1500444009 /* FanColorView.m */,
 				6639A1A02171B6CA00231B42 /* FanAlertController.h */,
 				6639A1A22171B6CA00231B42 /* FanAlertController.m */,
 				6639A1A12171B6CA00231B42 /* FanProgressHUD.h */,
@@ -485,7 +490,7 @@
 		667A9FBA1CFEC619009B1D53 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "凡向阳";
 				TargetAttributes = {
 					667A9FC11CFEC619009B1D53 = {
@@ -504,7 +509,7 @@
 			};
 			buildConfigurationList = 667A9FBD1CFEC619009B1D53 /* Build configuration list for PBXProject "FanKit" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -587,6 +592,7 @@
 				66B3967E1D2A52B400A40A06 /* FanActionSheetView.m in Sources */,
 				66B3967F1D2A52B400A40A06 /* FanShareView.m in Sources */,
 				66E81A651E72C069008E887E /* FanSwiperbleViewController.m in Sources */,
+				6683109122842F1500444009 /* FanColorView.m in Sources */,
 				66B3965C1D2A1F9A00A40A06 /* UIViewController+FanRoot.m in Sources */,
 				66A5071F1D06E1AA00D5EC34 /* UIView+FanAutoLayout.m in Sources */,
 				6639A1AA2171B9FF00231B42 /* NSBundle+FanKit.m in Sources */,
@@ -650,6 +656,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -705,6 +712,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";

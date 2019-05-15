@@ -36,6 +36,14 @@
  *  @return （几年，几天前，几点前）
  */
 + (NSString *)fan_stringFromCurrent:(NSString *)dateStr isGMT:(BOOL)isGMT;
+
+/**
+ 格式化日期（几年，几天前，几点前)
+
+ @param timeStamp 时间戳
+ @return 格式化后结果
+ */
++ (NSString *)fan_stringFromTimeStamp:(NSTimeInterval)timeStamp;
 /**
  *  格式化日期（几年，几天前，几点前)
  *
@@ -43,7 +51,15 @@
  *
  *  @return 格式化后结果
  */
-+ (NSString *)fan_stringFromDate:(NSDate *)earlierDate;
++ (NSString *)fan_stringFromSinceNowDateToEarlierDate:(NSDate *)earlierDate;
+
+/**
+ 格式化日期（几年，几天前，几点前)
+
+ @param timeSpace 与现在的时间间隔
+ @return 格式化后结果
+ */
++ (NSString *)fan_stringFromSinceNowWithSpace:(NSTimeInterval)timeSpace;
 /**
  *  时间戳转化为时间字符串
  *
@@ -51,8 +67,15 @@
  *
  *  @return 字符串yyyy-MM-dd HH:mm:ss
  */
-+(NSString*)fan_timeStamp:(NSString *)stamp;
-
++(NSString*)fan_stringWithTimeStamp:(NSString *)stamp;
+/**
+ 时间戳格式化想要的字符串
+ 
+ @param format @"YYYY-MM-dd HH:mm:ss"
+ @param timeStamp 时间戳
+ @return 字符串2019-05-23 04:30:20
+ */
++(NSString*)fan_stringWithFormat:(NSString *)format timeStamp:(NSTimeInterval)timeStamp;
 /** 时间转换具体的天
  
  *  现在时间戳：      1427953149.691974
@@ -63,12 +86,31 @@
  *  直接汉字          昨天
  *  今天时刻          21:15
  */
-+ (NSString *)fan_getTheRightTimeWith:(id)timeObj isGMT:(BOOL)isGMT;
++ (NSString *)fan_stingWithRealTime:(id)timeObj isGMT:(BOOL)isGMT;
 /**
  时间戳转化成年月日
  
- @param stamp 时间戳
+ @param timeStamp 时间戳
  @return 年月日对象
  */
-+(NSDateComponents *)fan_componentsFromTimeStamp:(NSString *)stamp;
++(NSDateComponents *)fan_componentsFromTimeStamp:(NSTimeInterval)timeStamp;
+
+
+
+/**
+ 通过对象生成时间戳
+
+ @param timeObj 时间对象（NSDate，NSNumber，NSString（【17位的和10位的数字】+【YYYY-MM-dd HH:mm:ss】+【YYYY/MM/dd】）
+ @param isGMT 是否是GMT
+ @return 时间戳
+ */
++ (NSTimeInterval)fan_getRealTimeIntervalWith:(id)timeObj isGMT:(BOOL)isGMT;
+
+/**
+ 时间戳转成 今天，昨天 年月
+
+ @param timeStamp 时间戳
+ @return 格式化后的时间显示
+ */
++(NSString *)fan_stringFormatWithTimeStamp:(NSTimeInterval)timeStamp;
 @end

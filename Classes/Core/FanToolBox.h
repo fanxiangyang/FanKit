@@ -13,7 +13,7 @@
 
 
 #pragma mark - 文件操作
-/** 缓存路径*/
+/** 缓存路径  NSTemporaryDirectory() = tmp文件夹*/
 +(NSString *)fan_cachePath;
 +(NSString *)fan_documentPath;
 +(BOOL)fan_createDirectoryAtPath:(NSString *)filePath;

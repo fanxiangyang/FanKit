@@ -267,7 +267,23 @@ NSNumber*fan_DegreesToNumber(CGFloat degrees) {
     animation.repeatCount=repeatTimes;
     return animation;
 }
-
+//贝塞尔路径动画（曲线）
++(CAKeyframeAnimation *)fan_bezierPathAniamtion:(UIBezierPath *)bezierPath durTimes:(float)time Rep:(float)repeatTimes{
+    //CAKeyframeAnimation关键帧动画，可以定义行动的路线
+    CAKeyframeAnimation *animation=[CAKeyframeAnimation animationWithKeyPath:@"position"];
+    animation.removedOnCompletion=NO;
+    animation.fillMode=kCAFillModeForwards;
+    animation.timingFunction=[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+    animation.autoreverses=NO;
+    animation.duration=time;
+    animation.repeatCount=repeatTimes;
+    animation.calculationMode = kCAAnimationPaced;
+    //    CGMutablePathRef curvedPath = CGPathCreateMutable();
+    //    CGPathAddPath(curvedPath, 0, bezierPath.CGPath);
+    animation.path=bezierPath.CGPath;
+    //    CGPathRelease(curvedPath);
+    return animation;
+}
 #pragma mark - 其他辅助内容
 
 //注意一：一个视图的layer添加动画后，必须移除动画后对视图的frame操作才会有效

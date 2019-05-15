@@ -94,7 +94,7 @@
 + (instancetype _Nullable )fan_showAlertHUDTitle:(NSString *_Nullable)textStr subTitle:( NSString * _Nonnull )subTitle buttonTitle:(NSString *_Nullable)buttonTitle alertBlock:(FanProgressHUDAlertBlock _Nullable)alertBlock{
     return [self fan_showAlertHUDTitle:textStr subTitle:subTitle buttonTitles:@[buttonTitle] alertBlock:alertBlock];
 }
-+ (instancetype)fan_showAlertHUDTitle:(NSString *)textStr subTitle:(NSString *_Nonnull)subTitle buttonTitles:(NSArray*_Nullable)btnTitleArray  alertBlock:(FanProgressHUDAlertBlock _Nullable)alertBlock{
++ (instancetype)fan_showAlertHUDTitle:(NSString *)textStr subTitle:(NSString *_Nullable)subTitle buttonTitles:(NSArray*_Nullable)btnTitleArray  alertBlock:(FanProgressHUDAlertBlock _Nullable)alertBlock{
     FanAlertController *hud = [[FanAlertController alloc]init];
     hud.view.frame=[[UIScreen mainScreen]bounds];
     hud.alertTitle=textStr;

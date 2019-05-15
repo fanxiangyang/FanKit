@@ -20,7 +20,27 @@
 /** 根据文本的内容，计算字符串的大小
  *  根据换行方式和字体的大小，已经计算的范围来确定字符串的size
  */
-+(CGSize)fan_currentSizeWithContent:(NSString *)content font:(UIFont *)font cgSize:(CGSize)cgsize;
++(CGSize)fan_textSizeWithMaxSize:(CGSize)maxSize text:(NSString *)text font:(UIFont *)font;
+/**
+ 返回限定内的字体宽高
+ 
+ @param maxSize 限定宽高
+ @param text 文本
+ @param font 字体
+ @param lineSpace 行间距
+ @param wordSpace 字间距
+ @return 文本宽高
+ */
++(CGSize)fan_textSizeWithMaxSize:(CGSize)maxSize text:(NSString *)text font:(UIFont *)font lineSpace:(CGFloat)lineSpace wordSpace:(CGFloat)wordSpace;
+
+/**
+ 修改Label的行间距和字间距
+ 
+ @param label label
+ @param lineSpace 行间距,<=0 不设置
+ @param wordSpace 字间距,<=0 不设置
+ */
++(void)fan_changeSpaceFromlabel:(UILabel *)label lineSpace:(CGFloat)lineSpace wordSpace:(CGFloat)wordSpace;
 #pragma mark - 字节个数
 /** 字节个数 */
 +(NSUInteger) fan_unicodeLengthOfString: (NSString *) text;
@@ -35,7 +55,8 @@
 +(UIImage*)fan_scalImage:(UIImage *)sourceImage scalingForSize:(CGSize)targetSize;
 /** 通过UIcolor获取一张图片 */
 + (UIImage *)fan_ImageWithColor:(UIColor *)color frame:(CGRect)rect;
-
+/** 通过UIcolor获取一张图片圆角 */
++ (UIImage *)fan_ImageWithColor:(UIColor *)color frame:(CGRect)rect cornerRadius:(CGFloat)cornerRadius;
 /** 截屏*/
 +(UIImage*)fan_beginImageContext:(CGRect)rect fromView:(UIView*)view;
 /** OpenGL截图*/
@@ -81,6 +102,8 @@
 //移除tag值的View
 +(void)fan_removeViewTag:(NSInteger)tag fromeView:(UIView *)view;
 +(id)fan_classFromName:(NSString *)aClassName;
+#pragma mark 创建手势和其他
++(void)fan_addTapGestureTarget:(id)target action:(SEL)action toView:(UIView *)tapView;
 /***************************************创建UI  End******************************************/
 
 #pragma mark 返回设备类型

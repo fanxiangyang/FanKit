@@ -81,7 +81,8 @@
 +(CAKeyframeAnimation *)fan_keyframeAniamtion:(CGMutablePathRef)path durTimes:(float)time Rep:(float)repeatTimes; //路径动画
 /**左右摇晃,图标的抖动:抖动宽度+强度*/
 +(CAKeyframeAnimation * )fan_shakeAnimationWidth:(float)shakeWidth sigleDuration:(float)sigleDuration;
-
+/**贝塞尔路径动画（曲线）*/
++(CAKeyframeAnimation *)fan_bezierPathAniamtion:(UIBezierPath *)bezierPath durTimes:(float)time Rep:(float)repeatTimes;
 
 #pragma mark - 其他辅佐方法
 /**快速获得视图相对屏幕的坐标*/

@@ -9,7 +9,16 @@
 #import "FanDrawLayer.h"
 
 @implementation FanDrawLayer
-
++(CAShapeLayer *)fan_ovalInRect:(CGRect)frame lineWidth:(CGFloat)lineWidth lineColor:(UIColor *)lineColor{
+    CAShapeLayer *layer=[[CAShapeLayer alloc]init];
+    layer.lineWidth=lineWidth;
+    layer.lineCap = kCALineCapRound;
+    layer.strokeColor=lineColor.CGColor;
+    layer.fillColor=[UIColor clearColor].CGColor;
+    UIBezierPath* path = [UIBezierPath bezierPathWithOvalInRect:frame];
+    layer.path=[path CGPath];
+    return layer;
+}
 +(CAShapeLayer *)fan_lineStartPoint:(CGPoint)startPoint toPoint:(CGPoint)toPoint lineWidth:(CGFloat)lineWidth lineColor:(UIColor *)lineColor{
     CAShapeLayer *layer=[[CAShapeLayer alloc]init];
     layer.lineWidth=lineWidth;
@@ -186,6 +195,21 @@
     [path addArcWithCenter:CGPointMake(frame.origin.x+radius, frame.origin.y+frame.size.height-radius-arrowHeight) radius:radius startAngle:M_PI_2 endAngle:M_PI clockwise:YES];
     [path addLineToPoint:CGPointMake(frame.origin.x, frame.origin.y+radius)];
     //    [path closePath];
+    layer.path=[path CGPath];
+    return layer;
+}
++(CAShapeLayer *)fan_arrowPopupleftRightMaskFrame:(CGRect)frame arrowWidth:(CGFloat)arrowWidth{
+    CAShapeLayer *layer=[[CAShapeLayer alloc]init];
+    layer.frame=frame;
+    UIBezierPath* path = [UIBezierPath bezierPath];
+    //从左边第一个箭头点开始
+    [path moveToPoint:CGPointMake(0, frame.size.height/2.0)];
+    [path addLineToPoint:CGPointMake(arrowWidth, 0)];
+    [path addLineToPoint:CGPointMake(frame.size.width-arrowWidth, 0)];
+    [path addLineToPoint:CGPointMake(frame.size.width, frame.size.height/2.0)];
+    [path addLineToPoint:CGPointMake(frame.size.width-arrowWidth, frame.size.height)];
+    [path addLineToPoint:CGPointMake(arrowWidth, frame.size.height)];
+    [path addLineToPoint:CGPointMake(0, frame.size.height/2.0)];
     layer.path=[path CGPath];
     return layer;
 }
