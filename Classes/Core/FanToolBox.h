@@ -21,6 +21,10 @@
 +(BOOL)fan_copyAtFilePath:(NSString *)srcFilePath toFilePath:(NSString *)toFilePath;
 /** copy文件夹下所有子文件和文件夹，放到目标文件夹下 是否移除旧文件*/
 +(void)fan_copyAtDirPath:(NSString *)srcDirPath toDirPath:(NSString *)toDirPath isRemoveOld:(BOOL)isRemoveOld;
+///重命名 文件/文件夹 (移动 文件/文件夹) removeOld=NO如果有旧文件失败
++(BOOL)fan_moveSrcPath:(NSString *)srcPath toPath:(NSString *)toPath removeOld:(BOOL)removeOld;
+///重命名文件/文件夹 pathName重命名的名字不含路径
++(BOOL)fan_moveSrcPath:(NSString *)srcPath pathName:(NSString *)pathName;
 /**删除目录下所有文件*/
 + (BOOL)fan_deleteFilesAtPath:(NSString *)filePath;
 + (BOOL)fan_deleteFile:(NSString *)filePath;//删除文件

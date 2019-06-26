@@ -7,8 +7,8 @@
 //
 
 #import "FanColorView.h"
-#import "NSBundle+FanKit.h"
 #import "FanUIKit.h"
+#import "NSBundle+FanKit.h"
 
 
 @interface FanColorView ()

@@ -69,7 +69,7 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
 @property(nullable, nonatomic,strong)NSArray *buttonTitleArray;
 
 #pragma mark - 外部可以修改属性
-@property(nonatomic,strong)UIView *blackAlphaView;
+@property(nonatomic,strong)UIView * _Nullable blackAlphaView;
 /**黑色背景透明度 默认0.5  default translucent(0.5)*/
 @property(nonatomic,assign)CGFloat blackAlpha;//不要设置为>0.1，不立即释放
 @property(nonatomic,strong)NSMutableArray * _Nullable dataArray;
@@ -157,8 +157,8 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
 -(void)fan_createIconAlertUI;
 
 #pragma mark - 子类调用的方法
--(CGSize)fan_currentSizeWithContent:(NSString *)content font:(UIFont *)font cgSize:(CGSize)cgsize;
--(void)buttonClick:(UIButton *)btn;
-- (id)initWithShowView:(UIView *)view;
+-(CGSize)fan_currentSizeWithContent:(NSString *_Nullable)content font:(UIFont *_Nullable)font cgSize:(CGSize)cgsize;
+-(void)buttonClick:(nullable UIButton *)btn;
+- (id _Nullable )initWithShowView:(UIView *_Nullable)view;
 - (void)commonInit;//继承要执行父类方法
 @end

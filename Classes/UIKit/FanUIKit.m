@@ -440,13 +440,23 @@
     
     return returnImage;
 }
-+(void)fan_addBlurEffectToView:(UIView *)toView{
++(UIVisualEffectView *)fan_addBlurEffectToView:(UIView *)toView{
     UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
     effectView.frame = CGRectMake(0, 0, toView.frame.size.width, toView.frame.size.height);
     [toView addSubview:effectView];
+    return effectView;
 }
 
++(UIVisualEffectView *)fan_addBlurEffectWithStyle:(UIBlurEffectStyle)style toView:(UIView *)toView effectCornerRadius:(CGFloat)cornerRadius{
+    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:style];
+    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
+    effectView.layer.masksToBounds=YES;
+    effectView.layer.cornerRadius=cornerRadius;
+    effectView.frame = CGRectMake(0, 0, toView.frame.size.width, toView.frame.size.height);
+    [toView addSubview:effectView];
+    return effectView;
+}
 +(UIImage *)fan_stretchableImage:(UIImage *)image{
     UIImage *returnImage = [image stretchableImageWithLeftCapWidth:floorf(image.size.width/2) topCapHeight:floorf(image.size.height/2)];
     image=nil;

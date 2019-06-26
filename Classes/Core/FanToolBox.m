@@ -47,6 +47,9 @@
     return YES;
 }
 +(BOOL)fan_copyAtFilePath:(NSString *)srcFilePath toFilePath:(NSString *)toFilePath{
+    if ([srcFilePath isEqualToString:toFilePath]) {
+        return YES;
+    }
     [FanToolBox fan_createDirectoryAtPath:toFilePath];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
@@ -87,6 +90,61 @@
         }
         [fileManager copyItemAtPath:[srcDirPath stringByAppendingPathComponent:fileStr] toPath:[toDirPath stringByAppendingPathComponent:fileStr] error:nil];
     }
+}
++(BOOL)fan_moveSrcPath:(NSString *)srcPath pathName:(NSString *)pathName{
+    NSString *toPath=[srcPath stringByReplacingOccurrencesOfString:[srcPath lastPathComponent] withString:pathName];
+    return [FanToolBox fan_moveSrcPath:srcPath toPath:toPath removeOld:YES];
+}
+//文件夹move
++(BOOL)fan_moveSrcPath:(NSString *)srcPath toPath:(NSString *)toPath removeOld:(BOOL)removeOld{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL isDir;
+    if (![fileManager fileExistsAtPath:srcPath isDirectory:&isDir])
+    {
+        return NO;
+    }
+    if ([srcPath isEqualToString:toPath]) {
+        return YES;
+    }
+    NSError *error = nil;
+    if (isDir) {
+        //文件夹
+        if (![fileManager fileExistsAtPath:toPath isDirectory:&isDir])
+        {
+            [fileManager createDirectoryAtPath:[toPath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
+        }else{
+            if (removeOld) {
+                [fileManager removeItemAtPath:toPath error:nil];
+            }else{
+                return NO;
+            }
+        }
+        BOOL success = [fileManager moveItemAtPath:srcPath toPath:toPath error:&error];
+        if (success==NO) {
+            NSLog(@"重命名Error:%@",error);
+            return NO;
+        }
+        
+    }else{
+        //文件
+        if (![fileManager fileExistsAtPath:toPath isDirectory:&isDir])
+        {
+            NSString *filePath=[toPath stringByReplacingOccurrencesOfString:[toPath lastPathComponent] withString:@""];
+            [fileManager createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:nil];
+        }else{
+            if (removeOld) {
+                [fileManager removeItemAtPath:toPath error:nil];
+            }else{
+                return NO;
+            }
+        }
+        BOOL success = [fileManager moveItemAtPath:srcPath toPath:toPath error:&error];
+        if (success==NO) {
+            NSLog(@"重命名Error:%@",error);
+            return NO;
+        }
+    }
+    return YES;
 }
 /**删除目录下所有文件*/
 + (BOOL)fan_deleteFilesAtPath:(NSString *)filePath

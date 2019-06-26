@@ -17,7 +17,7 @@ Installation（安装）
 ==============
 ### CocoaPods
 
-1. Add `pod 'FanKit','~> 0.1.0'` to your Podfile.
+1. Add `pod 'FanKit','~> 0.2.0'` to your Podfile.
 2. Run `pod install` or `pod update`.
 3. Import "FanKit.h".
 
@@ -53,6 +53,9 @@ Function Example(功能事例)
 * 添加部分语言本地化，
 * 移除不太通用的方法，
 * 完善和添加部分方法，使用更加方便,特别在layer层绘图。
+### Release 0.2.0
+* 添加部分方法，优化部分细节，
+* 移除Libs pod库内容，需要可以下载使用，以后只包含在项目中。
 
 Like(喜欢)
 ==============

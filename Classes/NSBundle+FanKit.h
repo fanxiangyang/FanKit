@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FanDrawLayer.h"
+#import <UIKit/UIKit.h>
+//#import "FanDrawLayer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

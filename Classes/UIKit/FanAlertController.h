@@ -50,7 +50,7 @@ typedef NS_ENUM(NSInteger,FanAlertControllerStyle) {
 
 
 
-const static UIWindow * fanAlertWindow;
+const static UIWindow * _Nullable fanAlertWindow;
 
 
 typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
@@ -58,31 +58,31 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
 @interface FanAlertController : UIViewController
 #pragma mark - 外部不能修改或者不建议修改的，在继承类里面可以修改的
 /** 内容View*/
-@property(nonatomic,strong)UIView *fan_cententView;
+@property(nonatomic,strong)UIView * _Nullable fan_cententView;
 @property(nullable,nonatomic,strong)UIImageView *cententBgmView;//中间区域背景
 @property(nonatomic,assign)CGFloat contentWidth;
 @property(nonatomic,assign)CGFloat contentHeight;
 
 @property(nonatomic,assign)FanAlertControllerStyle progressHUDStyle;
 
-@property(nonatomic,copy)FanProgressHUDAlertBlock alertBlock;
+@property(nonatomic,copy)FanProgressHUDAlertBlock _Nullable alertBlock;
 /** 显示几秒后，消失*/
 @property (assign, nonatomic) NSTimeInterval showTime;
-@property(nonatomic,strong)NSArray *buttonTitleArray;
+@property(nonatomic,strong)NSArray * _Nullable buttonTitleArray;
 
 #pragma mark - 外部可以修改属性
-@property(nonatomic,strong)UIView *blackAlphaView;
+@property(nonatomic,strong)UIView * _Nullable blackAlphaView;
 /**黑色背景透明度 默认0.5  default translucent(0.5)*/
 @property(nonatomic,assign)CGFloat blackAlpha;//不要设置为>0.1，不立即释放
-@property(nonatomic,strong)NSMutableArray * dataArray;
+@property(nonatomic,strong)NSMutableArray * _Nullable dataArray;
 /**是不是触摸其他区域，自动消失*/
 @property(nonatomic,assign)BOOL isTouchRemove;
 
 @property(nonatomic,assign)BOOL isAnimation;//暂时没有用到
 
-@property(nonatomic,copy)NSString *alertTitle;
-@property(nonatomic,copy)NSString *subTitle;
-@property(nonatomic,copy)NSString *iconName;
+@property(nonatomic,copy)NSString * _Nullable alertTitle;
+@property(nonatomic,copy)NSString * _Nullable subTitle;
+@property(nonatomic,copy)NSString * _Nullable iconName;
 
 #pragma mark -  显示和隐藏的类方法
 /**
@@ -91,17 +91,17 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
  @param textStr 提示文本
  @return self
  */
-+ (instancetype)fan_showHUDWithStatus:(NSString*)textStr;
-+ (instancetype)fan_showHUDWithStatus:(NSString *)textStr afterDelay:(NSTimeInterval)seconds;
++ (instancetype _Nullable )fan_showHUDWithStatus:(NSString*_Nullable)textStr;
++ (instancetype _Nullable )fan_showHUDWithStatus:(NSString *_Nullable)textStr afterDelay:(NSTimeInterval)seconds;
 
 /**
  弹出加载等待框
  
  @return self
  */
-+ (instancetype)fan_showProgressHUD;
-+ (instancetype)fan_showProgressHUD:(NSString *)textStr;
-+ (instancetype)fan_showProgressHUD:(NSString *)textStr afterDelay:(NSTimeInterval)seconds;
++ (instancetype _Nullable)fan_showProgressHUD;
++ (instancetype _Nullable)fan_showProgressHUD:(NSString *_Nullable)textStr;
++ (instancetype _Nullable)fan_showProgressHUD:(NSString *_Nullable)textStr afterDelay:(NSTimeInterval)seconds;
 /**
  隐藏弹窗
  

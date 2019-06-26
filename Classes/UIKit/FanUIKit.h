@@ -67,7 +67,8 @@
 +(UIImage *)fan_accelerateBlurWithImage:(UIImage *)image blurNumber:(CGFloat)blur;
 /** 没有白边的高斯模糊（解决发红情况） blur 1-100 (最好1-25)*/
 +(UIImage *)fan_accelerateBlurShortWithImage:(UIImage *)image blurNumber:(CGFloat)blur;
-+(void)fan_addBlurEffectToView:(UIView *)toView;//添加毛玻璃
++(UIVisualEffectView *)fan_addBlurEffectToView:(UIView *)toView;//添加毛玻璃
++(UIVisualEffectView *)fan_addBlurEffectWithStyle:(UIBlurEffectStyle)style toView:(UIView *)toView effectCornerRadius:(CGFloat)cornerRadius;
 /** 拉伸图片，边缘不拉伸，图片的一半*/
 +(UIImage *)fan_stretchableImage:(UIImage *)image;
 /***************************************创建UI******************************************/

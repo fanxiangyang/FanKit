@@ -1,38 +1,20 @@
 //
-//  UILabel+FanCopy.m
-//  FanKit
+//  FanCopyLabel.m
+//  Brain
 //
-//  Created by 向阳凡 on 16/7/4.
-//  Copyright © 2016年 凡向阳. All rights reserved.
+//  Created by 向阳凡 on 2019/6/5.
+//  Copyright © 2019 向阳凡. All rights reserved.
 //
 
-#import "UILabel+FanCopy.h"
-#import <objc/runtime.h>
+#import "FanCopyLabel.h"
 
-
-@implementation UILabel (FanCopy)
-#pragma mark - 添加私有属性
-@dynamic fan_originalColor;
-
-static const void *baseColor=&baseColor;
-
--(UIColor *)fan_originalColor{
-    return objc_getAssociatedObject(self, baseColor);
-}
-
--(void)setFan_originalColor:(UIColor *)fan_originalColor{
-    objc_setAssociatedObject(self, baseColor, fan_originalColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-
+@implementation FanCopyLabel
 #pragma mark - 初始化
 -(id)init{
     self=[super init];
-    if (self==nil) {
-        self=[[UILabel alloc]init];
-        //可能是category的特性，该[super init]不为空
+    if (self) {
+        [self addLongGuest];
     }
-    [self addLongGuest];
     return self;
 }
 //实现xib的的扩展
@@ -48,13 +30,10 @@ static const void *baseColor=&baseColor;
     [self addGestureRecognizer:longGuest];
     //添加通知中心，通知菜单消失时选中背景颜色复原
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(willHideEditMenu:) name:UIMenuControllerWillHideMenuNotification object:nil];
-    //     [self.backgroundColor addObserver:self forKeyPath:@"fan_originalColor" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+    self.fan_copyBgColor=[UIColor colorWithRed:194.0/255 green:206.0/255 blue:223.0/255 alpha:1];
 }
-
 -(void)longPress:(UILongPressGestureRecognizer *)longPressGuesture{
-    [self becomeFirstResponder];
-    
-    //由于执行的先后顺序问题，有两中解决方法，一，加队列，二，touchBegan
+    [self becomeFirstResponder];    //由于执行的先后顺序问题，有两中解决方法，一，加队列，二，touchBegan
     //[self setOriginalColor:self.backgroundColor];
     
     UIMenuController *menu=[UIMenuController sharedMenuController];
@@ -64,14 +43,11 @@ static const void *baseColor=&baseColor;
     //    UIMenuItem *past=[[UIMenuItem alloc]initWithTitle:@"paste" action:@selector(paste:)];
     //    [menu setMenuItems:@[copy,past]];
     [menu setMenuVisible:YES animated:YES];
-    
-    
-    
-    self.backgroundColor=[UIColor colorWithRed:194.0/255 green:206.0/255 blue:223.0/255 alpha:1];
+    self.backgroundColor=self.fan_copyBgColor;
 }
 //通知中心的，菜单消失时执行
 -(void)willHideEditMenu:(id)sender{
-    self.backgroundColor=[self fan_originalColor];
+    self.backgroundColor=self.fan_originalColor;
 }
 //#pragma mark - notificationCenter
 //-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
@@ -126,16 +102,18 @@ static const void *baseColor=&baseColor;
     UIPasteboard *pboard=[UIPasteboard generalPasteboard];
     pboard.string=self.text;
 }
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    
-    if (CGColorEqualToColor(self.backgroundColor.CGColor, [UIColor colorWithRed:194.0/255 green:206.0/255 blue:223.0/255 alpha:1].CGColor)) {
-        return;
-    }
-    [self setFan_originalColor:self.backgroundColor];
-}
+
 #pragma mark - delloc
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter]removeObserver:self name:UIMenuControllerWillHideMenuNotification object:nil];
 }
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
 
 @end

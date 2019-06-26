@@ -13,6 +13,7 @@
 #define FanKit_h
 //一些常用宏
 #import "FanKitHead.h"
+#import "NSBundle+FanKit.h"
 
 //工厂类
 #import "FanAnimationToll.h"
@@ -24,7 +25,7 @@
 #import "UIView+FanAutoLayout.h"
 #import "UIViewController+FanRoot.h"
 #import "NSDictionary+FanNull.h"
-#import "NSBundle+FanKit.h"
+//#import "FanDrawLayer.h"
 
 
 #endif /* FanKit_h */
