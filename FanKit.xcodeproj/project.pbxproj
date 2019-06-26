@@ -15,8 +15,9 @@
 		6639A19F2171B4EE00231B42 /* FanDrawLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6639A19D2171B4EE00231B42 /* FanDrawLayer.m */; };
 		6639A1A42171B6CA00231B42 /* FanAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6639A1A22171B6CA00231B42 /* FanAlertController.m */; };
 		6639A1A52171B6CA00231B42 /* FanProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 6639A1A32171B6CA00231B42 /* FanProgressHUD.m */; };
-		6640956A22C31BCE0097F4CB /* NSBundle+FanKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6640956822C31BCE0097F4CB /* NSBundle+FanKit.m */; };
 		6640956B22C31BCE0097F4CB /* FanKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6640956922C31BCE0097F4CB /* FanKit.bundle */; };
+		6640956E22C35C630097F4CB /* NSBundle+FanKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6640956C22C35C630097F4CB /* NSBundle+FanKit.m */; };
+		6640957422C35D6A0097F4CB /* FanAnyObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6640957322C35D6A0097F4CB /* FanAnyObject.m */; };
 		666C8D1E1D4B2B7E0071E6CD /* NSDictionary+FanNull.m in Sources */ = {isa = PBXBuildFile; fileRef = 666C8D1D1D4B2B7E0071E6CD /* NSDictionary+FanNull.m */; };
 		667A9FC71CFEC619009B1D53 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FC61CFEC619009B1D53 /* main.m */; };
 		667A9FCA1CFEC619009B1D53 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FC91CFEC619009B1D53 /* AppDelegate.m */; };
@@ -87,9 +88,11 @@
 		6639A1A12171B6CA00231B42 /* FanProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanProgressHUD.h; sourceTree = "<group>"; };
 		6639A1A22171B6CA00231B42 /* FanAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanAlertController.m; sourceTree = "<group>"; };
 		6639A1A32171B6CA00231B42 /* FanProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanProgressHUD.m; sourceTree = "<group>"; };
-		6640956722C31BCE0097F4CB /* NSBundle+FanKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+FanKit.h"; sourceTree = "<group>"; };
-		6640956822C31BCE0097F4CB /* NSBundle+FanKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+FanKit.m"; sourceTree = "<group>"; };
 		6640956922C31BCE0097F4CB /* FanKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FanKit.bundle; sourceTree = "<group>"; };
+		6640956C22C35C630097F4CB /* NSBundle+FanKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+FanKit.m"; sourceTree = "<group>"; };
+		6640956D22C35C630097F4CB /* NSBundle+FanKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+FanKit.h"; sourceTree = "<group>"; };
+		6640957222C35D6A0097F4CB /* FanAnyObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FanAnyObject.h; sourceTree = "<group>"; };
+		6640957322C35D6A0097F4CB /* FanAnyObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FanAnyObject.m; sourceTree = "<group>"; };
 		666C8D1C1D4B2B7E0071E6CD /* NSDictionary+FanNull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+FanNull.h"; sourceTree = "<group>"; };
 		666C8D1D1D4B2B7E0071E6CD /* NSDictionary+FanNull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+FanNull.m"; sourceTree = "<group>"; };
 		667A9FC21CFEC619009B1D53 /* FanKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FanKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -277,14 +280,16 @@
 		667A9FF81CFED46A009B1D53 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				66A507171D06E1AA00D5EC34 /* Core */,
 				6640956922C31BCE0097F4CB /* FanKit.bundle */,
-				6640956722C31BCE0097F4CB /* NSBundle+FanKit.h */,
-				6640956822C31BCE0097F4CB /* NSBundle+FanKit.m */,
 				66A5071A1D06E1AA00D5EC34 /* FanKit.h */,
 				66B396591D2A1E7200A40A06 /* FanKitHead.h */,
-				66A507171D06E1AA00D5EC34 /* Core */,
-				66A5071B1D06E1AA00D5EC34 /* UIKit */,
 				66B3965D1D2A3ECE00A40A06 /* Libs */,
+				6640956D22C35C630097F4CB /* NSBundle+FanKit.h */,
+				6640956C22C35C630097F4CB /* NSBundle+FanKit.m */,
+				66A5071B1D06E1AA00D5EC34 /* UIKit */,
+				6640957222C35D6A0097F4CB /* FanAnyObject.h */,
+				6640957322C35D6A0097F4CB /* FanAnyObject.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -572,6 +577,7 @@
 				667A9FCD1CFEC619009B1D53 /* ViewController.m in Sources */,
 				6639A1A52171B6CA00231B42 /* FanProgressHUD.m in Sources */,
 				66A5071E1D06E1AA00D5EC34 /* FanAnimationToll.m in Sources */,
+				6640957422C35D6A0097F4CB /* FanAnyObject.m in Sources */,
 				66B396881D2A532000A40A06 /* FanLockNodeView.m in Sources */,
 				66B396581D2A150200A40A06 /* FanUIKit.m in Sources */,
 				661741131D2B66D5005A5221 /* FanKitTableViewController.m in Sources */,
@@ -594,7 +600,7 @@
 				66E81A651E72C069008E887E /* FanSwiperbleViewController.m in Sources */,
 				6683109122842F1500444009 /* FanColorView.m in Sources */,
 				66B3965C1D2A1F9A00A40A06 /* UIViewController+FanRoot.m in Sources */,
-				6640956A22C31BCE0097F4CB /* NSBundle+FanKit.m in Sources */,
+				6640956E22C35C630097F4CB /* NSBundle+FanKit.m in Sources */,
 				66A5071F1D06E1AA00D5EC34 /* UIView+FanAutoLayout.m in Sources */,
 				66B396681D2A416600A40A06 /* NSNull+FanNull.m in Sources */,
 				6639A19C2171B35400231B42 /* FanToolBox.m in Sources */,

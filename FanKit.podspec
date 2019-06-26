@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "FanKit"
-  s.version      = "0.2.0"
+  s.version      = "0.2.1"
   s.summary      = "A Cocoa Tool Kit of iOS components."
   s.description  = <<-DESC
             一个iOS集成实用工具库,以后会添加更多更多的工具，实用类，封装类，封装小效果
@@ -31,10 +31,10 @@ Pod::Spec.new do |s|
 
   s.source       = { :git => "https://github.com/fanxiangyang/FanKit.git", :tag => s.version.to_s }
 
-  s.source_files  = "Classes/FanKit.h","Classes/FanKitHead.h","Classes/NSBundle+FanKit.{h,m}"
+  s.source_files  = "Classes/FanKit.h","Classes/FanKitHead.h","Classes/NSBundle+FanKit.{h,m}","Classes/FanAnyObject.{h,m}"
   #s.exclude_files = "Classes/Exclude"
 
-  s.public_header_files = "Classes/FanKit.h","Classes/FanKitHead.h","Classes/NSBundle+FanKit.h"
+  s.public_header_files = "Classes/FanKit.h","Classes/FanKitHead.h","Classes/NSBundle+FanKit.h","Classes/FanAnyObject.h"
 
   # s.resource  = "icon.png"
   # s.resources = "Resources/*.png"
@@ -57,16 +57,16 @@ Pod::Spec.new do |s|
   s.subspec 'Core' do |ss|
     #ss.dependency 'Classes/NSBundle+FanKit.{h,m}'
     #ss.dependency 'Extend'
-    ss.source_files  = "Classes/Core/*.{h,m}","Classes/NSBundle+FanKit.{h,m}"
-    ss.public_header_files = "Classes/Core/*.h",'Classes/NSBundle+FanKit.h'
+    ss.source_files  = "Classes/Core/*.{h,m}","Classes/NSBundle+FanKit.{h,m}","Classes/FanAnyObject.{h,m}"
+    ss.public_header_files = "Classes/Core/*.h",'Classes/NSBundle+FanKit.h','Classes/FanAnyObject.h'
     ss.frameworks = "UIKit", "QuartzCore"
   end
 
   s.subspec 'UIKit' do |ss|
     #ss.dependency 'Classes/NSBundle+FanKit.{h,m}'
     #ss.dependency 'Extend'
-    ss.public_header_files = 'Classes/UIKit/*.h','Classes/NSBundle+FanKit.h'
-    ss.source_files = 'Classes/UIKit/*.{h,m}',"Classes/NSBundle+FanKit.{h,m}"
+    ss.public_header_files = 'Classes/UIKit/*.h','Classes/NSBundle+FanKit.h','Classes/FanAnyObject.h'
+    ss.source_files = 'Classes/UIKit/*.{h,m}',"Classes/NSBundle+FanKit.{h,m}","Classes/FanAnyObject.{h,m}"
     ss.frameworks = "UIKit"
   end
 

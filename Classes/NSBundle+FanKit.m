@@ -7,13 +7,14 @@
 //
 
 #import "NSBundle+FanKit.h"
+#import "FanAnyObject.h"
 
 @implementation NSBundle (FanKit)
 + (instancetype)fan_bundle
 {
     static NSBundle *fankitBundle = nil;
     if (fankitBundle == nil) {
-        fankitBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"FanKit" ofType:@"bundle"]];
+        fankitBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[FanAnyObject class]] pathForResource:@"FanKit" ofType:@"bundle"]];
     }
     return fankitBundle;
 }
