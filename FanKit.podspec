@@ -52,17 +52,21 @@ Pod::Spec.new do |s|
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # s.dependency "JSONKit", "~> 1.4"
 
+  
+
   s.subspec 'Core' do |ss|
-    ss.dependency 'Classes/NSBundle+FanKit.h'
-    ss.source_files  = "Classes/Core/*.{h,m}"
-    ss.public_header_files = "Classes/Core/*.h"
+    #ss.dependency 'Classes/NSBundle+FanKit.{h,m}'
+    #ss.dependency 'Extend'
+    ss.source_files  = "Classes/Core/*.{h,m}","Classes/NSBundle+FanKit.{h,m}"
+    ss.public_header_files = "Classes/Core/*.h",'Classes/NSBundle+FanKit.h'
     ss.frameworks = "UIKit", "QuartzCore"
   end
 
   s.subspec 'UIKit' do |ss|
-    ss.dependency 'Classes/NSBundle+FanKit.h'
-    ss.public_header_files = 'Classes/UIKit/*.h'
-    ss.source_files = 'Classes/UIKit/*.{h,m}'
+    #ss.dependency 'Classes/NSBundle+FanKit.{h,m}'
+    #ss.dependency 'Extend'
+    ss.public_header_files = 'Classes/UIKit/*.h','Classes/NSBundle+FanKit.h'
+    ss.source_files = 'Classes/UIKit/*.{h,m}',"Classes/NSBundle+FanKit.{h,m}"
     ss.frameworks = "UIKit"
   end
 
