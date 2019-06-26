@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "FanKit"
-  s.version      = "0.2.1"
+  s.version      = "0.2.2"
   s.summary      = "A Cocoa Tool Kit of iOS components."
   s.description  = <<-DESC
             一个iOS集成实用工具库,以后会添加更多更多的工具，实用类，封装类，封装小效果
@@ -31,14 +31,14 @@ Pod::Spec.new do |s|
 
   s.source       = { :git => "https://github.com/fanxiangyang/FanKit.git", :tag => s.version.to_s }
 
-  s.source_files  = "Classes/FanKit.h","Classes/FanKitHead.h","Classes/NSBundle+FanKit.{h,m}","Classes/FanAnyObject.{h,m}"
+  s.source_files  = "Classes/FanKit.h","Classes/FanKitHead.h"
   #s.exclude_files = "Classes/Exclude"
 
-  s.public_header_files = "Classes/FanKit.h","Classes/FanKitHead.h","Classes/NSBundle+FanKit.h","Classes/FanAnyObject.h"
+  s.public_header_files = "Classes/FanKit.h","Classes/FanKitHead.h"
 
   # s.resource  = "icon.png"
   # s.resources = "Resources/*.png"
-  s.resources = "Classes/FanKit.bundle"
+  s.resources = "Classes/Common/FanKit.bundle"
 
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
@@ -52,21 +52,26 @@ Pod::Spec.new do |s|
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # s.dependency "JSONKit", "~> 1.4"
 
+  #这个作为公共的子文件夹，其他子文件有引用这里的东西，所以放在这里面
+  s.subspec 'Common' do |ss|
+    ss.public_header_files = 'Classes/Common/*.h'
+    ss.source_files = 'Classes/Common/*.{h,m}'
+    ss.frameworks = "UIKit"
+  end
   
 
   s.subspec 'Core' do |ss|
-    #ss.dependency 'Classes/NSBundle+FanKit.{h,m}'
-    #ss.dependency 'Extend'
-    ss.source_files  = "Classes/Core/*.{h,m}","Classes/NSBundle+FanKit.{h,m}","Classes/FanAnyObject.{h,m}"
-    ss.public_header_files = "Classes/Core/*.h",'Classes/NSBundle+FanKit.h','Classes/FanAnyObject.h'
+    #ss.dependency 是库的依赖不是路径Class
+    ss.dependency 'FanKit/Common'
+    ss.source_files  = "Classes/Core/*.{h,m}"
+    ss.public_header_files = "Classes/Core/*.h"
     ss.frameworks = "UIKit", "QuartzCore"
   end
 
   s.subspec 'UIKit' do |ss|
-    #ss.dependency 'Classes/NSBundle+FanKit.{h,m}'
-    #ss.dependency 'Extend'
-    ss.public_header_files = 'Classes/UIKit/*.h','Classes/NSBundle+FanKit.h','Classes/FanAnyObject.h'
-    ss.source_files = 'Classes/UIKit/*.{h,m}',"Classes/NSBundle+FanKit.{h,m}","Classes/FanAnyObject.{h,m}"
+    ss.dependency 'FanKit/Common'
+    ss.public_header_files = 'Classes/UIKit/*.h'
+    ss.source_files = 'Classes/UIKit/*.{h,m}'
     ss.frameworks = "UIKit"
   end
 
