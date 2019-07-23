@@ -56,7 +56,7 @@ Pod::Spec.new do |s|
   s.subspec 'Common' do |ss|
     ss.public_header_files = 'Classes/Common/*.h'
     ss.source_files = 'Classes/Common/*.{h,m}'
-    ss.frameworks = "UIKit"
+    ss.frameworks = "UIKit","SystemConfiguration"
   end
   
 
@@ -72,7 +72,7 @@ Pod::Spec.new do |s|
     ss.dependency 'FanKit/Common'
     ss.public_header_files = 'Classes/UIKit/*.h'
     ss.source_files = 'Classes/UIKit/*.{h,m}'
-    ss.frameworks = "UIKit"
+    ss.frameworks = "UIKit","AVFoundation","Photos","AssetsLibrary"
   end
 
   #s.subspec 'Libs' do |ss|

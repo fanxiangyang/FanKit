@@ -14,7 +14,7 @@
  *
  *  @return 字典
  */
-- (NSDictionary *)fan_modelToDictionary;
+- (NSMutableDictionary *)fan_modelToDictionary;
 /**
  *  获得当前类及其父类的属性列表（递归法）
  *
@@ -23,7 +23,7 @@
  *
  *  @return 不同深度的属性列表
  */
--(NSDictionary *)fan_propertyList:(BOOL)isSaveValue depth:(NSInteger)depth;
+-(NSMutableDictionary *)fan_propertyList:(BOOL)isSaveValue depth:(NSInteger)depth;
 /**
  *  获得当前对象的所有属性列表
  *
@@ -31,6 +31,6 @@
  *
  *  @return 属性列表-字典
  */
-- (NSDictionary *)fan_propertyList:(BOOL)isSaveValue;
+- (NSMutableDictionary *)fan_propertyList:(BOOL)isSaveValue;
 
 @end

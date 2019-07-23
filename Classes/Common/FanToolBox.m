@@ -73,22 +73,45 @@
 //文件夹copy
 +(void)fan_copyAtDirPath:(NSString *)srcDirPath toDirPath:(NSString *)toDirPath isRemoveOld:(BOOL)isRemoveOld{
     NSFileManager *fileManager = [NSFileManager defaultManager];
+    //    BOOL isDir;
+    //    if (![fileManager fileExistsAtPath:toDirPath isDirectory:&isDir])
+    //    {
+    //        [fileManager createDirectoryAtPath:toDirPath withIntermediateDirectories:YES attributes:nil error:nil];
+    //    }
+    //    if (isRemoveOld) {
+    //        //只移除文件，不移除路径
+    //        if (isDir) {
+    //            [fileManager removeItemAtPath:toDirPath error:nil];
+    //        }
+    //    }
+    //    [fileManager copyItemAtPath:srcDirPath toPath:toDirPath error:nil];
+    
     //当前srcDirPath目录下全路径（包含文件夹）  ***/**.png
     NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtPath:srcDirPath];
     for (NSString *fileStr in enumerator) {
-        NSString *fileAllPath=[[toDirPath stringByAppendingPathComponent:fileStr] stringByDeletingLastPathComponent];
+        //        NSLog(@"%@",fileStr);
         BOOL isDir;
-        if (![fileManager fileExistsAtPath:fileAllPath isDirectory:&isDir])
+        NSString *srcFileName=[srcDirPath stringByAppendingPathComponent:fileStr];
+        if (![fileManager fileExistsAtPath:srcFileName isDirectory:&isDir])
         {
-            [fileManager createDirectoryAtPath:fileAllPath withIntermediateDirectories:YES attributes:nil error:nil];
+            continue;
         }
-        if (isRemoveOld) {
-            //只移除文件，不移除路径
-            if (!isDir) {
+        if (isDir) {
+            //是路径
+        }else{
+            //文件
+            NSString *fileAllPath=[[toDirPath stringByAppendingPathComponent:fileStr] stringByDeletingLastPathComponent];
+            if (![fileManager fileExistsAtPath:fileAllPath isDirectory:&isDir])
+            {
+                [fileManager createDirectoryAtPath:fileAllPath withIntermediateDirectories:YES attributes:nil error:nil];
+            }
+            if (isRemoveOld) {
+                //移除文件，移除路径
                 [fileManager removeItemAtPath:[toDirPath stringByAppendingPathComponent:fileStr] error:nil];
             }
+            [fileManager copyItemAtPath:srcFileName toPath:[toDirPath stringByAppendingPathComponent:fileStr] error:nil];
         }
-        [fileManager copyItemAtPath:[srcDirPath stringByAppendingPathComponent:fileStr] toPath:[toDirPath stringByAppendingPathComponent:fileStr] error:nil];
+        
     }
 }
 +(BOOL)fan_moveSrcPath:(NSString *)srcPath pathName:(NSString *)pathName{
@@ -191,10 +214,6 @@
 + (unsigned long long)fan_fileSizeFromPath:(NSString *)path
 {
     if (path==nil) {
-        //        //如果文件路径不存在，取到应用缓存路径Caches(同级别的有Cookies）
-        //        NSString *caches=[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)firstObject];
-        //        //        path=[caches stringByAppendingPathComponent:@"default"];
-        //        path=caches;
         return 0;
     }
     // 文件管理者
@@ -209,13 +228,13 @@
     if (isDirectory) { // 文件夹
         // 总大小
         NSInteger size = 0;
-        // 获得文件夹中的所有内容
-        NSDirectoryEnumerator *enumerator = [mgr enumeratorAtPath:path];
-        for (NSString *subpath in enumerator) {
-            // 获得全路径
-            NSString *fullSubpath = [path stringByAppendingPathComponent:subpath];
-            // 获得文件属性
-            size += [mgr attributesOfItemAtPath:fullSubpath error:nil].fileSize;
+        // 获得文件夹中的所有内容enumeratorAtPath遍历事for内存不释放
+        //NSDirectoryEnumerationSkipsHiddenFiles忽略隐藏文件大小
+        NSDirectoryEnumerator *enumerator = [mgr enumeratorAtURL:[NSURL fileURLWithPath:path] includingPropertiesForKeys:@[NSFileSize] options:0 errorHandler:NULL];
+        for(NSURL *fileURL in enumerator){
+            NSNumber *fileSize;
+            [fileURL getResourceValue:&fileSize forKey:NSURLFileSizeKey error:NULL];
+            size+=fileSize.unsignedIntegerValue;
         }
         return size;
     } else { // 文件

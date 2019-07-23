@@ -20,7 +20,7 @@
  *
  *  @return 字典
  */
-- (NSDictionary *)fan_modelToDictionary
+- (NSMutableDictionary *)fan_modelToDictionary
 {
     NSMutableDictionary *dictionaryFormat = [NSMutableDictionary dictionary];
     //  取得当前类类型
@@ -68,7 +68,7 @@
  *
  *  @return 不同深度的属性列表
  */
--(NSDictionary *)fan_propertyList:(BOOL)isSaveValue depth:(NSInteger)depth
+-(NSMutableDictionary *)fan_propertyList:(BOOL)isSaveValue depth:(NSInteger)depth
 {
     NSMutableDictionary *props = [NSMutableDictionary dictionary];
     
@@ -133,7 +133,7 @@
  *
  *  @return 属性列表-字典
  */
-- (NSDictionary *)fan_propertyList:(BOOL)isSaveValue
+- (NSMutableDictionary *)fan_propertyList:(BOOL)isSaveValue
 {
     NSMutableDictionary *props = [NSMutableDictionary dictionary];
     unsigned int outCount, i;
