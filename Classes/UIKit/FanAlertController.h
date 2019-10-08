@@ -43,19 +43,19 @@ typedef NS_ENUM(NSInteger,FanAlertControllerStyle) {
      */
     FanAlertControllerStyleInput,
     /**
+     *  倒计时
+     */
+    FanAlertControllerStyleCountdown,
+    /**
      *  提示时使用
      */
     FanAlertControllerStyleTips
 };
 
-
-
-const static UIWindow * _Nullable fanAlertWindow;
-
-
 typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
 
 @interface FanAlertController : UIViewController
++(UIWindow *_Nullable)fan_alertWindow;
 #pragma mark - 外部不能修改或者不建议修改的，在继承类里面可以修改的
 /** 内容View*/
 @property(nonatomic,strong)UIView * _Nullable fan_cententView;

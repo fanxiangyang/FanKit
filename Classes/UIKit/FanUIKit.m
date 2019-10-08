@@ -462,7 +462,21 @@
     image=nil;
     return returnImage;
 }
-
++(void)fan_addShadowToView:(UIView *)shadowView shadowColor:(UIColor *)shadowColor shadowOpacity:(CGFloat)shadowOpacity shadowOffset:(CGSize)shadowOffset{
+    shadowView.layer.shadowColor =shadowColor.CGColor;
+    //阴影透明度，默认为0，如果不设置的话看不到阴影，切记，这是个大坑
+    shadowView.layer.shadowOpacity = shadowOpacity;
+    shadowView.layer.shadowOffset=shadowOffset;
+}
++(void)fan_addShadowToView:(UIView *)shadowView shadowColor:(UIColor *)shadowColor shadowOpacity:(CGFloat)shadowOpacity shadowOffset:(CGSize)shadowOffset shadowRadius:(CGFloat)shadowRadius byRoundingCorners:(UIRectCorner)corners{
+    shadowView.layer.shadowColor =shadowColor.CGColor;
+    //阴影透明度，默认为0，如果不设置的话看不到阴影，切记，这是个大坑
+    shadowView.layer.shadowOpacity = shadowOpacity;
+    shadowView.layer.shadowOffset=shadowOffset;
+    shadowView.layer.shadowRadius=shadowRadius;
+    //参数依次为大小，设置四个角圆角状态，圆角曲度
+    shadowView.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:shadowView.bounds byRoundingCorners:corners cornerRadii:CGSizeMake(shadowRadius, shadowRadius)].CGPath;
+}
 
 /***************************************创建UI******************************************/
 +(UILabel*)fan_createLabelWithFrame:(CGRect)frame text:(NSString*)text textColor:(UIColor *)textColor

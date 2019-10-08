@@ -23,15 +23,25 @@
 
 //打印数据
 #ifdef DEBUG
-# define FanLog(fmt, ...) NSLog((@"[文件名:%s]" "[函数名:%s]" "[行号:%d] \n" fmt), __FILE__, __FUNCTION__, __LINE__, ##__VA_ARGS__)
+# define FanLog(fmt, ...) NSLog((@"[%s:%d]\n" fmt), [[[NSString stringWithUTF8String: __FILE__] lastPathComponent] UTF8String], __LINE__, ##__VA_ARGS__)
 #else
 # define FanLog(fmt, ...)
+#endif
+//print打印
+#ifdef DEBUG
+#define FanPrintf(fmt, ...) fprintf(stderr, "%s:%d\t%s\n", [[[NSString stringWithUTF8String: __FILE__] lastPathComponent] UTF8String], __LINE__, [[NSString stringWithFormat: fmt, ##__VA_ARGS__] UTF8String]);
+#else
+#define FanPrintf(fmt, ...) nil
 #endif
 
 //颜色
 #define FanColor(r,g,b,a)   [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
 ///不带#的6位 488fjj 颜色值
 #define FanHexColor(hex)   [FanUIKit fan_colorFromHexColor:hex]
+//白色
+#define FanWhiteColor(a)  [UIColor colorWithWhite:1.0 alpha:a]
+//黑色
+#define FanBlackColor(a) [[UIColor blackColor]colorWithAlphaComponent:a]
 //本地化
 #define FanLocalizedString(key) NSLocalizedString(key, @"")
 #define FanLocalizedStringFromTable(key,tbl) NSLocalizedStringFromTable(key, tbl, @"")

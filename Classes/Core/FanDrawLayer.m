@@ -138,7 +138,7 @@
     return layer;
 }
 +(CAShapeLayer *)fan_roundingView:(CGRect)bounds byRoundingCorners:(UIRectCorner)roundingCorners cornerRadius:(CGFloat)cornerRadius{
-    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:bounds byRoundingCorners:roundingCorners cornerRadii:CGSizeMake(2*cornerRadius, 2*cornerRadius)];
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:bounds byRoundingCorners:roundingCorners cornerRadii:CGSizeMake(cornerRadius, cornerRadius)];
     
     CAShapeLayer *maskLayer = [[CAShapeLayer alloc]init];
     //设置大小

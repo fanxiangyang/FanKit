@@ -14,6 +14,19 @@
 
 @implementation FanAlertController
 
++( UIWindow * _Nullable )fan_alertWindow{
+    //用来解决有些弹窗框，keyWindow不确定的问题
+    static UIWindow * fan_alertWindow;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if (fan_alertWindow==nil) {
+            fan_alertWindow=[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
+            fan_alertWindow.windowLevel=UIWindowLevelAlert;
+        }
+    });
+    //    [fan_alertWindow makeKeyAndVisible];
+    return fan_alertWindow;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -42,13 +55,9 @@
     
     [hud configUIWithData];
     
-    if (fanAlertWindow==nil) {
-        fanAlertWindow=[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
-        fanAlertWindow.windowLevel=UIWindowLevelAlert;
-    }
-    fanAlertWindow.rootViewController=hud;
-    [fanAlertWindow makeKeyAndVisible];
-
+    [self fan_alertWindow].rootViewController=hud;
+    [[self fan_alertWindow] makeKeyAndVisible];
+    
     return hud;
 }
 + (instancetype)fan_showProgressHUD{
@@ -57,12 +66,8 @@
     hud.progressHUDStyle=FanAlertControllerStyleLoding;
     [hud configUIWithData];
     
-    if (fanAlertWindow==nil) {
-        fanAlertWindow=[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
-        fanAlertWindow.windowLevel=UIWindowLevelAlert;
-    }
-    fanAlertWindow.rootViewController=hud;
-    [fanAlertWindow makeKeyAndVisible];
+    [self fan_alertWindow].rootViewController=hud;
+    [[self fan_alertWindow] makeKeyAndVisible];
     
     return hud;
 }
@@ -80,12 +85,8 @@
     hud.progressHUDStyle=FanAlertControllerStyleLodingText;
     [hud configUIWithData];
     
-    if (fanAlertWindow==nil) {
-        fanAlertWindow=[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
-        fanAlertWindow.windowLevel=UIWindowLevelAlert;
-    }
-    fanAlertWindow.rootViewController=hud;
-    [fanAlertWindow makeKeyAndVisible];
+    [self fan_alertWindow].rootViewController=hud;
+    [[self fan_alertWindow] makeKeyAndVisible];
     
     return hud;
 }
@@ -104,12 +105,8 @@
     hud.progressHUDStyle=FanAlertControllerStyleAlert;
     [hud configUIWithData];
     
-    if (fanAlertWindow==nil) {
-        fanAlertWindow=[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
-        fanAlertWindow.windowLevel=UIWindowLevelAlert;
-    }
-    fanAlertWindow.rootViewController=hud;
-    [fanAlertWindow makeKeyAndVisible];
+    [self fan_alertWindow].rootViewController=hud;
+    [[self fan_alertWindow] makeKeyAndVisible];
     return hud;
 }
 + (instancetype _Nullable )fan_showIconAlertHUDTitle:(NSString *_Nullable)textStr imageName:(NSString *_Nonnull)imageName buttonTitle:(NSString *_Nullable)buttonTitle alertBlock:(FanProgressHUDAlertBlock _Nullable)alertBlock{
@@ -125,20 +122,16 @@
     hud.alertBlock = alertBlock;
     hud.progressHUDStyle=FanAlertControllerStyleIconAlert;
     [hud configUIWithData];
-    if (fanAlertWindow==nil) {
-        fanAlertWindow=[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
-        fanAlertWindow.windowLevel=UIWindowLevelAlert;
-    }
-    fanAlertWindow.rootViewController=hud;
-    [fanAlertWindow makeKeyAndVisible];
+    [self fan_alertWindow].rootViewController=hud;
+    [[self fan_alertWindow] makeKeyAndVisible];
     return hud;
 }
 
 
 + (BOOL)fan_hideProgressHUD{
-    if (fanAlertWindow) {
-        fanAlertWindow.rootViewController=nil;
-        fanAlertWindow.hidden=YES;
+    if ([self fan_alertWindow]) {
+        [self fan_alertWindow].rootViewController=nil;
+        [self fan_alertWindow].hidden=YES;
     }
     return YES;
 }
@@ -498,9 +491,9 @@
     [self performSelector:@selector(removeFromWindow) withObject:nil afterDelay:0.3f];
 }
 -(void)removeFromWindow{
-    if (fanAlertWindow) {
-        fanAlertWindow.rootViewController=nil;
-        fanAlertWindow.hidden=YES;
+    if ([[self class] fan_alertWindow]) {
+        [[self class] fan_alertWindow].rootViewController=nil;
+        [[self class] fan_alertWindow].hidden=YES;
     }
 }
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{

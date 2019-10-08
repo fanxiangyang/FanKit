@@ -71,6 +71,20 @@
 +(UIVisualEffectView *)fan_addBlurEffectWithStyle:(UIBlurEffectStyle)style toView:(UIView *)toView effectCornerRadius:(CGFloat)cornerRadius;
 /** 拉伸图片，边缘不拉伸，图片的一半*/
 +(UIImage *)fan_stretchableImage:(UIImage *)image;
+/** 添加阴影*/
++(void)fan_addShadowToView:(UIView *)shadowView shadowColor:(UIColor *)shadowColor shadowOpacity:(CGFloat)shadowOpacity shadowOffset:(CGSize)shadowOffset;
+
+/**
+ 添加阴影
+ 
+ @param shadowView shadowView
+ @param shadowColor 阴影颜色
+ @param shadowOpacity 阴影透明度最好0.5+(建议1.0)
+ @param shadowOffset 偏移量
+ @param shadowRadius 圆角
+ @param corners 圆角类型
+ */
++(void)fan_addShadowToView:(UIView *)shadowView shadowColor:(UIColor *)shadowColor shadowOpacity:(CGFloat)shadowOpacity shadowOffset:(CGSize)shadowOffset shadowRadius:(CGFloat)shadowRadius byRoundingCorners:(UIRectCorner)corners;
 /***************************************创建UI******************************************/
 #pragma mark --创建Label
 +(UILabel*)fan_createLabelWithFrame:(CGRect)frame text:(NSString*)text textColor:(UIColor *)textColor;
