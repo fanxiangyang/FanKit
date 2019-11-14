@@ -108,6 +108,22 @@
     label.attributedText = attributedString;
     [label sizeToFit];
 }
++(CGSize)fan_htmlTextSizeWithMaxSize:(CGSize)maxSize html:(NSString *)htmlStr font:(UIFont *)font lineSpace:(CGFloat)lineSpace{
+    NSMutableAttributedString *htmlString =[[NSMutableAttributedString alloc] initWithData:[htmlStr dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]} documentAttributes:NULL error:nil];
+    [htmlString addAttributes:@{NSFontAttributeName:font} range:NSMakeRange(0, htmlString.length)];
+    //设置行间距
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:lineSpace];
+    [htmlString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [htmlString length])];
+    //NSStringDrawingTruncatesLastVisibleLine
+    CGSize size = [htmlString boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil].size;
+    return size;
+}
++(CGSize)fan_attributTextSizeWithMaxSize:(CGSize)maxSize attributedString:(NSAttributedString *)attributedString{
+    //NSStringDrawingTruncatesLastVisibleLine
+    CGSize size = [attributedString boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil].size;
+    return size;
+}
 #pragma mark - 字节个数
 +(NSUInteger) fan_unicodeLengthOfString: (NSString *) text {
     NSUInteger asciiLength = 0;

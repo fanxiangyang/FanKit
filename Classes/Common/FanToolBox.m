@@ -242,7 +242,10 @@
     }
 }
 #pragma mark - 其他
-
+//if(@available(iOS 13.0,*))特殊设置
+//1、使用定位功能，并且获得了定位服务权限的应用;
+//2、使用NEHotspotConfiguration配置过的Wi-Fi;
+//3、应用程序已安装有效的VPN配置;
 +(NSString *)fan_wifiInfo_ssid{
     NSString *ssid;
 #if TARGET_OS_IOS

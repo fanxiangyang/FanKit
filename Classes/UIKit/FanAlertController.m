@@ -56,8 +56,8 @@
     [hud configUIWithData];
     
     [self fan_alertWindow].rootViewController=hud;
-    [[self fan_alertWindow] makeKeyAndVisible];
-    
+//    [[self fan_alertWindow] makeKeyAndVisible];
+    [self fan_alertWindow].hidden=NO;
     return hud;
 }
 + (instancetype)fan_showProgressHUD{
@@ -67,8 +67,9 @@
     [hud configUIWithData];
     
     [self fan_alertWindow].rootViewController=hud;
-    [[self fan_alertWindow] makeKeyAndVisible];
-    
+//    [[self fan_alertWindow] makeKeyAndVisible];
+    [self fan_alertWindow].hidden=NO;
+
     return hud;
 }
 
@@ -86,8 +87,9 @@
     [hud configUIWithData];
     
     [self fan_alertWindow].rootViewController=hud;
-    [[self fan_alertWindow] makeKeyAndVisible];
-    
+//    [[self fan_alertWindow] makeKeyAndVisible];
+    [self fan_alertWindow].hidden=NO;
+
     return hud;
 }
 
@@ -106,7 +108,9 @@
     [hud configUIWithData];
     
     [self fan_alertWindow].rootViewController=hud;
-    [[self fan_alertWindow] makeKeyAndVisible];
+//    [[self fan_alertWindow] makeKeyAndVisible];
+    [self fan_alertWindow].hidden=NO;
+
     return hud;
 }
 + (instancetype _Nullable )fan_showIconAlertHUDTitle:(NSString *_Nullable)textStr imageName:(NSString *_Nonnull)imageName buttonTitle:(NSString *_Nullable)buttonTitle alertBlock:(FanProgressHUDAlertBlock _Nullable)alertBlock{
@@ -123,7 +127,9 @@
     hud.progressHUDStyle=FanAlertControllerStyleIconAlert;
     [hud configUIWithData];
     [self fan_alertWindow].rootViewController=hud;
-    [[self fan_alertWindow] makeKeyAndVisible];
+//    [[self fan_alertWindow] makeKeyAndVisible];
+    [self fan_alertWindow].hidden=NO;
+
     return hud;
 }
 

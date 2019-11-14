@@ -425,5 +425,71 @@
             break;
     }
 }
-
+#pragma mark - VFL格式话约束+居中约束
+// @"H:|-20-[V1(50)]-20-[V2(==V1)]-20-[V3(==V1)]";
+/// 添加多view约束Format方式(参数必须是 V1,V2,....)
+/// @param views 多个view
+/// @param formatH 水平format
+/// @param formatV 垂直format
+/// @param formatOptions 可选参数 默认 0
+-(void)fan_addConstraintsFormatViews:(NSArray *)views formatH:(NSString *)formatH formatV:(NSString *)formatV formatOptions:(NSLayoutFormatOptions)formatOptions{
+    NSMutableDictionary *dicViews=[[NSMutableDictionary alloc]init];
+    for (int i=0;i<views.count ;i++) {
+        UIView *view=(UIView *)views[i];
+        view.translatesAutoresizingMaskIntoConstraints=NO;
+        [dicViews setObject:view forKey:[NSString stringWithFormat:@"V%ld",(long)(i+1)]];
+    }
+    //水平方向
+    if (formatH.length>0) {
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:formatH options:formatOptions metrics:nil views:dicViews]];
+    }
+    //垂直方向
+    if (formatV.length>0) {
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:formatV options:formatOptions metrics:nil views:dicViews]];
+    }
+}
+/// 添加多view约束Format方式(format里面必须是view)
+/// @param view 需要约束的view
+/// @param formatH 水平format
+/// @param formatV 垂直format
+/// @param formatOptions 可选参数 默认 0
+-(void)fan_addConstraintsFormat:(id)view formatH:(NSString *)formatH formatV:(NSString *)formatV formatOptions:(NSLayoutFormatOptions)formatOptions{
+    ((UIView *)view).translatesAutoresizingMaskIntoConstraints=NO;
+    NSDictionary* views = NSDictionaryOfVariableBindings(view);
+    //水平方向
+    if (formatH.length>0) {
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:formatH options:formatOptions metrics:nil views:views]];
+    }
+    //垂直方向
+    if (formatV.length>0) {
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:formatV options:formatOptions metrics:nil views:views]];
+    }
+}
+/// 添加中心约束XY
+/// @param centerView 需要居中的view
+/// @param centerX X偏移量
+/// @param centerY Y偏移量
+-(void)fan_addConstraintsCenterXY:(id)centerView centerX:(CGFloat)centerX centerY:(CGFloat)centerY{
+    ((UIView *)centerView).translatesAutoresizingMaskIntoConstraints=NO;
+    //水平居中
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:centerView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:centerX]];
+    //垂直居中
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:centerView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:centerY]];
+}
+/// 添加中心约束centerX
+/// @param centerView 需要居中的View
+/// @param centerX X偏移量
+-(void)fan_addConstraintsCenterX:(id)centerView centerX:(CGFloat)centerX{
+    ((UIView *)centerView).translatesAutoresizingMaskIntoConstraints=NO;
+    //水平居中
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:centerView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:centerX]];
+}
+/// 添加中心约束centerY
+/// @param centerView 需要居中的View
+/// @param centerY Y偏移量
+-(void)fan_addConstraintsCenterY:(id)centerView centerY:(CGFloat)centerY{
+    ((UIView *)centerView).translatesAutoresizingMaskIntoConstraints=NO;
+    //垂直居中
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:centerView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:centerY]];
+}
 @end

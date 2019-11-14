@@ -34,6 +34,10 @@
 //删除文件下大于7天的文件
 
 #pragma mark - 其他
+//if(@available(iOS 13.0,*))特殊设置
+//1、使用定位功能，并且获得了定位服务权限的应用;
+//2、使用NEHotspotConfiguration配置过的Wi-Fi;
+//3、应用程序已安装有效的VPN配置;
 /** 获取WiFi ssid*/
 +(NSString *)fan_wifiInfo_ssid;
 ///必须在有网的情况下才能获取手机的IP地址

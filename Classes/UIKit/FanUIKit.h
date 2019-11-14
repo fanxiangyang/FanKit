@@ -41,6 +41,17 @@
  @param wordSpace 字间距,<=0 不设置
  */
 +(void)fan_changeSpaceFromlabel:(UILabel *)label lineSpace:(CGFloat)lineSpace wordSpace:(CGFloat)wordSpace;
+/// 计算HTML文本的宽高
+/// @param maxSize 限定Size
+/// @param htmlStr HTML字符串
+/// @param font 字体
+/// @param lineSpace 行间距
++(CGSize)fan_htmlTextSizeWithMaxSize:(CGSize)maxSize html:(NSString *)htmlStr font:(UIFont *)font lineSpace:(CGFloat)lineSpace;
+
+/// 根据HTML富文本获取宽高
+/// @param maxSize 限定宽高
+/// @param attributedString 富文本
++(CGSize)fan_attributTextSizeWithMaxSize:(CGSize)maxSize attributedString:(NSAttributedString *)attributedString;
 #pragma mark - 字节个数
 /** 字节个数 */
 +(NSUInteger) fan_unicodeLengthOfString: (NSString *) text;
