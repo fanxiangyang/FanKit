@@ -211,23 +211,18 @@
     return animation;
 }
 #pragma mark - CAKeyframeAnimation动画
-/**左右摇晃,图标的抖动:抖动宽度+强度*/
-+(CAKeyframeAnimation * )fan_shakeAnimationWidth:(float)shakeWidth sigleDuration:(float)sigleDuration {
-    CAKeyframeAnimation *animation;
-    animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];//指定动画的属性
+/**左右摇晃,图标的抖动:抖动宽度(0-360)+强度(单次时间)*/
++(CAKeyframeAnimation * )fan_shakeAnimationDegress:(float)shakeDegress sigleDuration:(float)sigleDuration repeatCount:(float)repeatCount {
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
     [animation setDuration:sigleDuration];
-    [animation setRepeatCount:10000];
-    // Try to get the animationto begin to start with a small offset
-    // that makes it shake out of sync withother layers. srand([[NSDate date] timeIntervalSince1970]);
+    [animation setRepeatCount:repeatCount];
     float rand = (float)random();
     [animation setBeginTime:CACurrentMediaTime() + rand * .0000000001];
-    NSMutableArray *values =[NSMutableArray array]; // Turn right
-    [values addObject:fan_DegreesToNumber(-shakeWidth)]; // Turn left
-    [values addObject:fan_DegreesToNumber(shakeWidth)]; // Turn right
-    [values addObject:fan_DegreesToNumber(-shakeWidth)]; // Set the values for the animation
-    
-    //第一帧转10个度数到右边，第二帧转10个度数到左边，然后第三帧再转两个度数到右边。当动画完成时，它再次启动然后通过调用setRepeatCount:10000来重复10000次。视觉上就是在中轴上不停的抖动。要停止动画，可以通过调用-removeAnimationForKey:@”rotate”这个函数从层上面移除动画
-    
+    NSMutableArray *values =[NSMutableArray array];
+    [values addObject:[NSNumber numberWithFloat:0]];
+    [values addObject:fan_DegreesToNumber(-shakeDegress)]; // Turn left
+    [values addObject:fan_DegreesToNumber(shakeDegress)]; // Turn right
+    [values addObject:fan_DegreesToNumber(0)];
     [animation setValues:values];
     return animation;
 }

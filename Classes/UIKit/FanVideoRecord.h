@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  界面是否支持横竖屏
-
+ 
  - FanVideoRecordOrientationAll: 横竖屏切换
  - FanVideoRecordOrientationPortrait: 只支持横屏
  - FanVideoRecordOrientationLandscape: 只支持竖屏
@@ -27,14 +27,14 @@ typedef NS_ENUM(NSInteger,FanVideoRecordOrientation){
 
 //录制状态
 typedef NS_ENUM(NSInteger, FanRecordState) {
-    FanRecordStateInit = 0,
-    FanRecordStateOpenCamera,
-    FanRecordStateRecording,
-    FanRecordStateReRecord,
-    FanRecordStatePause,
-    FanRecordStateFinish,
-    FanRecordStateEnterBack,
-    FanRecordStateBecomeActive
+    FanRecordStateInit = 0,//初始化
+    FanRecordStateOpenCamera,//打开相机
+    FanRecordStateRecording,//正在录制
+    FanRecordStateReRecord,//重新录制
+    FanRecordStatePause,//停止
+    FanRecordStateFinish,//完成录制
+    FanRecordStateEnterBack,//进入后台
+    FanRecordStateBecomeActive//进入前台
 };
 
 @class FanVideoRecord;
@@ -43,8 +43,8 @@ typedef void(^FanVideoRecordBlock)(FanVideoRecord *videoRecord, FanRecordState r
 
 /**
  保存到相册的block
-
- @param saveType -1 = 开始转码 -2编码成功 -3 编码失败  0=开始保存 1=保存成功 2=保存失败
+ 
+ @param saveType -1 = 开始转码 -2编码成功 -3 编码失败 -4 相机权限不允许 -5 相册不允许 -6 不支持闪光灯  0=开始保存 1=保存成功 2=保存失败
  */
 typedef void(^FanVideoSaveAlbumBlock)(NSInteger saveType);
 
@@ -96,7 +96,7 @@ typedef void(^FanVideoSaveAlbumBlock)(NSInteger saveType);
 - (NSString *)fan_createTmpVideoFilePath:(NSString *)pathExtension;
 /**
  根据视频拍摄时的方向编码旋转正确的mp4文件
-
+ 
  @param anInputFileURL 输入的文件URL
  @param videoOrientation 视频方向
  @param completeBlock 回调-成功失败，URLStr
@@ -104,7 +104,7 @@ typedef void(^FanVideoSaveAlbumBlock)(NSInteger saveType);
 - (void)fan_encodeVideoOrientation:(NSURL *)anInputFileURL videoOrientation:(AVCaptureVideoOrientation)videoOrientation completeBlock:(void(^)(BOOL success, NSString*urlStr))completeBlock;
 /**
  mov 转MP4 清晰度中
-
+ 
  @param fileUrl 文件URL，因为，可以是文件，可以是相册文件，可以是网络URL
  @param outPath 输出文件路径
  @param completeBlock 完成的回调 成功、失败   type=0 失败 =1 关闭  =2 成功

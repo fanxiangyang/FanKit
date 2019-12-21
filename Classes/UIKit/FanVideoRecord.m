@@ -53,7 +53,7 @@
     }
     
     self.recordState=FanRecordStateInit;
-  
+    
 }
 
 -(void)dealloc{
@@ -66,7 +66,7 @@
     
     [self.timer invalidate];
     self.timer=nil;
-
+    
 }
 -(BOOL)fan_openVideo{
     if ([self.captureSession isRunning]) {
@@ -82,9 +82,9 @@
     //判断摄像头权限
     AVAuthorizationStatus deviceStatus=[AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
     if (deviceStatus == AVAuthorizationStatusRestricted||deviceStatus==AVAuthorizationStatusDenied) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self fan_showAlertWithMessage:[NSBundle fan_localizedStringForKey:@"FanKit_ProhibitCameraPermission"]];
-        });
+        if (self.saveAlbumBlock) {
+            self.saveAlbumBlock(-4);
+        }
         return NO;
     }
     
@@ -108,7 +108,7 @@
         [self.captureSession addInput:self.videoInput];
     }
     
-
+    
     //音频输入
     // 获取音频输入设备
     AVCaptureDevice *audioCaptureDevice=[[AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio] firstObject];
@@ -136,18 +136,18 @@
         self.captureVideoPreviewLayer=[AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
         self.captureVideoPreviewLayer.videoGravity=AVLayerVideoGravityResizeAspectFill;
     }
-   
+    
     [self.captureVideoPreviewLayer connection].videoOrientation=[self videoDeviceOrientation:[UIDevice currentDevice].orientation];
     //设置后，输出的方向，随着预览图变化（但是不起作用，给每次启动录制时设备是什么方向，视频就是什么方向）
     captureConnection.videoOrientation=[self.captureVideoPreviewLayer connection].videoOrientation;
-//    captureConnection.videoMirrored=NO;
-//    if ([captureConnection isVideoOrientationSupported]) {
-//        captureConnection.videoOrientation=AVCaptureVideoOrientationLandscapeLeft;//[self.captureVideoPreviewLayer connection].videoOrientation;
-//    }else{
-//        NSLog(@"----------不支持---------");
-//    }
+    //    captureConnection.videoMirrored=NO;
+    //    if ([captureConnection isVideoOrientationSupported]) {
+    //        captureConnection.videoOrientation=AVCaptureVideoOrientationLandscapeLeft;//[self.captureVideoPreviewLayer connection].videoOrientation;
+    //    }else{
+    //        NSLog(@"----------不支持---------");
+    //    }
     
-   
+    
     if ([self.captureSession canAddOutput:self.fileOutput]) {
         [self.captureSession addOutput:self.fileOutput];
     }
@@ -156,7 +156,7 @@
     self.captureVideoPreviewLayer.frame=self.layer.bounds;
     [self.layer addSublayer:self.captureVideoPreviewLayer];
     
-
+    
     //启动扫描
     [self.captureSession startRunning];
     
@@ -175,7 +175,9 @@
 -(void)fan_flashLight{
     AVCaptureDevice * device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     if(![device isTorchModeSupported:AVCaptureTorchModeOn]){
-        [self fan_showAlertWithMessage:[NSBundle fan_localizedStringForKey:@"FanKit_OpenFlash"]];
+        if (self.saveAlbumBlock) {
+            self.saveAlbumBlock(-6);
+        }
         return;
     }
     [device lockForConfiguration:nil];
@@ -202,19 +204,19 @@
     if ([self fan_openVideo]) {
         //修正每次拍摄时的方向,每次录制时，记录当前屏幕方向
         self.currentOrientation=[self videoDeviceOrientation:[UIDevice currentDevice].orientation];
-
+        
         if (videoPath.length>0) {
             self.videoPath=videoPath;
         }else{
             self.videoPath = [self fan_createTmpVideoFilePath:@"mov"];
-
+            
         }
         self.videoUrl = [NSURL fileURLWithPath:self.videoPath];
         [self.fileOutput startRecordingToOutputFileURL:self.videoUrl recordingDelegate:self];
         return YES;
         
     }else{
-        NSLog(@"无法打开摄像头，请重试");
+//        NSLog(@"无法打开摄像头，请重试");
         return NO;
     }
 }
@@ -224,7 +226,7 @@
         [self fan_stopVideoRecord];
         //在回调中处理
         return YES;
-
+        
     }else{
         self.recordState=FanRecordStateReRecord;
         //没有启动，直接启动
@@ -257,6 +259,26 @@
     [self fan_saveVideoToAlbum:[self.videoUrl path]];
 }
 -(void)fan_saveVideoToAlbum:(NSString *)videoPath{
+    PHAuthorizationStatus photoAuthorStatus = [PHPhotoLibrary authorizationStatus];
+    if (photoAuthorStatus==PHAuthorizationStatusDenied||photoAuthorStatus==PHAuthorizationStatusRestricted) {
+        //用户拒绝当前应用访问相册,我们需要提醒用户打开访问开关 ||  不允许访问
+        if (self.saveAlbumBlock) {
+            self.saveAlbumBlock(-5);
+        }
+    }else if (photoAuthorStatus==PHAuthorizationStatusNotDetermined){
+        //获取用户对是否允许访问相册的操作
+        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+            if (status==PHAuthorizationStatusAuthorized) {
+                [self fan_saveVideoToAlbumAuthorization:videoPath];
+            }
+        }];
+        return;
+    }else{
+        //允许访问  PHAuthorizationStatusAuthorized
+        [self fan_saveVideoToAlbumAuthorization:videoPath];
+    }
+}
+-(void)fan_saveVideoToAlbumAuthorization:(NSString *)videoPath{
     if ([[NSFileManager defaultManager] fileExistsAtPath:videoPath isDirectory:nil]) {
         if (self.saveAlbumBlock) {
             self.saveAlbumBlock(0);
@@ -264,9 +286,9 @@
         //文件存在
         NSURL *url=[NSURL fileURLWithPath:videoPath];
         
-//        ALAssetsLibrary *lib = [[ALAssetsLibrary alloc] init];
-//        [lib writeVideoAtPathToSavedPhotosAlbum:url completionBlock:nil];
-//
+        //        ALAssetsLibrary *lib = [[ALAssetsLibrary alloc] init];
+        //        [lib writeVideoAtPathToSavedPhotosAlbum:url completionBlock:nil];
+        //
         __weak typeof(self)weakSelf=self;
         [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
             [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:url];
@@ -275,12 +297,12 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (success) {
                     //                    PHAsset *asset = [[PHAsset fetchAssetsWithLocalIdentifiers:@[localIdentifier] options:nil] firstObject];
-//                    NSLog(@"文件保存成功");
+                    //                    NSLog(@"文件保存成功");
                     if (weakSelf.saveAlbumBlock) {
                         weakSelf.saveAlbumBlock(1);
                     }
                 } else if (error) {
-                    NSLog(@"保存视频出错:%@",error.localizedDescription);
+//                    NSLog(@"保存视频出错:%@",error.localizedDescription);
                     if (weakSelf.saveAlbumBlock) {
                         weakSelf.saveAlbumBlock(2);
                     }
@@ -298,8 +320,8 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:path]){
         [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
     }
-    NSLog(@"========:%@",path);
-   
+//    NSLog(@"========:%@",path);
+    
     return path;
     
 }
@@ -333,7 +355,7 @@
                     break;
                 case AVAssetExportSessionStatusCompleted:
                     completeBlock(YES,2);
-                    NSLog(@"转出成功");
+//                    NSLog(@"转出成功");
                     break;
                 default:
                     break;
@@ -342,15 +364,15 @@
     }
 }
 - (void)fan_encodeVideoOrientation:(NSURL *)anInputFileURL videoOrientation:(AVCaptureVideoOrientation)videoOrientation completeBlock:(void(^)(BOOL success, NSString*urlStr))completeBlock{
-//    __weak typeof(self)weakSelf=self;
+    //    __weak typeof(self)weakSelf=self;
     //1 — 采集
     AVAsset *asset = [AVAsset assetWithURL:anInputFileURL];
-//    AVURLAsset * urlAsset = [[AVURLAsset alloc]initWithURL:anInputFileURL options:nil];
-
+    //    AVURLAsset * urlAsset = [[AVURLAsset alloc]initWithURL:anInputFileURL options:nil];
+    
     
     /********************************************************************************************/
     //配置图像转码时属性和通道，可以旋转和裁剪图像
-//    AVMutableVideoComposition *mainComposition=[self getVideoComposition:asset];
+    //    AVMutableVideoComposition *mainComposition=[self getVideoComposition:asset];
     
     // 2 创建AVMutableComposition实例. 创建一个包含asset的新子类对象，导出时需要用这个，不然没有图像数据
     AVMutableComposition *composition = [[AVMutableComposition alloc] init];
@@ -397,7 +419,7 @@
         case AVCaptureVideoOrientationPortraitUpsideDown:
         {
             renderSize = CGSizeMake(minsize, maxsize);
-
+            
             angle=-M_PI;
             moveX=-maxsize;
             moveY=-minsize;
@@ -405,11 +427,11 @@
             break;
         case AVCaptureVideoOrientationLandscapeLeft:
         {
-
+            
             angle=M_PI_2;
             moveX=minsize-maxsize;
             moveY=-minsize;
-
+            
         }
             break;
         case AVCaptureVideoOrientationLandscapeRight:
@@ -418,13 +440,13 @@
             moveX=-minsize;
         }
             break;
-      
+            
             
         default:
             break;
     }
     composition.naturalSize=renderSize;
-
+    
     //iPhone录制视频1920*1080 默认保存到相册都是按实际宽高， 开始时屏幕是什么方向视频内容就翻转多少，视频是左下角为坐标轴
     CGAffineTransform layerTransform =CGAffineTransformRotate(videoAssetTrack.preferredTransform, angle);
     layerTransform=CGAffineTransformTranslate(layerTransform, moveX, moveY);
@@ -445,7 +467,7 @@
     
     
     /********************************************************************************************/
-
+    
     
     NSString* outputPath = [self fan_createTmpVideoFilePath:@"mp4"];
     if ([[NSFileManager defaultManager] fileExistsAtPath:outputPath]){
@@ -467,7 +489,7 @@
     exporter.outputFileType = AVFileTypeMPEG4;
     exporter.shouldOptimizeForNetworkUse = YES;
     [exporter exportAsynchronouslyWithCompletionHandler:^{
-        NSLog(@"编码错误：%@",exporter.error);
+//        NSLog(@"编码错误：%@",exporter.error);
         switch ([exporter status]) {
             case AVAssetExportSessionStatusFailed:
                 completeBlock(NO,@"0");
@@ -477,15 +499,15 @@
                 break;
             case AVAssetExportSessionStatusCompleted:
             {
-
+                
                 completeBlock(YES,outputPath);
-                NSLog(@"转出成功");
+//                NSLog(@"转出成功");
                 break;
             }
             default:
                 break;
         }
-       
+        
         
     }];
     
@@ -559,8 +581,8 @@
     //系统退出后台，会自动完成录制
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.videoPath isDirectory:nil]) {
         
-        long long length = [FanToolBox fan_fileSizeFromPath:self.videoPath];
-        NSLog(@"文件大小：%lld",length);
+//        long long length = [FanToolBox fan_fileSizeFromPath:self.videoPath];
+//        NSLog(@"文件大小：%lld",length);
         if (self.autoSaveToAlbum) {
             if (self.currentOrientation==AVCaptureVideoOrientationPortrait) {
                 [self fan_saveVideoToAlbum];
@@ -583,12 +605,12 @@
                 }];
             }
         }
-       
+        
         
         
         
     }else{
-        NSLog(@"录制失败");
+//        NSLog(@"录制失败");
     }
     
 }
@@ -732,39 +754,14 @@
         self.recordBlock(self, FanRecordStateBecomeActive, 0);
     }
     //在回调里面，可以重新打开摄像头
-
-}
-
-#pragma mark 其他内部方法
-
--(void)fan_showAlertWithMessage:(NSString *)message{
-    [self fan_showAlertWithTitle:[NSBundle fan_localizedStringForKey:@"FanKit_WarmTips"] message:message];
-}
-//根据不同的提示信息，创建警告框
--(void)fan_showAlertWithTitle:(NSString *)title message:(NSString *)message{
-    
-    UIAlertController *act=[UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    [act addAction:[UIAlertAction actionWithTitle:[NSBundle fan_localizedStringForKey:@"FanKit_Confirm"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-    }]];
-    //    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
-    //        [act setModalPresentationStyle:UIModalPresentationPopover];
-    //        UIPopoverPresentationController *popPresenter = [act popoverPresentationController];
-    //        popPresenter.sourceView = self.lineImageView;
-    //        popPresenter.sourceRect = self.lineImageView.bounds;
-    //    }
-    UIViewController *rootVC=(UIViewController*)[UIApplication sharedApplication].keyWindow.rootViewController;
-    [rootVC presentViewController:act animated:YES completion:^{
-        
-    }];
     
 }
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
 
 @end

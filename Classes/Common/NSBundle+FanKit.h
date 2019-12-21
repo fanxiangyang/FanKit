@@ -20,8 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *)fan_localizedStringForKey:(NSString *)key;
 
-//获取资源图片，图片全路径
-+ (UIImage *)fan_bundleImageName:(NSString *)imageName;
+/** 获取资源图片，图片全路径login@2x.png*/
++(UIImage *)fan_bundleImageFileName:(NSString *)imageName;
+/** 获取资源图片，只是图片名(没有后缀)，自动适配@2x,@3x*/
++(UIImage *)fan_bundleImageName:(NSString *)imageName;
+/** 获取资源图片，只是图片名和扩展，自动适配@2x,@3x*/
++(UIImage *)fan_bundleImageName:(NSString *)imageName extName:(NSString *)extName;
 
 @end
 

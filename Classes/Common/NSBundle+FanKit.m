@@ -18,8 +18,41 @@
     }
     return fankitBundle;
 }
-+(UIImage *)fan_bundleImageName:(NSString *)imageName{
++(UIImage *)fan_bundleImageFileName:(NSString *)imageName{
     UIImage *fImage = [UIImage imageWithContentsOfFile:[[self fan_bundle] pathForResource:[imageName stringByDeletingPathExtension] ofType:[imageName pathExtension]]];
+    return fImage;
+}
++(UIImage *)fan_bundleImageName:(NSString *)imageName{
+    return [NSBundle fan_bundleImageName:imageName extName:@"png"];
+}
++(UIImage *)fan_bundleImageName:(NSString *)imageName extName:(NSString *)extName{
+    NSMutableString *imgName=[imageName mutableCopy];
+    CGFloat scale = [UIScreen mainScreen].scale;
+    NSInteger scaleType=0;
+    if (ABS(scale-3.0f) <= 0.001) {
+        [imgName appendString:@"@3x"];
+        scaleType=3;
+    }else if (ABS(scale-2.0f) <= 0.001) {
+        [imgName appendString:@"@2x"];
+        scaleType=2;
+    }else{
+        //1.png
+        scaleType=1;
+    }
+    
+    UIImage *fImage = [UIImage imageWithContentsOfFile:[[self fan_bundle] pathForResource:imgName ofType:extName]];
+    if (fImage==nil) {
+        if (scaleType==3) {
+            fImage = [UIImage imageWithContentsOfFile:[[self fan_bundle] pathForResource:[imageName stringByAppendingString:@"@2x"] ofType:extName]];
+            if (fImage==nil) {
+                fImage = [UIImage imageWithContentsOfFile:[[self fan_bundle] pathForResource:imageName ofType:extName]];
+            }
+        }else if (scaleType==2){
+            if (fImage==nil) {
+                fImage = [UIImage imageWithContentsOfFile:[[self fan_bundle] pathForResource:imageName ofType:extName]];
+            }
+        }
+    }
     return fImage;
 }
 + (NSString *)fan_localizedStringForKey:(NSString *)key

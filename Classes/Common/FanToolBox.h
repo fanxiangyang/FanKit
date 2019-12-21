@@ -11,6 +11,15 @@
 @interface FanToolBox : NSObject
 
 
+#pragma mark - 类，数据操作
+
+/// json字符串转字典
+/// @param jsonString json字符串
++(NSDictionary *)fan_dictionaryWithString:(NSString *)jsonString;
+/// json字符串转数组
+/// @param jsonString json字符串
++(NSArray *)fan_arrayWithString:(NSString *)jsonString;
+
 
 #pragma mark - 文件操作
 /** 缓存路径  NSTemporaryDirectory() = tmp文件夹*/

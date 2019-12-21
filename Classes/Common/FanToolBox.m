@@ -14,6 +14,40 @@
 #include <net/if.h>
 
 @implementation FanToolBox
+#pragma mark - 类，数据操作
+
++(NSDictionary *)fan_dictionaryWithString:(NSString *)jsonString{
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error=nil;
+    //NSJSONReadingMutableContainers 可变的数组和字典
+    //NSJSONReadingMutableLeaves 指定返回json对象内部的字符串为可变字符串的实例
+    //NSJSONReadingAllowFragments 指定解析的时候允许最外层(最顶层)的对象可以不是一个数组或字典对象也是可以的
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&error];
+    if (error) {
+        return nil;
+    }else{
+        if (![dic isKindOfClass:[NSDictionary class]]) {
+            return nil;
+        }
+        return dic;
+    }
+}
++(NSArray *)fan_arrayWithString:(NSString *)jsonString{
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error=nil;
+    //NSJSONReadingMutableContainers 可变的数组和字典
+    //NSJSONReadingMutableLeaves 指定返回json对象内部的字符串为可变字符串的实例
+    //NSJSONReadingAllowFragments 指定解析的时候允许最外层(最顶层)的对象可以不是一个数组或字典对象也是可以的
+    NSArray *array = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&error];
+    if (error) {
+        return nil;
+    }else{
+        if (![array isKindOfClass:[NSArray class]]) {
+            return nil;
+        }
+    }
+    return array;
+}
 
 #pragma mark - 文件操作
 

@@ -79,8 +79,11 @@
  *repeatTimes 重复的次数
  */
 +(CAKeyframeAnimation *)fan_keyframeAniamtion:(CGMutablePathRef)path durTimes:(float)time Rep:(float)repeatTimes; //路径动画
-/**左右摇晃,图标的抖动:抖动宽度+强度*/
-+(CAKeyframeAnimation * )fan_shakeAnimationWidth:(float)shakeWidth sigleDuration:(float)sigleDuration;
+/// 左右摇晃，抖动角度
+/// @param shakeDegress 抖动左偏移角度（0-360）
+/// @param sigleDuration 单次抖动时间
+/// @param repeatCount 执行次数 HUGE_VALF
++(CAKeyframeAnimation * )fan_shakeAnimationDegress:(float)shakeDegress sigleDuration:(float)sigleDuration repeatCount:(float)repeatCount;
 /**贝塞尔路径动画（曲线）*/
 +(CAKeyframeAnimation *)fan_bezierPathAniamtion:(UIBezierPath *)bezierPath durTimes:(float)time Rep:(float)repeatTimes;
 
