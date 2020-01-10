@@ -165,14 +165,14 @@
     NSTimeInterval time=[stamp doubleValue];
     NSDate *detaildate=[NSDate dateWithTimeIntervalSince1970:time];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     [formatter setTimeZone:[NSTimeZone localTimeZone]]; //设置时区
     return [formatter stringFromDate:detaildate];
 }
 /**
  时间戳格式化想要的字符串
  
- @param format @"YYYY-MM-dd HH:mm:ss"
+ @param format @"yyyy-MM-dd HH:mm:ss"
  @param timeStamp 时间戳
  @return 字符串2019-05-23 04:30:20
  */
@@ -216,7 +216,7 @@
             NSRange range = [timeStr rangeOfString:@"/"];
             if(range.length){
                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateFormat:@"YYYY/MM/dd"];
+                [formatter setDateFormat:@"yyyy/MM/dd"];
                 //设置时区 NSDataFormatter默认输出格林威治时间，要输出本地时间要设置时区 ，跟北京时间差8小时
                 [formatter setTimeZone:isGMT?[NSTimeZone timeZoneWithName:@"GMT"]:[NSTimeZone localTimeZone]];
                 NSDate *theDate =  [formatter dateFromString:timeStr];
@@ -229,7 +229,7 @@
             return returnStr;
         }else{
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
             //设置时区 NSDataFormatter默认输出格林威治时间，要输出本地时间要设置时区 ，跟北京时间差8小时
             [formatter setTimeZone:isGMT?[NSTimeZone timeZoneWithName:@"GMT"]:[NSTimeZone localTimeZone]];
             NSDate *theDate =  [formatter dateFromString:timeStr];
@@ -238,13 +238,13 @@
     }
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     //设置时区 NSDataFormatter默认输出格林威治时间，要输出本地时间要设置时区 ，跟北京时间差8小时
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
     
     //处理凌晨时间戳
     NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
-    [dateFormatter1 setDateFormat:@"YYYY-MM-dd 23:59:59"];
+    [dateFormatter1 setDateFormat:@"yyyy-MM-dd 23:59:59"];
     [dateFormatter1 setTimeZone:[NSTimeZone localTimeZone]];
     NSString *currentDateStr1 = [dateFormatter1 stringFromDate:[NSDate date]];
     
@@ -258,7 +258,7 @@
     int betweenYear = ((int)(timeNowNum -timeNum)/(FanYEARS)) ;
     //不是今年
     if(betweenYear && betweenYear<100){
-        [formatter setDateFormat:@"YYYY-MM-dd"];
+        [formatter setDateFormat:@"yyyy-MM-dd"];
         returnStr = [formatter stringFromDate:lastDate];
     }else if(betweenYear == 0){
         if (betweenDay == 0){
@@ -269,7 +269,7 @@
             //昨天
             returnStr = [NSBundle fan_localizedStringForKey:@"FanKit_yesterday" value:@"昨天"];
         }else{
-            [formatter setDateFormat:@"YYYY-MM-dd"];
+            [formatter setDateFormat:@"yyyy-MM-dd"];
             returnStr = [formatter stringFromDate:lastDate];
         }
     }else{
@@ -305,7 +305,7 @@
             NSRange range = [timeStr rangeOfString:@"/"];
             if(range.length){
                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateFormat:@"YYYY/MM/dd"];
+                [formatter setDateFormat:@"yyyy/MM/dd"];
                 //设置时区 NSDataFormatter默认输出格林威治时间，要输出本地时间要设置时区 ，跟北京时间差8小时
                 [formatter setTimeZone:isGMT?[NSTimeZone timeZoneWithName:@"GMT"]:[NSTimeZone localTimeZone]];
                 NSDate *theDate =  [formatter dateFromString:timeStr];
@@ -320,7 +320,7 @@
                 //中文日期
             }else{
                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+                [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
                 //设置时区 NSDataFormatter默认输出格林威治时间，要输出本地时间要设置时区 ，跟北京时间差8小时
                 [formatter setTimeZone:isGMT?[NSTimeZone timeZoneWithName:@"GMT"]:[NSTimeZone localTimeZone]];
                 NSDate *theDate =  [formatter dateFromString:timeStr];
@@ -334,13 +334,13 @@
     NSString *returnStr=@"";
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     //设置时区 NSDataFormatter默认输出格林威治时间，要输出本地时间要设置时区 ，跟北京时间差8小时
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
     
     //处理凌晨时间戳
     NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
-    [dateFormatter1 setDateFormat:@"YYYY-MM-dd 23:59:59"];
+    [dateFormatter1 setDateFormat:@"yyyy-MM-dd 23:59:59"];
     [dateFormatter1 setTimeZone:[NSTimeZone localTimeZone]];
     NSString *nowDate = [dateFormatter1 stringFromDate:[NSDate date]];
     
@@ -357,7 +357,7 @@
     //不是今年
     if(betweenYear && betweenYear<100){
         //大于一年小于100年
-        [formatter setDateFormat:@"YYYY-MM-dd HH:mm"];
+        [formatter setDateFormat:@"yyyy-MM-dd HH:mm"];
         returnStr = [formatter stringFromDate:lastDate];
     }else if(betweenYear == 0){
 //        int betweenMonth = ((int)(timeInterval)/(FanMONTHS)) ;

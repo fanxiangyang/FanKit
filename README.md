@@ -17,7 +17,7 @@ Installation（安装）
 ==============
 ### CocoaPods
 
-1. Add `pod 'FanKit','~> 0.2.0'` to your Podfile.
+1. Add `pod 'FanKit','~> 0.3.0'` to your Podfile.
 2. Run `pod install` or `pod update`.
 3. Import "FanKit.h".
 
@@ -30,13 +30,18 @@ Installation（安装）
    * CoreFoundation
    * CoreGraphics
    * QuartzCore
+   * AudioToolbox
+   * AVFoundation
+   * Photos
+   * AssetsLibrary
+   * SystemConfiguration
 4. 在项目pch中导入 `FanKit.h`,其他的功能自行选择。
 
 Requirements(系统要求)
 ==============
-FanKit该项目最低支持 iOS 8.0。
+FanKit该项目最低支持 iOS 9.0。
 
-注意：只是个别支持iOS8.0，其他几乎可以兼容到iOS7,6，5，4
+注意：随着iOS系统更新换代，iOS9.0以下，不适配了
 
 
 Function Example(功能事例)
@@ -53,9 +58,15 @@ Function Example(功能事例)
 * 添加部分语言本地化，
 * 移除不太通用的方法，
 * 完善和添加部分方法，使用更加方便,特别在layer层绘图。
+
 ### Release 0.2.0
 * 添加部分方法，优化部分细节，
 * 移除Libs pod库内容，需要可以下载使用，以后只包含在项目中。
+
+### Release 0.3.0
+* iOS 9.0+ 会移除iOS8.0的方法
+* 添加部分方法，优化部分细节
+* 增加wav和caf格式转码到aac
 
 Like(喜欢)
 ==============

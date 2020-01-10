@@ -71,7 +71,7 @@
 /**
  时间戳格式化想要的字符串
  
- @param format @"YYYY-MM-dd HH:mm:ss"
+ @param format @"yyyy-MM-dd HH:mm:ss"
  @param timeStamp 时间戳
  @return 字符串2019-05-23 04:30:20
  */
@@ -100,7 +100,7 @@
 /**
  通过对象生成时间戳
 
- @param timeObj 时间对象（NSDate，NSNumber，NSString（【17位的和10位的数字】+【YYYY-MM-dd HH:mm:ss】+【YYYY/MM/dd】）
+ @param timeObj 时间对象（NSDate，NSNumber，NSString（【17位的和10位的数字】+【yyyy-MM-dd HH:mm:ss】+【yyyy/MM/dd】）
  @param isGMT 是否是GMT
  @return 时间戳
  */

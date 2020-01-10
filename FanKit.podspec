@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "FanKit"
-  s.version      = "0.2.2"
+  s.version      = "0.3.0"
   s.summary      = "A Cocoa Tool Kit of iOS components."
   s.description  = <<-DESC
             一个iOS集成实用工具库,以后会添加更多更多的工具，实用类，封装类，封装小效果
@@ -22,9 +22,9 @@ Pod::Spec.new do |s|
   s.author             = { "fanxiangyang" => "fqsyfan@gmail.com" }
   # s.social_media_url   = "http://twitter.com/fanxiangyang"
 
-  s.platform     = :ios, "8.0"
+  s.platform     = :ios, "9.0"
 
-  s.ios.deployment_target = "8.0"
+  s.ios.deployment_target = "9.0"
   # s.osx.deployment_target = "10.7"
   # s.watchos.deployment_target = "2.0"
   # s.tvos.deployment_target = "9.0"
@@ -65,7 +65,7 @@ Pod::Spec.new do |s|
     ss.dependency 'FanKit/Common'
     ss.source_files  = "Classes/Core/*.{h,m}"
     ss.public_header_files = "Classes/Core/*.h"
-    ss.frameworks = "UIKit", "QuartzCore"
+    ss.frameworks = "UIKit", "QuartzCore","AudioToolbox","AVFoundation"
   end
 
   s.subspec 'UIKit' do |ss|

@@ -17,6 +17,17 @@
 
 @implementation FanProgressHUD
 
++(UIWindow *)showKeyWindow{
+    UIWindow *kWindow=[UIApplication sharedApplication].keyWindow;
+    if (kWindow) {
+    }else{
+        if([[UIApplication sharedApplication] windows].count>0){
+            kWindow=[[[UIApplication sharedApplication] windows] objectAtIndex:0];
+        }
+    }
+    return kWindow;
+}
+
 /**
  弹出提示对话框
 
@@ -29,7 +40,7 @@
     
 }
 + (instancetype)fan_showHUDWithStatus:(NSString *)textStr afterDelay:(NSTimeInterval)seconds{
-    UIView *view=[UIApplication sharedApplication].keyWindow;
+    UIView *view=[FanProgressHUD showKeyWindow];
     FanProgressHUD *hud = [[self alloc] initWithShowView:view];
     //    hud.isAnimation = YES;
     hud.title=textStr;
@@ -41,7 +52,7 @@
     return hud;
 }
 + (instancetype)fan_showProgressHUD{
-    return [FanProgressHUD fan_showProgressHUDToView:[UIApplication sharedApplication].keyWindow];
+    return [FanProgressHUD fan_showProgressHUDToView:[FanProgressHUD showKeyWindow]];
 }
 
 + (instancetype)fan_showProgressHUDToView:(UIView *)view{
@@ -53,7 +64,7 @@
 }
 
 + (instancetype)fan_showProgressHUD:(NSString *)textStr afterDelay:(NSTimeInterval)seconds{
-    UIView *view=[UIApplication sharedApplication].keyWindow;
+    UIView *view=[FanProgressHUD showKeyWindow];
     FanProgressHUD *hud = [[self alloc] initWithShowView:view];
     hud.showTime=seconds;
     hud.title=textStr;
@@ -64,7 +75,7 @@
 }
 
 + (instancetype)fan_showProgressHUD:(NSString *)textStr{
-    return [FanProgressHUD fan_showProgressHUDToView:[UIApplication sharedApplication].keyWindow title:textStr];
+    return [FanProgressHUD fan_showProgressHUDToView:[FanProgressHUD showKeyWindow] title:textStr];
 }
 
 + (instancetype)fan_showProgressHUDToView:(UIView *)view title:(NSString *)textStr{
@@ -81,7 +92,7 @@
     return [self fan_showAlertHUDTitle:textStr subTitle:subTitle buttonTitles:@[buttonTitle] alertBlock:alertBlock];
 }
 + (instancetype)fan_showAlertHUDTitle:(NSString *)textStr subTitle:(NSString *_Nonnull)subTitle buttonTitles:(NSArray*_Nullable)btnTitleArray  alertBlock:(FanProgressHUDAlertBlock _Nullable)alertBlock{
-    UIView *view=[UIApplication sharedApplication].keyWindow;
+    UIView *view=[FanProgressHUD showKeyWindow];
 
     FanProgressHUD *hud = [[self alloc] initWithShowView:view];
     hud.title=textStr;
@@ -98,7 +109,7 @@
 
 }
 + (instancetype _Nullable )fan_showIconAlertHUDTitle:(NSString *_Nullable)textStr imageName:(NSString *_Nonnull)imageName buttonTitles:(NSArray*_Nullable)btnTitleArray  alertBlock:(FanProgressHUDAlertBlock _Nullable )alertBlock{
-    UIView *view=[UIApplication sharedApplication].keyWindow;
+    UIView *view=[FanProgressHUD showKeyWindow];
     
     FanProgressHUD *hud = [[self alloc] initWithShowView:view];
     hud.title=textStr;
@@ -113,7 +124,7 @@
 
 
 + (BOOL)fan_hideProgressHUD{
-    return [self fan_hideProgressHUDForView:[UIApplication sharedApplication].keyWindow];
+    return [self fan_hideProgressHUDForView:[FanProgressHUD showKeyWindow]];
 }
 + (BOOL)fan_hideProgressHUDForView:(UIView *)view{
     FanProgressHUD *hud = [self fan_progressHUDForView:view];
@@ -133,7 +144,7 @@
     return nil;
 }
 +(BOOL)fan_hideAllProgressHUD{
-    return [self fan_hideAllProgressHUDForView:[UIApplication sharedApplication].keyWindow];
+    return [self fan_hideAllProgressHUDForView:[FanProgressHUD showKeyWindow]];
 }
 +(BOOL)fan_hideAllProgressHUDForView:(UIView *)view{
     NSEnumerator *subviewsEnum = [view.subviews reverseObjectEnumerator];

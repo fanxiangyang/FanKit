@@ -83,7 +83,8 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
 @property(nonatomic,copy)NSString * _Nullable subTitle;
 @property(nonatomic,copy)NSString * _Nullable iconName;
 
-
+//获取keywindow
++(UIWindow *_Nullable)showKeyWindow;
 
 #pragma mark -  显示和隐藏的类方法
 /**

@@ -462,6 +462,11 @@
 
 #pragma mark - 移除View
 -(void)buttonClick:(UIButton *)btn{
+    if (self.isAnimation==NO) {
+        if ([[self class] fan_alertWindow]) {
+            [[self class] fan_alertWindow].hidden=YES;
+        }
+    }
     if (self.alertBlock) {
         self.alertBlock(btn.tag-100);
     }
@@ -483,7 +488,8 @@
     }else{
         [self.blackAlphaView.layer removeAllAnimations];
         [self.fan_cententView.layer removeAllAnimations];
-        [self performSelector:@selector(removeFromWindow) withObject:nil afterDelay:0.01f];
+//        [self performSelector:@selector(removeFromWindow) withObject:nil afterDelay:0.01f];
+        [self performSelectorOnMainThread:@selector(removeFromWindow) withObject:nil waitUntilDone:YES];
     }
 }
 -(void)removeSelfView{

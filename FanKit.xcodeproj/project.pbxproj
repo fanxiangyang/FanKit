@@ -31,6 +31,7 @@
 		6683109122842F1500444009 /* FanColorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6683109022842F1500444009 /* FanColorView.m */; };
 		66A5071E1D06E1AA00D5EC34 /* FanAnimationToll.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A507191D06E1AA00D5EC34 /* FanAnimationToll.m */; };
 		66A5071F1D06E1AA00D5EC34 /* UIView+FanAutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A5071D1D06E1AA00D5EC34 /* UIView+FanAutoLayout.m */; };
+		66B32F9B23C72A7100190849 /* FanAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B32F9A23C72A7100190849 /* FanAudioConverter.m */; };
 		66B396551D2A144900A40A06 /* FanDataTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B396541D2A144900A40A06 /* FanDataTool.m */; };
 		66B396581D2A150200A40A06 /* FanUIKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B396571D2A150200A40A06 /* FanUIKit.m */; };
 		66B3965C1D2A1F9A00A40A06 /* UIViewController+FanRoot.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B3965B1D2A1F9A00A40A06 /* UIViewController+FanRoot.m */; };
@@ -121,6 +122,8 @@
 		66A5071A1D06E1AA00D5EC34 /* FanKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanKit.h; sourceTree = "<group>"; };
 		66A5071C1D06E1AA00D5EC34 /* UIView+FanAutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FanAutoLayout.h"; sourceTree = "<group>"; };
 		66A5071D1D06E1AA00D5EC34 /* UIView+FanAutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+FanAutoLayout.m"; sourceTree = "<group>"; };
+		66B32F9923C72A7100190849 /* FanAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanAudioConverter.h; sourceTree = "<group>"; };
+		66B32F9A23C72A7100190849 /* FanAudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanAudioConverter.m; sourceTree = "<group>"; };
 		66B396531D2A144900A40A06 /* FanDataTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanDataTool.h; sourceTree = "<group>"; };
 		66B396541D2A144900A40A06 /* FanDataTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanDataTool.m; sourceTree = "<group>"; };
 		66B396561D2A150200A40A06 /* FanUIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanUIKit.h; sourceTree = "<group>"; };
@@ -310,6 +313,8 @@
 		66A507171D06E1AA00D5EC34 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				66B32F9923C72A7100190849 /* FanAudioConverter.h */,
+				66B32F9A23C72A7100190849 /* FanAudioConverter.m */,
 				6639A19E2171B4EE00231B42 /* FanDrawLayer.h */,
 				6639A19D2171B4EE00231B42 /* FanDrawLayer.m */,
 				66A507181D06E1AA00D5EC34 /* FanAnimationToll.h */,
@@ -608,6 +613,7 @@
 				66E81A551E7253B8008E887E /* FanTestViewController.m in Sources */,
 				66B396611D2A3F0C00A40A06 /* FanSideslipManager.m in Sources */,
 				664095BE22C37AA20097F4CB /* FanVideoRecord.m in Sources */,
+				66B32F9B23C72A7100190849 /* FanAudioConverter.m in Sources */,
 				66B396551D2A144900A40A06 /* FanDataTool.m in Sources */,
 				667A9FC71CFEC619009B1D53 /* main.m in Sources */,
 				66B3968C1D2A536400A40A06 /* FanSwiperbleView.m in Sources */,
@@ -784,6 +790,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = NW3X9NZ9UP;
 				INFOPLIST_FILE = FanKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fan.FanKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -796,6 +803,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = NW3X9NZ9UP;
 				INFOPLIST_FILE = FanKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fan.FanKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";

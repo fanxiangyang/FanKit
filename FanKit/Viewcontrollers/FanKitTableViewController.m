@@ -31,8 +31,8 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     //@"UIKit",@"Core",@"Libs
-    self.dataArray=[@[@[@"Create Control",@"AutoLayout",@"VC Category"] ,@[@"Animation",@"Byte Core/File Operation",@"Time/Date"] ,@[@"Swiperble",@"GesturePassword",@"Alert",@"DragBubble",@"sideslip"] ] mutableCopy];
-    self.detailArray=[@[@[@"FanUIKit.h",@"UIView+FanAutoLayout.h",@"UIViewController+FanRoot.h"] ,@[@"FanAnimationToll.h",@"FanDataTool.h",@"NSString+FanTime.h"] ,@[@"FanSwiperbleView.h",@"FanGesturePasswordView.h",@"FanShowView",@"FanDragBubbleView.h",@"FanSideslipManager.h"] ] mutableCopy];
+    self.dataArray=[@[@[@"Create Control",@"AutoLayout",@"VC Category"] ,@[@"Animation",@"Byte Core/File Operation",@"Time/Date",@"Audio->.aac"] ,@[@"Swiperble",@"GesturePassword",@"Alert",@"DragBubble",@"sideslip"] ] mutableCopy];
+    self.detailArray=[@[@[@"FanUIKit.h",@"UIView+FanAutoLayout.h",@"UIViewController+FanRoot.h"] ,@[@"FanAnimationToll.h",@"FanDataTool.h",@"NSString+FanTime.h",@"FanAudioConverter.h"] ,@[@"FanSwiperbleView.h",@"FanGesturePasswordView.h",@"FanShowView",@"FanDragBubbleView.h",@"FanSideslipManager.h"] ] mutableCopy];
 
 //    [self.tableView registerNib:[UINib nibWithNibName:@"" bundle:nil] forCellReuseIdentifier:@"Cell"];
 //    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];

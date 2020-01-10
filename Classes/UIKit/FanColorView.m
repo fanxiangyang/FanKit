@@ -82,7 +82,20 @@
 }
 -(void)refreshTouchPoint:(CGPoint)touchPoint{
     if (self.colorType==0) {
-        if (pow(touchPoint.x - self.bounds.size.width/2, 2)+pow(touchPoint.y-self.bounds.size.width/2, 2) > pow(self.bounds.size.width/2, 2)) {
+        CGFloat xSpace=0;
+        CGFloat ySpace=0;
+        CGFloat r=self.bounds.size.width/2.0f;
+        if (touchPoint.x<r) {
+            xSpace=-3.0f;
+        }else{
+            xSpace=3.0f;
+        }
+        if (touchPoint.y<r) {
+            ySpace=-3.0f;
+        }else{
+            ySpace=3.0f;
+        }
+        if (pow(touchPoint.x - r+xSpace, 2)+pow(touchPoint.y-r+ySpace, 2) > pow(r, 2)) {
             return;
         }
     }else if(self.colorType==1||self.colorType==2){
