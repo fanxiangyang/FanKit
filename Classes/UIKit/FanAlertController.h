@@ -79,6 +79,7 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
 @property(nonatomic,assign)BOOL isTouchRemove;
 
 @property(nonatomic,assign)BOOL isAnimation;//暂时没有用到
+@property(nonatomic,assign)BOOL isAutoHidden;//是否自动隐藏界面 默认Yes
 
 @property(nonatomic,copy)NSString * _Nullable alertTitle;
 @property(nonatomic,copy)NSString * _Nullable subTitle;

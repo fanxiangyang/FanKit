@@ -438,7 +438,7 @@ static inline BOOL _checkResultLite(OSStatus result, const char *operation, cons
                 //跳转文件句柄到上一包
                 fan_checkResult(ExtAudioFileSeek(sourceFile, sourceFrameOffset), "ExtAudioFileSeek");
             } else if (self.dataSource&&[self.dataSource respondsToSelector:@selector(fan_audioConverter:seekToPosition:)]) {
-                [self.dataSource fan_audioConverter:self seekToPosition:(NSUInteger)(sourceFrameOffset * clientFormat.mBytesPerFrame)];
+                [self.dataSource fan_audioConverter:self seekToPosition:(sourceFrameOffset * clientFormat.mBytesPerFrame)];
             }
         } else if ( !fan_checkResult(status, "ExtAudioFileWrite") ) {
             //写入是否成功判断

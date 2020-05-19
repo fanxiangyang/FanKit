@@ -9,6 +9,7 @@
 #import "FanKitTableViewController.h"
 #import "FanKit.h"
 #import "FanCommonViewController.h"
+#import "FanTestViewController.h"
 
 @interface FanKitTableViewController ()
 
@@ -31,8 +32,8 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     //@"UIKit",@"Core",@"Libs
-    self.dataArray=[@[@[@"Create Control",@"AutoLayout",@"VC Category"] ,@[@"Animation",@"Byte Core/File Operation",@"Time/Date",@"Audio->.aac"] ,@[@"Swiperble",@"GesturePassword",@"Alert",@"DragBubble",@"sideslip"] ] mutableCopy];
-    self.detailArray=[@[@[@"FanUIKit.h",@"UIView+FanAutoLayout.h",@"UIViewController+FanRoot.h"] ,@[@"FanAnimationToll.h",@"FanDataTool.h",@"NSString+FanTime.h",@"FanAudioConverter.h"] ,@[@"FanSwiperbleView.h",@"FanGesturePasswordView.h",@"FanShowView",@"FanDragBubbleView.h",@"FanSideslipManager.h"] ] mutableCopy];
+    self.dataArray=[@[@[@"Create Control",@"AutoLayout",@"VC Category"] ,@[@"Animation",@"Byte Core/File Operation",@"Time/Date",@"Audio->.aac"] ,@[@"Swiperble",@"GesturePassword",@"Alert",@"DragBubble",@"sideslip"],@[@"Test"] ] mutableCopy];
+    self.detailArray=[@[@[@"FanUIKit.h",@"UIView+FanAutoLayout.h",@"UIViewController+FanRoot.h"] ,@[@"FanAnimationToll.h",@"FanDataTool.h",@"NSString+FanTime.h",@"FanAudioConverter.h"] ,@[@"FanSwiperbleView.h",@"FanGesturePasswordView.h",@"FanShowView",@"FanDragBubbleView.h",@"FanSideslipManager.h"],@[@"FanTestViewController.h"] ] mutableCopy];
 
 //    [self.tableView registerNib:[UINib nibWithNibName:@"" bundle:nil] forCellReuseIdentifier:@"Cell"];
 //    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
@@ -53,7 +54,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 //#warning Incomplete implementation, return the number of sections
-    return 3;
+    return self.dataArray.count;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     return 0.0001;
@@ -97,7 +98,11 @@
             return @"Libs";
         }
             break;
-            
+        case 3:
+        {
+            return @"Test";
+        }
+            break;
         default:
             return @"";
             break;
@@ -121,6 +126,10 @@
         }else if (indexPath.row==4) {
             [self fan_jumpCommonViewController:@{@"Title":@"FanSideslipManager",@"Class":@"FanSideslipManager.h/m",@"Demo":@"https://github.com/fanxiangyang/FanQQSideslipManager"}];
         }
+    }else if(indexPath.section==3){
+        if (indexPath.row==0) {
+            [self fan_jumpTestViewController];
+        }
     }
     
     
@@ -136,6 +145,11 @@
     if (vc) {
         [self.navigationController pushViewController:vc animated:YES];
     }
+}
+
+-(void)fan_jumpTestViewController{
+    FanTestViewController *cVC=[[FanTestViewController alloc]init];
+    [self.navigationController pushViewController:cVC animated:YES];
 }
 
 /*

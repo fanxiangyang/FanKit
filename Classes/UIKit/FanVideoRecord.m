@@ -137,7 +137,7 @@
         self.captureVideoPreviewLayer.videoGravity=AVLayerVideoGravityResizeAspectFill;
     }
     
-    [self.captureVideoPreviewLayer connection].videoOrientation=[self videoDeviceOrientation:[UIDevice currentDevice].orientation];
+    [self.captureVideoPreviewLayer connection].videoOrientation=[self viewStatusBrarOrientation];
     //设置后，输出的方向，随着预览图变化（但是不起作用，给每次启动录制时设备是什么方向，视频就是什么方向）
     captureConnection.videoOrientation=[self.captureVideoPreviewLayer connection].videoOrientation;
     //    captureConnection.videoMirrored=NO;
@@ -203,7 +203,7 @@
     
     if ([self fan_openVideo]) {
         //修正每次拍摄时的方向,每次录制时，记录当前屏幕方向
-        self.currentOrientation=[self videoDeviceOrientation:[UIDevice currentDevice].orientation];
+        self.currentOrientation=[self viewStatusBrarOrientation];
         
         if (videoPath.length>0) {
             self.videoPath=videoPath;
@@ -694,44 +694,43 @@
     //    captureConnection.videoOrientation=[self.captureVideoPreviewLayer connection].videoOrientation;
 }
 
-- (AVCaptureVideoOrientation) videoDeviceOrientation:(UIDeviceOrientation)deviceOrientation {
-    switch (deviceOrientation) {
-        case UIDeviceOrientationUnknown: {
-            break;
+//用设备方向没有解决当用户锁定屏幕时解决方案
+-(AVCaptureVideoOrientation)viewStatusBrarOrientation{
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    switch (orientation) {
+        case UIInterfaceOrientationUnknown:
+        {
+            
         }
-        case UIDeviceOrientationPortrait: {
+            break;
+        case UIInterfaceOrientationPortrait:
+        {
             return AVCaptureVideoOrientationPortrait;
         }
-        case UIDeviceOrientationPortraitUpsideDown: {
+            break;
+        case UIInterfaceOrientationPortraitUpsideDown:
+        {
             return AVCaptureVideoOrientationPortraitUpsideDown;
         }
-        case UIDeviceOrientationLandscapeLeft: {
-            return AVCaptureVideoOrientationLandscapeRight;
-        }
-        case UIDeviceOrientationLandscapeRight: {
+            break;
+        case UIInterfaceOrientationLandscapeLeft:
+        {
             return AVCaptureVideoOrientationLandscapeLeft;
         }
-        case UIDeviceOrientationFaceUp: {
-            // 面朝上
             break;
+        case UIInterfaceOrientationLandscapeRight:
+        {
+            return AVCaptureVideoOrientationLandscapeRight;
         }
-        case UIDeviceOrientationFaceDown: {
-            //面朝下
-            
             break;
-        }
-        default:{
-            
-            
+        default:
             break;
-        }
     }
     if (self.recordOrientation==FanVideoRecordOrientationLandscape) {
         return AVCaptureVideoOrientationLandscapeRight;
     }else{
         return AVCaptureVideoOrientationPortrait;
     }
-    
 }
 //进入后台
 - (void)enterBack

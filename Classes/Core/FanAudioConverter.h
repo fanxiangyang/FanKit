@@ -58,7 +58,7 @@ typedef NS_ENUM(NSUInteger, FanAudioConverterErrorType) {
 - (void)fan_audioConverter:(FanAudioConverter*)converter nextBytes:(char*)bytes length:(NSUInteger*)length;
 @optional
 ///转换偏移量到多少字节  
-- (void)fan_audioConverter:(FanAudioConverter *)converter seekToPosition:(NSUInteger)position;
+- (void)fan_audioConverter:(FanAudioConverter *)converter seekToPosition:(long long)position;
 @end
 
 #pragma mark -FanAudioConverter

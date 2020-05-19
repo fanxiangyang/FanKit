@@ -242,40 +242,35 @@
     //设置时区 NSDataFormatter默认输出格林威治时间，要输出本地时间要设置时区 ，跟北京时间差8小时
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
     
-    //处理凌晨时间戳
-    NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
-    [dateFormatter1 setDateFormat:@"yyyy-MM-dd 23:59:59"];
-    [dateFormatter1 setTimeZone:[NSTimeZone localTimeZone]];
-    NSString *currentDateStr1 = [dateFormatter1 stringFromDate:[NSDate date]];
-    
-    NSTimeInterval timeNowNum = [[NSString fan_stringToDate:currentDateStr1 isGMT:NO]timeIntervalSince1970];
-    
     //要处理的date
     NSDate *lastDate = [NSDate dateWithTimeIntervalSince1970:timeNum];
+    //当前用户的calendar
+    NSDateComponents * components = [[NSCalendar currentCalendar] components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay| NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond  fromDate:lastDate];
+    [components setTimeZone:[NSTimeZone localTimeZone]];
     
-    //是否同一天
-    int betweenDay = ((int)(timeNowNum -timeNum)/(FanDAYS));
-    int betweenYear = ((int)(timeNowNum -timeNum)/(FanYEARS)) ;
-    //不是今年
-    if(betweenYear && betweenYear<100){
+    NSDateComponents * nowComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay| NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond  fromDate:[NSDate date]];
+    [components setTimeZone:[NSTimeZone localTimeZone]];
+    if (nowComponents.year!=components.year) {
+        //不是同一年
         [formatter setDateFormat:@"yyyy-MM-dd"];
         returnStr = [formatter stringFromDate:lastDate];
-    }else if(betweenYear == 0){
-        if (betweenDay == 0){
-            //今天
+    }else if (nowComponents.year==components.year) {
+        if ([[NSCalendar currentCalendar] isDateInToday:lastDate]) {
+            //今天  02:20
             [formatter setDateFormat:@"HH:mm"];
             returnStr = [formatter stringFromDate:lastDate];
-        }else if (betweenDay == 1){
-            //昨天
-            returnStr = [NSBundle fan_localizedStringForKey:@"FanKit_yesterday" value:@"昨天"];
+        }else if ([[NSCalendar currentCalendar] isDateInYesterday:lastDate]){
+            //昨天 16:40
+            [formatter setDateFormat:@"HH:mm"];
+
+            returnStr = [NSString stringWithFormat:@"%@ %@",[NSBundle fan_localizedStringForKey:@"FanKit_yesterday" value:@"昨天"],[formatter stringFromDate:lastDate]];
         }else{
             [formatter setDateFormat:@"yyyy-MM-dd"];
             returnStr = [formatter stringFromDate:lastDate];
         }
     }else{
-        returnStr = @"";
+        returnStr = [formatter stringFromDate:lastDate];
     }
-    
     return returnStr;
 }
 
@@ -332,43 +327,29 @@
 }
 +(NSString *)fan_stringFormatWithTimeStamp:(NSTimeInterval)timeStamp{
     NSString *returnStr=@"";
-    
+    //需要输出的时间Format后面会修改
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     //设置时区 NSDataFormatter默认输出格林威治时间，要输出本地时间要设置时区 ，跟北京时间差8小时
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
-    
-    //处理凌晨时间戳
-    NSDateFormatter *dateFormatter1 = [[NSDateFormatter alloc] init];
-    [dateFormatter1 setDateFormat:@"yyyy-MM-dd 23:59:59"];
-    [dateFormatter1 setTimeZone:[NSTimeZone localTimeZone]];
-    NSString *nowDate = [dateFormatter1 stringFromDate:[NSDate date]];
-    
-    //现在时间晚上23:59:59
-    NSTimeInterval timeNowNum = [[formatter dateFromString:nowDate] timeIntervalSince1970];
-    
     //要处理的date
     NSDate *lastDate = [NSDate dateWithTimeIntervalSince1970:timeStamp];
+    //当前用户的calendar
+    NSDateComponents * components = [[NSCalendar currentCalendar] components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay| NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond  fromDate:lastDate];
+    [components setTimeZone:[NSTimeZone localTimeZone]];
     
-    //间隔时间
-    NSTimeInterval timeInterval=timeNowNum-timeStamp;
-    //是否同一天
-    int betweenYear = ((int)(timeInterval)/(FanYEARS));
-    //不是今年
-    if(betweenYear && betweenYear<100){
-        //大于一年小于100年
+    NSDateComponents * nowComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay| NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond  fromDate:[NSDate date]];
+    [components setTimeZone:[NSTimeZone localTimeZone]];
+    if (nowComponents.year!=components.year) {
+        //不是同一年
         [formatter setDateFormat:@"yyyy-MM-dd HH:mm"];
         returnStr = [formatter stringFromDate:lastDate];
-    }else if(betweenYear == 0){
-//        int betweenMonth = ((int)(timeInterval)/(FanMONTHS)) ;
-        int betweenDay = ((int)(timeInterval)/(FanDAYS));
-
-        //同一年内
-        if (betweenDay == 0){
+    }else if (nowComponents.year==components.year) {
+        if ([[NSCalendar currentCalendar] isDateInToday:lastDate]) {
             //今天  02:20
             [formatter setDateFormat:@"HH:mm"];
             returnStr = [formatter stringFromDate:lastDate];
-        }else if (betweenDay == 1){
+        }else if ([[NSCalendar currentCalendar] isDateInYesterday:lastDate]){
             //昨天 16:40
             [formatter setDateFormat:@"HH:mm"];
 
@@ -378,7 +359,7 @@
             returnStr = [formatter stringFromDate:lastDate];
         }
     }else{
-        returnStr = @"";
+        returnStr = [formatter stringFromDate:lastDate];
     }
     return returnStr;
 }

@@ -53,7 +53,8 @@
 +(CAShapeLayer *)fan_dottedLineFrame:(CGRect)frame lineWidth:(CGFloat)lineWidth lineColor:(UIColor *)lineColor cornerRadius:(CGFloat)cornerRadius lineSpace:(CGFloat)lineSpace;
 /**
  获取圆环进度
-
+ 如果需要渐变色，可以用gradientLayer.mask=CAShapeLayer
+ 
  @param progress 进度0-1
  @param rightWidth 圆环宽度
  @param ringColor 圆环颜色

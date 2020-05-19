@@ -17,7 +17,7 @@ Installation（安装）
 ==============
 ### CocoaPods
 
-1. Add `pod 'FanKit','~> 0.3.0'` to your Podfile.
+1. Add `pod 'FanKit','~> 0.4.0'` to your Podfile.
 2. Run `pod install` or `pod update`.
 3. Import "FanKit.h".
 
@@ -67,6 +67,11 @@ Function Example(功能事例)
 * iOS 9.0+ 会移除iOS8.0的方法
 * 添加部分方法，优化部分细节
 * 增加wav和caf格式转码到aac
+
+### Release 0.4.0
+* 录屏横竖屏和锁定适配
+* 2.新增加RSA加密解密算法
+* 3.日期处理显示的bug
 
 Like(喜欢)
 ==============

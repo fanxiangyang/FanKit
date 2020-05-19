@@ -162,6 +162,7 @@
     self.view.backgroundColor=[UIColor clearColor];
     _showTime=-1;
     _isAnimation=YES;
+    _isAutoHidden=YES;
     _blackAlpha=0.0;//空白区域黑色，半透明
     _isTouchRemove=YES;//是否支持触摸空白区域消失
     _progressHUDStyle=FanAlertControllerStyleText;
@@ -462,13 +463,16 @@
 
 #pragma mark - 移除View
 -(void)buttonClick:(UIButton *)btn{
+    if (self.alertBlock) {
+        self.alertBlock(btn.tag-100);
+    }
+    if (self.isAutoHidden==NO) {
+        return;
+    }
     if (self.isAnimation==NO) {
         if ([[self class] fan_alertWindow]) {
             [[self class] fan_alertWindow].hidden=YES;
         }
-    }
-    if (self.alertBlock) {
-        self.alertBlock(btn.tag-100);
     }
     [self fan_removeSelfView:NO];
 }
@@ -483,6 +487,9 @@
 }
 
 -(void)fan_removeSelfView:(BOOL)animation{
+    if (self.isAutoHidden==NO) {
+        return;
+    }
     if (animation) {
         [self removeSelfView];
     }else{
@@ -493,6 +500,9 @@
     }
 }
 -(void)removeSelfView{
+    if (self.isAutoHidden==NO) {
+        return;
+    }
     [self.fan_cententView.layer removeAllAnimations];
     self.blackAlphaView.alpha=0;
     [self.blackAlphaView.layer addAnimation:[[self class] fan_transitionAnimationWithSubType:kCATransitionFromBottom withType:kCATransitionFade duration:0.3] forKey:@"alpha.animation.no"];
