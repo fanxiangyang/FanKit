@@ -8,7 +8,7 @@
 
 #import "FanVideoRecord.h"
 #import <Photos/Photos.h>
-#import <AssetsLibrary/AssetsLibrary.h>
+//#import <AssetsLibrary/AssetsLibrary.h>
 #import "NSBundle+FanKit.h"
 #import "FanToolBox.h"
 
