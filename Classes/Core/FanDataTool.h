@@ -77,4 +77,10 @@
 +(NSString *)fan_unpack_string16:(NSData*)data;
 
 
+#pragma mark - MD5校验
+///求字符串的32位小写MD5加密字符串
++(NSString *)fan_md5String:(NSString *)str;
+///求字符串的16字节MD5加密Data
++(NSData *)fan_md5Data:(NSString *)str;
+
 @end

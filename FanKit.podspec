@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "FanKit"
-  s.version      = "0.4.0"
+  s.version      = "1.0.0"
   s.summary      = "A Cocoa Tool Kit of iOS components."
   s.description  = <<-DESC
             一个iOS集成实用工具库,以后会添加更多更多的工具，实用类，封装类，封装小效果
@@ -72,7 +72,7 @@ Pod::Spec.new do |s|
     ss.dependency 'FanKit/Common'
     ss.public_header_files = 'Classes/UIKit/*.h'
     ss.source_files = 'Classes/UIKit/*.{h,m}'
-    ss.frameworks = "UIKit","AVFoundation","Photos","AssetsLibrary"
+    ss.frameworks = "UIKit","AVFoundation","Photos"
   end
 
   #s.subspec 'Libs' do |ss|

@@ -7,7 +7,6 @@
 //
 
 #import "FanUIKit.h"
-#import <sys/sysctl.h>
 #import <Accelerate/Accelerate.h>
 
 @implementation FanUIKit
@@ -198,8 +197,35 @@
     UIGraphicsEndImageContext();
     return scaledImage;
 }
+/// 不变形裁剪图片
+/// @param image 图片
+/// @param size 图片View的控件大小
+/// @param rect 相对于图片View的裁剪框尺寸
+/// @param isOval 是否是圆形
++(UIImage *)fan_clipImage:(UIImage *)image imageViewSize:(CGSize)size clipRect:(CGRect)rect isOval:(BOOL)isOval{
+    CGFloat wScale=image.size.width/size.width;
+    CGFloat hScale=image.size.height/size.height;
+
+    CGRect rec = CGRectMake(rect.origin.x*wScale, rect.origin.y*hScale,rect.size.width*wScale,rect.size.height*hScale);
+    //竖屏照片有偏移，而且方向也是错的
+//    CGImageRef imageRef =CGImageCreateWithImageInRect([image CGImage],rec);
+//    UIImage * image = [[UIImage alloc]initWithCGImage:imageRef];
+//    CGImageRelease(imageRef);
+    
+    //把图片画在等比例的区域内
+    UIGraphicsBeginImageContext(rec.size); // this will crop
+    if (isOval) {
+        UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, rec.size.width, rec.size.height)];
+        //把圆形的路径设置在指定区域 超过裁剪区域以外的内容都给裁剪掉
+        [path addClip];
+    }
+    [image drawAtPoint:CGPointMake(-rec.origin.x, -rec.origin.y)];
+    UIImage *clipImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return clipImage;
+}
 /** 通过UIcolor获取一张图片 */
-+ (UIImage *)fan_ImageWithColor:(UIColor *)color frame:(CGRect)rect{
++ (UIImage *)fan_imageWithColor:(UIColor *)color frame:(CGRect)rect{
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, [color CGColor]);
@@ -209,7 +235,7 @@
     return img;
 }
 /** 通过UIcolor获取一张图片圆角 */
-+ (UIImage *)fan_ImageWithColor:(UIColor *)color frame:(CGRect)rect cornerRadius:(CGFloat)cornerRadius{
++ (UIImage *)fan_imageWithColor:(UIColor *)color frame:(CGRect)rect cornerRadius:(CGFloat)cornerRadius{
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, [color CGColor]);
@@ -474,7 +500,13 @@
     return effectView;
 }
 +(UIImage *)fan_stretchableImage:(UIImage *)image{
-    UIImage *returnImage = [image stretchableImageWithLeftCapWidth:floorf(image.size.width/2) topCapHeight:floorf(image.size.height/2)];
+    UIImage *returnImage = [image resizableImageWithCapInsets:UIEdgeInsetsMake(floorf(image.size.height/3), floorf(image.size.width/3), floorf(image.size.height/3), floorf(image.size.width/3)) resizingMode:UIImageResizingModeStretch];
+    
+    image=nil;
+    return returnImage;
+}
++(UIImage *)fan_stretchableImage:(UIImage *)image edgeInset:(UIEdgeInsets)edgeInset{
+    UIImage *returnImage = [image resizableImageWithCapInsets:UIEdgeInsetsMake(floorf(image.size.height)*edgeInset.top, floorf(image.size.width)*edgeInset.left, floorf(image.size.height)*edgeInset.bottom, floorf(image.size.width)*edgeInset.right) resizingMode:UIImageResizingModeStretch];
     image=nil;
     return returnImage;
 }
@@ -691,6 +723,13 @@
     }
     return nil;
 }
++(UIViewController *)fan_presentedViewController:(UIViewController *)viewController{
+    while (viewController.presentedViewController)
+    {
+        viewController = viewController.presentedViewController;
+    }
+    return viewController;
+}
 +(void)fan_removeViewTag:(NSInteger)tag fromeView:(UIView *)view{
     UIView *removeView=[view viewWithTag:tag];
     if (removeView) {
@@ -711,118 +750,4 @@
     tapView.userInteractionEnabled=YES;
     [tapView addGestureRecognizer:imageTapGesture];
 }
-#pragma mark 返回设备类型
-
-+(NSString *)fan_platformString{
-    // Gets a string with the device model
-    size_t size;
-    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-    char *machine = malloc(size);
-    sysctlbyname("hw.machine", machine, &size, NULL, 0);
-    NSString *platform = [NSString stringWithCString:machine encoding:NSUTF8StringEncoding];
-    free(machine);
-    NSDictionary* d = nil;
-    if (d == nil)
-    {
-        d = @{
-              @"iPhone1,1": @"iPhone 2G",
-              @"iPhone1,2": @"iPhone 3G",
-              @"iPhone2,1": @"iPhone 3GS",
-              @"iPhone3,1": @"iPhone 4",
-              @"iPhone3,2": @"iPhone 4",
-              @"iPhone3,3": @"iPhone 4 (CDMA)",
-              @"iPhone4,1": @"iPhone 4S",
-              @"iPhone5,1": @"iPhone 5 (CDMA)",
-              @"iPhone5,2": @"iPhone 5 (GSM+CDMA)",
-              @"iPhone5,3": @"iPhone 5C (CDMA)",
-              @"iPhone5,4": @"iPhone 5C (GSM+CDMA)",
-              @"iPhone6,1": @"iPhone 5S (CDMA)",
-              @"iPhone6,2": @"iPhone 5S (GSM+CDMA)",
-              @"iPhone7,1": @"iPhone 6 Plus",
-              @"iPhone7,2": @"iPhone 6",
-              @"iPhone8,1": @"iPhone 6S",
-              @"iPhone8,2": @"iPhone 6S Plus",
-              @"iPhone8,4": @"iPhone SE",
-              @"iPhone9,1": @"iPhone 7",
-              @"iPhone9,3": @"iPhone 7",
-              @"iPhone9,2": @"iPhone 7 Plus",
-              @"iPhone9,4": @"iPhone 7 Plus",
-              @"iPhone10,1": @"iPhone 8",
-              @"iPhone10,4": @"iPhone 8",
-              @"iPhone10,2": @"iPhone 8 Plus",
-              @"iPhone10,5": @"iPhone 8 Plus",
-              @"iPhone10,3": @"iPhone X",
-              @"iPhone10,6": @"iPhone X",
-              
-              @"iPhone11,8": @"iPhone XR",
-              @"iPhone11,2": @"iPhone XS",
-              @"iPhone11,4": @"iPhone XS Max",
-              @"iPhone11,6": @"iPhone XS Max",
-              
-              
-              @"iPod1,1": @"iPod Touch (1 Gen)",
-              @"iPod2,1": @"iPod Touch (2 Gen)",
-              @"iPod3,1": @"iPod Touch (3 Gen)",
-              @"iPod4,1": @"iPod Touch (4 Gen)",
-              @"iPod5,1": @"iPod Touch (5 Gen)",
-              @"iPod7,1": @"iPod Touch (6 Gen)",
-              
-              @"iPad1,1": @"iPad",
-              @"iPad1,2": @"iPad 3G",
-              @"iPad2,1": @"iPad 2 (WiFi)",
-              @"iPad2,2": @"iPad 2",
-              @"iPad2,3": @"iPad 2 (CDMA)",
-              @"iPad2,4": @"iPad 2",
-              @"iPad2,5": @"iPad Mini (WiFi)",
-              @"iPad2,6": @"iPad Mini",
-              @"iPad2,7": @"iPad Mini (GSM+CDMA)",
-              @"iPad3,1": @"iPad 3 (WiFi)",
-              @"iPad3,2": @"iPad 3 (GSM+CDMA)",
-              @"iPad3,3": @"iPad 3",
-              @"iPad3,4": @"iPad 4 (WiFi)",
-              @"iPad3,5": @"iPad 4",
-              @"iPad3,6": @"iPad 4 (GSM+CDMA)",
-              @"iPad4,1": @"iPad air",
-              @"iPad4,2": @"iPad air",
-              @"iPad4,3": @"iPad air",
-              @"iPad4,4": @"iPad mini 2",
-              @"iPad4,5": @"iPad mini 2",
-              @"iPad4,6": @"iPad mini 2",
-              @"iPad4,7": @"iPad mini 3",
-              @"iPad4,8": @"iPad mini 3",
-              @"iPad4,9": @"iPad mini 3",
-              @"iPad5,1": @"iPad mini 4",
-              @"iPad5,2": @"iPad mini 4",
-              @"iPad5,3": @"iPad air 2",
-              @"iPad5,4": @"iPad air 2",
-              
-              @"iPad6,3": @"iPad Pro 9.7",
-              @"iPad6,4": @"iPad Pro 9.7",
-              @"iPad6,7": @"iPad Pro 12.9",
-              @"iPad6,8": @"iPad Pro 12.9",
-              
-              @"iPad6,11": @"iPad 2017 9.7",
-              @"iPad6,12": @"iPad 2017 9.7",
-              
-              @"iPad7,1": @"iPad Pro 12.9",
-              @"iPad7,2": @"iPad Pro 12.9",
-              @"iPad7,3": @"iPad Pro 10.5",
-              @"iPad7,4": @"iPad Pro 10.5",
-              @"iPad7,5": @"iPad 2018 9.7",
-              @"iPad7,6": @"iPad 2018 9.7",
-              
-              
-              @"i386": @"Simulator",
-              @"x86_64": @"Simulator"
-              };
-    }
-    NSString* ret = [d objectForKey: platform];
-    
-    if (ret == nil)
-    {
-        return platform;
-    }
-    return ret;
-}
-
 @end

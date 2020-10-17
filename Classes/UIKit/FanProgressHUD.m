@@ -161,8 +161,6 @@
 - (void)commonInit {
     self.backgroundColor=[UIColor clearColor];
     _showTime=-1;
-    _isAnimation=YES;
-    _blackAlpha=0.5;
     _isTouchRemove=YES;
     _progressHUDStyle=FanProgressHUDStyleText;
 
@@ -206,21 +204,15 @@
 
     
     self.blackAlphaView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-    self.blackAlphaView.backgroundColor=[UIColor blackColor];
+    self.blackAlphaView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.5];
     self.blackAlphaView.clipsToBounds=YES;
-    self.blackAlphaView.alpha=self.blackAlpha;
     [self addSubview:self.blackAlphaView];
     
     self.blackAlphaView.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
 
     
     [self fan_configUI];
-    
-    
-    
-//    [self.blackAlphaView.layer addAnimation:[[self class] fan_transitionAnimationWithSubType:kCATransitionFromBottom withType:kCATransitionFade duration:0.3f] forKey:@"alpha.animation"];
-
-    [self.fan_cententView.layer addAnimation:[[self class] fan_transitionAnimationWithSubType:kCATransitionFromTop withType:kCATransitionFade duration:0.3f] forKey:@"animation"];
+//    [self.fan_cententView.layer addAnimation:[[self class] fan_transitionAnimationWithSubType:kCATransitionFromTop withType:kCATransitionFade duration:0.3f] forKey:@"animation"];
 
 }
 -(void)fan_configUI{
@@ -485,11 +477,6 @@
 }
 #pragma mark - get set
 
--(void)setBlackAlpha:(CGFloat)blackAlpha{
-    _blackAlpha=blackAlpha;
-    _blackAlphaView.alpha=blackAlpha;
-}
-
 #pragma mark - 移除View
 -(void)buttonClick:(UIButton *)btn{
     if (self.alertBlock) {
@@ -511,20 +498,23 @@
     if (animation) {
         [self removeSelfView];
     }else{
-        [self.blackAlphaView.layer removeAllAnimations];
-        [self.fan_cententView.layer removeAllAnimations];
-        [self performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.01f];
+//        [self.blackAlphaView.layer removeAllAnimations];
+//        [self.fan_cententView.layer removeAllAnimations];
+//        [self performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.01f];
+        [self removeFromSuperview];
     }
 }
 -(void)removeSelfView{
-    [self.fan_cententView.layer removeAllAnimations];
-    self.blackAlphaView.alpha=0;
-    [self.blackAlphaView.layer addAnimation:[[self class] fan_transitionAnimationWithSubType:kCATransitionFromBottom withType:kCATransitionFade duration:0.3] forKey:@"alpha.animation.no"];
-    
-    self.fan_cententView.alpha=0;
-    [self.fan_cententView.layer addAnimation:[[self class] fan_transitionAnimationWithSubType:nil withType:kCATransitionFade duration:0.3f] forKey:@"animation.no"];
-    
-    [self performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.3f];
+//    [self.fan_cententView.layer removeAllAnimations];
+//    self.blackAlphaView.alpha=0;
+//    [self.blackAlphaView.layer addAnimation:[[self class] fan_transitionAnimationWithSubType:kCATransitionFromBottom withType:kCATransitionFade duration:0.3] forKey:@"alpha.animation.no"];
+//
+//    self.fan_cententView.alpha=0;
+//    [self.fan_cententView.layer addAnimation:[[self class] fan_transitionAnimationWithSubType:nil withType:kCATransitionFade duration:0.3f] forKey:@"animation.no"];
+//
+    [self removeFromSuperview];
+
+//    [self performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.3f];
 }
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     if (self.isTouchRemove) {

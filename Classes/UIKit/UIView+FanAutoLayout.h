@@ -167,7 +167,7 @@ typedef NS_ENUM(NSInteger, FanLayoutAspectRatio){
 /// @param formatV 垂直format
 /// @param formatOptions 可选参数 默认 0
 -(void)fan_addConstraintsFormatViews:(NSArray *)views formatH:(NSString *)formatH formatV:(NSString *)formatV formatOptions:(NSLayoutFormatOptions)formatOptions;
-/// 添加多view约束Format方式(format里面必须是view)
+/// 添加单view约束Format方式(format里面必须是view)
 /// @param view 需要约束的view
 /// @param formatH 水平format
 /// @param formatV 垂直format
@@ -181,9 +181,36 @@ typedef NS_ENUM(NSInteger, FanLayoutAspectRatio){
 /// 添加中心约束centerX
 /// @param centerView 需要居中的View
 /// @param centerX X偏移量
--(void)fan_addConstraintsCenterX:(id)centerView centerX:(CGFloat)centerX;
+/// @param multiplier 距离中心百分比 默认中心1.0
+-(void)fan_addConstraintsCenterX:(id)centerView centerX:(CGFloat)centerX multiplier:(CGFloat)multiplier;
 /// 添加中心约束centerY
 /// @param centerView 需要居中的View
 /// @param centerY Y偏移量
--(void)fan_addConstraintsCenterY:(id)centerView centerY:(CGFloat)centerY;
+/// @param multiplier 距离中心百分比 默认中心1.0
+-(void)fan_addConstraintsCenterY:(id)centerView centerY:(CGFloat)centerY multiplier:(CGFloat)multiplier;
+/// 添加宽高固定的View
+/// @param view 宽高固定view
+/// @param size view尺寸
+-(void)fan_addConstraintsWidthHeightView:(id)view viewSize:(CGSize)size;
+/// 自己一边依赖另外一个view的边
+/// @param constraintView 自己View
+/// @param dependView 依赖view
+/// @param attribute NSLayoutAttribute
+/// @param dependAttribute 依赖的
+/// @param space 间距
+-(void)fan_addConstraintsDepend:(id)constraintView dependView:(id)dependView attribute:(NSLayoutAttribute)attribute dependAttribute:(NSLayoutAttribute)dependAttribute space:(CGFloat)space;
+/// 自己一边依赖另外一个view的边,也可以是自己和自己宽高比
+/// @param constraintView 自己View
+/// @param dependView 依赖view
+/// @param attribute NSLayoutAttribute
+/// @param dependAttribute 依赖的
+/// @param space 间距
+/// @param multiplier 默认1.0  宽高比
+-(void)fan_addConstraintsDepend:(id)constraintView dependView:(id)dependView attribute:(NSLayoutAttribute)attribute dependAttribute:(NSLayoutAttribute)dependAttribute space:(CGFloat)space multiplier:(CGFloat)multiplier;
+/// 添加在父类安全区域的一边约束
+/// @param constraintView 需要约束的控件
+/// @param attribute 需要约束的方位
+/// @param safeAttribute 依赖的方位
+/// @param space 间距
+-(void)fan_addSafeAreaConstraintsView:(id)constraintView attribute:(NSLayoutAttribute)attribute safeAttribute:(NSLayoutAttribute)safeAttribute space:(CGFloat)space;
 @end

@@ -64,10 +64,16 @@
  *  return  :   更改后的图片对象
  */
 +(UIImage*)fan_scalImage:(UIImage *)sourceImage scalingForSize:(CGSize)targetSize;
+/// 不变形裁剪图片
+/// @param image 图片
+/// @param size 图片View的控件大小
+/// @param rect 相对于图片View的裁剪框尺寸
+/// @param isOval 是否是圆形
++(UIImage *)fan_clipImage:(UIImage *)image imageViewSize:(CGSize)size clipRect:(CGRect)rect isOval:(BOOL)isOval;
 /** 通过UIcolor获取一张图片 */
-+ (UIImage *)fan_ImageWithColor:(UIColor *)color frame:(CGRect)rect;
++ (UIImage *)fan_imageWithColor:(UIColor *)color frame:(CGRect)rect;
 /** 通过UIcolor获取一张图片圆角 */
-+ (UIImage *)fan_ImageWithColor:(UIColor *)color frame:(CGRect)rect cornerRadius:(CGFloat)cornerRadius;
++ (UIImage *)fan_imageWithColor:(UIColor *)color frame:(CGRect)rect cornerRadius:(CGFloat)cornerRadius;
 /** 截屏*/
 +(UIImage*)fan_beginImageContext:(CGRect)rect fromView:(UIView*)view;
 /** OpenGL截图*/
@@ -82,6 +88,10 @@
 +(UIVisualEffectView *)fan_addBlurEffectWithStyle:(UIBlurEffectStyle)style toView:(UIView *)toView effectCornerRadius:(CGFloat)cornerRadius;
 /** 拉伸图片，边缘不拉伸，图片的一半*/
 +(UIImage *)fan_stretchableImage:(UIImage *)image;
+/// 拉伸最好
+/// @param image 图片
+/// @param edgeInset 占长宽的百分比
++(UIImage *)fan_stretchableImage:(UIImage *)image edgeInset:(UIEdgeInsets)edgeInset;
 /** 添加阴影*/
 +(void)fan_addShadowToView:(UIView *)shadowView shadowColor:(UIColor *)shadowColor shadowOpacity:(CGFloat)shadowOpacity shadowOffset:(CGSize)shadowOffset;
 
@@ -124,15 +134,14 @@
 +(UISwitch *)fan_createSwitchWithFrame:(CGRect)rect target:(id)target action:(SEL)action;
 
 #pragma mark 创建UIViewController
+///根据view取到父类VC
 +(UIViewController *)fan_viewControllerFrom:(UIView *)view;
+///取到最顶层present的VC
++(UIViewController *)fan_presentedViewController:(UIViewController *)viewController;
 //移除tag值的View
 +(void)fan_removeViewTag:(NSInteger)tag fromeView:(UIView *)view;
 +(id)fan_classFromName:(NSString *)aClassName;
 #pragma mark 创建手势和其他
 +(void)fan_addTapGestureTarget:(id)target action:(SEL)action toView:(UIView *)tapView;
 /***************************************创建UI  End******************************************/
-
-#pragma mark 返回设备类型
-
-+(NSString *)fan_platformString;
 @end

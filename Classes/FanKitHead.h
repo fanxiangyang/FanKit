@@ -36,6 +36,7 @@
 
 //颜色
 #define FanColor(r,g,b,a)   [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
+#define FanColorf(r,g,b,a)   [UIColor colorWithRed:r green:g blue:b alpha:a]
 ///不带#的6位 488fjj 颜色值
 #define FanHexColor(hex)   [FanUIKit fan_colorFromHexColor:hex]
 //白色

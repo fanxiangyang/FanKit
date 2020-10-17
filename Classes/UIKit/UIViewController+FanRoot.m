@@ -25,7 +25,12 @@
     label.textColor=color;
     self.navigationItem.titleView = label;
 }
-
+-(CGFloat)fan_statusbarHeight{
+    return [[UIApplication sharedApplication] statusBarFrame].size.height;
+}
+-(CGFloat)fan_navigationHeight{
+    return [[UIApplication sharedApplication] statusBarFrame].size.height+self.navigationController.navigationBar.frame.size.height;
+}
 
 
 @end

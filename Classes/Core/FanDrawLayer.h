@@ -145,4 +145,10 @@
  @return layer
  */
 +(CAShapeLayer *)fan_arrowPopupleftRightMaskFrame:(CGRect)frame arrowWidth:(CGFloat)arrowWidth;
+/// 矩形镂空，圆形镂空
+/// @param cutoutView 镂空view
+/// @param frame 镂空尺寸
+/// @param roundingCorners 圆角
+/// @param cornerRadius 圆角半径
++(CAShapeLayer *)fan_roundCutoutView:(UIView *)cutoutView cutoutFrame:(CGRect)frame byRoundingCorners:(UIRectCorner)roundingCorners cornerRadius:(CGFloat)cornerRadius;
 @end

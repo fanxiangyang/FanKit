@@ -8,7 +8,7 @@ Introduce（介绍）
 FanKit 是一组庞大、功能丰富的 iOS 组件。
 
 但是现在还只是起步而已，我会加快完善类库和demo，希望到时候能给大家带来一个优质的工具
-
+* Common 			— 公共+基类+资源。
 * Core 			— 基本类型及常用工厂类。
 * UIKit		 	— UI方面的类及工厂方法。
 * Libs		 	— 自定义的小效果。（后期版本会移除此目录，自己喜欢可以自己下载demo使用）
@@ -17,7 +17,7 @@ Installation（安装）
 ==============
 ### CocoaPods
 
-1. Add `pod 'FanKit','~> 0.4.0'` to your Podfile.
+1. Add `pod 'FanKit','~> 1.0.0'` to your Podfile.
 2. Run `pod install` or `pod update`.
 3. Import "FanKit.h".
 
@@ -48,7 +48,8 @@ Function Example(功能事例)
 ==============
 ### 1.Example List（功能列表）
 <img src="https://github.com/fanxiangyang/FanKit/blob/master/Document/DemoList.png?raw=true" width="320">     <img src="https://github.com/fanxiangyang/FanKit/blob/master/Document/password.png?raw=true" width="320">
-
+#### 2.RGB-HSV可以相互转换
+<img src="https://github.com/fanxiangyang/FanKit/blob/master/Document/rgbColor.png?raw=true" width="320">
 更新历史(Version Update)
 ==============
 ### Release 0.0.1-0.0.3
@@ -69,9 +70,14 @@ Function Example(功能事例)
 * 增加wav和caf格式转码到aac
 
 ### Release 0.4.0
-* 录屏横竖屏和锁定适配
+* 1.录屏横竖屏和锁定适配
 * 2.新增加RSA加密解密算法
 * 3.日期处理显示的bug
+
+### Release 1.0.0 
+* 1.UIView+FanAutoLayout添加和更新方法
+* 2.增加RGB-HSV画图
+* 3.其他各功能优化
 
 Like(喜欢)
 ==============

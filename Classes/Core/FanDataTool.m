@@ -7,6 +7,7 @@
 //
 
 #import "FanDataTool.h"
+#include <CommonCrypto/CommonCrypto.h>
 
 @implementation FanDataTool
 
@@ -241,4 +242,28 @@
     NSString *ret = [[NSString alloc]initWithData:[data subdataWithRange:(NSRange){2,len}] encoding:NSUTF8StringEncoding];
     return ret;
 }
+
+#pragma mark - MD5校验
+
++(NSString *)fan_md5String:(NSString *)str{
+    const char* input = [str UTF8String];
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    CC_MD5(input, (CC_LONG)strlen(input), result);
+    //要比循环拼接效率高点吧
+    return [NSString stringWithFormat:
+            @"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+            result[0], result[1], result[2], result[3],
+            result[4], result[5], result[6], result[7],
+            result[8], result[9], result[10], result[11],
+            result[12], result[13], result[14], result[15]
+            ];
+}
++(NSData *)fan_md5Data:(NSString *)str{
+    const char* input = [str UTF8String];
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    CC_MD5(input, (CC_LONG)strlen(input), result);
+    return [NSData dataWithBytes:result length:CC_MD5_DIGEST_LENGTH];
+}
+
+
 @end

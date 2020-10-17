@@ -20,6 +20,9 @@
 		6640957D22C36D3A0097F4CB /* FanKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6640957A22C36D3A0097F4CB /* FanKit.bundle */; };
 		664095BE22C37AA20097F4CB /* FanVideoRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 664095BD22C37AA20097F4CB /* FanVideoRecord.m */; };
 		664095C122C37C390097F4CB /* FanToolBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 664095C022C37C390097F4CB /* FanToolBox.m */; };
+		664AA54E25398853003845D9 /* FanRgbView.m in Sources */ = {isa = PBXBuildFile; fileRef = 664AA54D25398853003845D9 /* FanRgbView.m */; };
+		664AA55F253A8DBA003845D9 /* FanRgbViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 664AA55E253A8DBA003845D9 /* FanRgbViewController.m */; };
+		666C0A7524AD8A1D00974DAB /* FanDialogboxController.m in Sources */ = {isa = PBXBuildFile; fileRef = 666C0A7324AD8A1D00974DAB /* FanDialogboxController.m */; };
 		666C8D1E1D4B2B7E0071E6CD /* NSDictionary+FanNull.m in Sources */ = {isa = PBXBuildFile; fileRef = 666C8D1D1D4B2B7E0071E6CD /* NSDictionary+FanNull.m */; };
 		667A9FC71CFEC619009B1D53 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FC61CFEC619009B1D53 /* main.m */; };
 		667A9FCA1CFEC619009B1D53 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FC91CFEC619009B1D53 /* AppDelegate.m */; };
@@ -100,6 +103,12 @@
 		664095BD22C37AA20097F4CB /* FanVideoRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanVideoRecord.m; sourceTree = "<group>"; };
 		664095BF22C37C390097F4CB /* FanToolBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanToolBox.h; sourceTree = "<group>"; };
 		664095C022C37C390097F4CB /* FanToolBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanToolBox.m; sourceTree = "<group>"; };
+		664AA54C25398852003845D9 /* FanRgbView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanRgbView.h; sourceTree = "<group>"; };
+		664AA54D25398853003845D9 /* FanRgbView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanRgbView.m; sourceTree = "<group>"; };
+		664AA55D253A8DBA003845D9 /* FanRgbViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FanRgbViewController.h; sourceTree = "<group>"; };
+		664AA55E253A8DBA003845D9 /* FanRgbViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FanRgbViewController.m; sourceTree = "<group>"; };
+		666C0A7324AD8A1D00974DAB /* FanDialogboxController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanDialogboxController.m; sourceTree = "<group>"; };
+		666C0A7424AD8A1D00974DAB /* FanDialogboxController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanDialogboxController.h; sourceTree = "<group>"; };
 		666C8D1C1D4B2B7E0071E6CD /* NSDictionary+FanNull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+FanNull.h"; sourceTree = "<group>"; };
 		666C8D1D1D4B2B7E0071E6CD /* NSDictionary+FanNull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+FanNull.m"; sourceTree = "<group>"; };
 		667A9FC21CFEC619009B1D53 /* FanKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FanKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -206,6 +215,8 @@
 				661741121D2B66D5005A5221 /* FanKitTableViewController.m */,
 				66E81A531E7253B8008E887E /* FanTestViewController.h */,
 				66E81A541E7253B8008E887E /* FanTestViewController.m */,
+				664AA55D253A8DBA003845D9 /* FanRgbViewController.h */,
+				664AA55E253A8DBA003845D9 /* FanRgbViewController.m */,
 			);
 			path = Viewcontrollers;
 			sourceTree = "<group>";
@@ -341,6 +352,10 @@
 		66A5071B1D06E1AA00D5EC34 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				664AA54C25398852003845D9 /* FanRgbView.h */,
+				664AA54D25398853003845D9 /* FanRgbView.m */,
+				666C0A7424AD8A1D00974DAB /* FanDialogboxController.h */,
+				666C0A7324AD8A1D00974DAB /* FanDialogboxController.m */,
 				664095BC22C37AA20097F4CB /* FanVideoRecord.h */,
 				664095BD22C37AA20097F4CB /* FanVideoRecord.m */,
 				662D05E022A79DE80016723A /* FanCopyLabel.h */,
@@ -595,6 +610,7 @@
 				6617410D1D2B637C005A5221 /* FanRootViewController.m in Sources */,
 				66B396651D2A3F2200A40A06 /* FanDragBubbleView.m in Sources */,
 				6640957C22C36D3A0097F4CB /* NSBundle+FanKit.m in Sources */,
+				664AA55F253A8DBA003845D9 /* FanRgbViewController.m in Sources */,
 				66B396801D2A52B400A40A06 /* FanShowAlertView.m in Sources */,
 				66B396711D2A480600A40A06 /* NSObject+FanDictionary.m in Sources */,
 				66B396811D2A52B400A40A06 /* FanShowView.m in Sources */,
@@ -603,6 +619,7 @@
 				6639A1A52171B6CA00231B42 /* FanProgressHUD.m in Sources */,
 				66A5071E1D06E1AA00D5EC34 /* FanAnimationToll.m in Sources */,
 				66B396881D2A532000A40A06 /* FanLockNodeView.m in Sources */,
+				664AA54E25398853003845D9 /* FanRgbView.m in Sources */,
 				66B396581D2A150200A40A06 /* FanUIKit.m in Sources */,
 				661741131D2B66D5005A5221 /* FanKitTableViewController.m in Sources */,
 				66E81A621E72B782008E887E /* FanGesturePasswordViewController.m in Sources */,
@@ -612,6 +629,7 @@
 				666C8D1E1D4B2B7E0071E6CD /* NSDictionary+FanNull.m in Sources */,
 				66B396871D2A532000A40A06 /* FanGesturePasswordView.m in Sources */,
 				66E81A5F1E72A791008E887E /* FanCommonViewController.m in Sources */,
+				666C0A7524AD8A1D00974DAB /* FanDialogboxController.m in Sources */,
 				662D05E122A79DE80016723A /* FanCopyLabel.m in Sources */,
 				6639A19F2171B4EE00231B42 /* FanDrawLayer.m in Sources */,
 				6640957B22C36D3A0097F4CB /* FanAnyObject.m in Sources */,

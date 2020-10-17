@@ -40,7 +40,8 @@
 /** 请求文件（夹）路径的所有文件大小（字节）*/
 + (unsigned long long)fan_fileSizeFromPath:(NSString *)path;
 
-//删除文件下大于7天的文件
+///随机生成len长度的字符串(a-zA-Z0-9) 避免0开头
++(NSString *)fan_randomStringWithLength:(NSInteger)len;
 
 #pragma mark - 其他
 //if(@available(iOS 13.0,*))特殊设置
@@ -53,4 +54,6 @@
 + (NSString *)fan_IPAdress;
 ///获取是否打开WiFi
 + (BOOL)fan_isOpenWiFi;
+#pragma mark 返回设备类型
++(NSString *)fan_platformString;
 @end

@@ -10,6 +10,7 @@
 #import "FanKit.h"
 #import "FanCommonViewController.h"
 #import "FanTestViewController.h"
+#import "FanRgbViewController.h"
 
 @interface FanKitTableViewController ()
 
@@ -32,8 +33,8 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     //@"UIKit",@"Core",@"Libs
-    self.dataArray=[@[@[@"Create Control",@"AutoLayout",@"VC Category"] ,@[@"Animation",@"Byte Core/File Operation",@"Time/Date",@"Audio->.aac"] ,@[@"Swiperble",@"GesturePassword",@"Alert",@"DragBubble",@"sideslip"],@[@"Test"] ] mutableCopy];
-    self.detailArray=[@[@[@"FanUIKit.h",@"UIView+FanAutoLayout.h",@"UIViewController+FanRoot.h"] ,@[@"FanAnimationToll.h",@"FanDataTool.h",@"NSString+FanTime.h",@"FanAudioConverter.h"] ,@[@"FanSwiperbleView.h",@"FanGesturePasswordView.h",@"FanShowView",@"FanDragBubbleView.h",@"FanSideslipManager.h"],@[@"FanTestViewController.h"] ] mutableCopy];
+    self.dataArray=[@[@[@"Create Control",@"AutoLayout",@"VC Category",@"RGB-HSV"] ,@[@"Animation",@"Byte Core/File Operation",@"Time/Date",@"Audio->.aac"] ,@[@"Swiperble",@"GesturePassword",@"Alert",@"DragBubble",@"sideslip"],@[@"Test"] ] mutableCopy];
+    self.detailArray=[@[@[@"FanUIKit.h",@"UIView+FanAutoLayout.h",@"UIViewController+FanRoot.h",@"FanRgbView.h"] ,@[@"FanAnimationToll.h",@"FanDataTool.h",@"NSString+FanTime.h",@"FanAudioConverter.h"] ,@[@"FanSwiperbleView.h",@"FanGesturePasswordView.h",@"FanShowView",@"FanDragBubbleView.h",@"FanSideslipManager.h"],@[@"FanTestViewController.h"] ] mutableCopy];
 
 //    [self.tableView registerNib:[UINib nibWithNibName:@"" bundle:nil] forCellReuseIdentifier:@"Cell"];
 //    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
@@ -111,7 +112,9 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section==0) {
-        
+        if (indexPath.row==3) {
+            [self fan_jumpVCWithName:@"FanRgbViewController"];
+        }
     }else if (indexPath.section==1){
         if (indexPath.row==0) {
             [self fan_jumpCommonViewController:@{@"Title":@"Animation",@"Class":@"FanAnimationToll.h/m",@"Demo":@"https://github.com/fanxiangyang/FanAnimationToll"}];

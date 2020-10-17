@@ -72,6 +72,15 @@
     }
     return 0;
 }
+-(long)fan_longForKey:(id)aKey{
+    NSNumber *value=[self objectForKey:aKey];
+    if([value isKindOfClass:[NSNumber class]]){
+        return [value longValue];
+    }else if([value isKindOfClass:[NSString class]]){
+        return [value longValue];
+    }
+    return 0;
+}
 -(float)fan_floatForKey:(id)aKey{
     NSNumber *value=[self objectForKey:aKey];
     if([value isKindOfClass:[NSNumber class]]){

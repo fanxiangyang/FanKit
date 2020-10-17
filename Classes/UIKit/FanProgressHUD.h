@@ -69,14 +69,10 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
 @property(nullable, nonatomic,strong)NSArray *buttonTitleArray;
 
 #pragma mark - 外部可以修改属性
-@property(nonatomic,strong)UIView * _Nullable blackAlphaView;
-/**黑色背景透明度 默认0.5  default translucent(0.5)*/
-@property(nonatomic,assign)CGFloat blackAlpha;//不要设置为>0.1，不立即释放
+@property(nonatomic,strong)UIView * _Nullable blackAlphaView;//修改背景颜色
 @property(nonatomic,strong)NSMutableArray * _Nullable dataArray;
 /**是不是触摸其他区域，自动消失*/
 @property(nonatomic,assign)BOOL isTouchRemove;
-
-@property(nonatomic,assign)BOOL isAnimation;//暂时没有用到
 
 //
 @property(nonatomic,copy)NSString * _Nullable title;

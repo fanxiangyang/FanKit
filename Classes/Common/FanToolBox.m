@@ -7,11 +7,14 @@
 //
 
 #import "FanToolBox.h"
+#import <UIKit/UIKit.h>
 //获取WiFi
 #import <SystemConfiguration/CaptiveNetwork.h>
 #include <ifaddrs.h>
 #include <arpa/inet.h>
 #include <net/if.h>
+//获取设备信息
+#import <sys/sysctl.h>
 
 @implementation FanToolBox
 #pragma mark - 类，数据操作
@@ -275,6 +278,15 @@
         return [mgr attributesOfItemAtPath:path error:nil].fileSize;
     }
 }
++(NSString *)fan_randomStringWithLength:(NSInteger)len{
+    NSString *randomStr=@"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+    NSMutableString *randomString = [NSMutableString stringWithCapacity: len];
+    [randomString appendFormat: @"%C", [randomStr characterAtIndex:arc4random_uniform((uint32_t)[randomStr length]-1)]];
+    for (NSInteger i = 1; i < len; i++) {
+        [randomString appendFormat: @"%C", [randomStr characterAtIndex:arc4random_uniform((uint32_t)[randomStr length])]];
+    }
+    return randomString;
+}
 #pragma mark - 其他
 //if(@available(iOS 13.0,*))特殊设置
 //1、使用定位功能，并且获得了定位服务权限的应用;
@@ -342,5 +354,111 @@
         }
     }
     return [cset countForObject:@"awdl0"] > 1 ? YES : NO;
+}
+#pragma mark 返回设备类型
+
++(NSString *)fan_platformString{
+    // Gets a string with the device model
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    char *machine = malloc(size);
+    sysctlbyname("hw.machine", machine, &size, NULL, 0);
+    NSString *platform = [NSString stringWithCString:machine encoding:NSUTF8StringEncoding];
+    free(machine);
+//    NSDictionary* d =  @{
+//        @"iPhone1,1": @"iPhone 2G",
+//        @"iPhone1,2": @"iPhone 3G",
+//        @"iPhone2,1": @"iPhone 3GS",
+//        @"iPhone3,1": @"iPhone 4",
+//        @"iPhone3,2": @"iPhone 4",
+//        @"iPhone3,3": @"iPhone 4 (CDMA)",
+//        @"iPhone4,1": @"iPhone 4S",
+//        @"iPhone5,1": @"iPhone 5 (CDMA)",
+//        @"iPhone5,2": @"iPhone 5 (GSM+CDMA)",
+//        @"iPhone5,3": @"iPhone 5C (CDMA)",
+//        @"iPhone5,4": @"iPhone 5C (GSM+CDMA)",
+//        @"iPhone6,1": @"iPhone 5S (CDMA)",
+//        @"iPhone6,2": @"iPhone 5S (GSM+CDMA)",
+//        @"iPhone7,1": @"iPhone 6 Plus",
+//        @"iPhone7,2": @"iPhone 6",
+//        @"iPhone8,1": @"iPhone 6S",
+//        @"iPhone8,2": @"iPhone 6S Plus",
+//        @"iPhone8,4": @"iPhone SE",
+//        @"iPhone9,1": @"iPhone 7",
+//        @"iPhone9,3": @"iPhone 7",
+//        @"iPhone9,2": @"iPhone 7 Plus",
+//        @"iPhone9,4": @"iPhone 7 Plus",
+//        @"iPhone10,1": @"iPhone 8",
+//        @"iPhone10,4": @"iPhone 8",
+//        @"iPhone10,2": @"iPhone 8 Plus",
+//        @"iPhone10,5": @"iPhone 8 Plus",
+//        @"iPhone10,3": @"iPhone X",
+//        @"iPhone10,6": @"iPhone X",
+//
+//        @"iPhone11,8": @"iPhone XR",
+//        @"iPhone11,2": @"iPhone XS",
+//        @"iPhone11,4": @"iPhone XS Max",
+//        @"iPhone11,6": @"iPhone XS Max",
+//
+//
+//        @"iPod1,1": @"iPod Touch (1 Gen)",
+//        @"iPod2,1": @"iPod Touch (2 Gen)",
+//        @"iPod3,1": @"iPod Touch (3 Gen)",
+//        @"iPod4,1": @"iPod Touch (4 Gen)",
+//        @"iPod5,1": @"iPod Touch (5 Gen)",
+//        @"iPod7,1": @"iPod Touch (6 Gen)",
+//
+//        @"iPad1,1": @"iPad",
+//        @"iPad1,2": @"iPad 3G",
+//        @"iPad2,1": @"iPad 2 (WiFi)",
+//        @"iPad2,2": @"iPad 2",
+//        @"iPad2,3": @"iPad 2 (CDMA)",
+//        @"iPad2,4": @"iPad 2",
+//        @"iPad2,5": @"iPad Mini (WiFi)",
+//        @"iPad2,6": @"iPad Mini",
+//        @"iPad2,7": @"iPad Mini (GSM+CDMA)",
+//        @"iPad3,1": @"iPad 3 (WiFi)",
+//        @"iPad3,2": @"iPad 3 (GSM+CDMA)",
+//        @"iPad3,3": @"iPad 3",
+//        @"iPad3,4": @"iPad 4 (WiFi)",
+//        @"iPad3,5": @"iPad 4",
+//        @"iPad3,6": @"iPad 4 (GSM+CDMA)",
+//        @"iPad4,1": @"iPad air",
+//        @"iPad4,2": @"iPad air",
+//        @"iPad4,3": @"iPad air",
+//        @"iPad4,4": @"iPad mini 2",
+//        @"iPad4,5": @"iPad mini 2",
+//        @"iPad4,6": @"iPad mini 2",
+//        @"iPad4,7": @"iPad mini 3",
+//        @"iPad4,8": @"iPad mini 3",
+//        @"iPad4,9": @"iPad mini 3",
+//        @"iPad5,1": @"iPad mini 4",
+//        @"iPad5,2": @"iPad mini 4",
+//        @"iPad5,3": @"iPad air 2",
+//        @"iPad5,4": @"iPad air 2",
+//
+//        @"iPad6,3": @"iPad Pro 9.7",
+//        @"iPad6,4": @"iPad Pro 9.7",
+//        @"iPad6,7": @"iPad Pro 12.9",
+//        @"iPad6,8": @"iPad Pro 12.9",
+//
+//        @"iPad6,11": @"iPad 2017 9.7",
+//        @"iPad6,12": @"iPad 2017 9.7",
+//
+//        @"iPad7,1": @"iPad Pro 12.9",
+//        @"iPad7,2": @"iPad Pro 12.9",
+//        @"iPad7,3": @"iPad Pro 10.5",
+//        @"iPad7,4": @"iPad Pro 10.5",
+//        @"iPad7,5": @"iPad 2018 9.7",
+//        @"iPad7,6": @"iPad 2018 9.7",
+//
+//
+//        @"i386": @"Simulator",
+//        @"x86_64": @"Simulator"
+//    };
+    if (platform.length==0){
+        return [UIDevice currentDevice].model;
+    }
+    return platform;
 }
 @end

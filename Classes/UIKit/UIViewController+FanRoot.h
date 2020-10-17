@@ -15,7 +15,9 @@
 -(void)fan_addTapGestureTarget:(id)target action:(SEL)action toView:(UIView *)tapView;
 /**titleView*/
 - (void)fan_addTitleViewWithTitle:(NSString *)title textColor:(UIColor *)color;
-
-
+///获取状态栏高度(状态栏+安全区域)
+-(CGFloat)fan_statusbarHeight;
+///获取导航栏高度(状态栏+导航)
+-(CGFloat)fan_navigationHeight;
 
 @end

@@ -31,7 +31,7 @@
 
     NSDictionary* views = NSDictionaryOfVariableBindings(centerView);
 
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"[centerView(%f)]",size.width] options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[centerView(%f)]",size.width] options:0 metrics:nil views:views]];
     //高度
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[centerView(%f)]",size.height] options:0 metrics:nil views:views]];
     //垂直居中
@@ -448,7 +448,7 @@
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:formatV options:formatOptions metrics:nil views:dicViews]];
     }
 }
-/// 添加多view约束Format方式(format里面必须是view)
+/// 添加单view约束Format方式(format里面必须是view)
 /// @param view 需要约束的view
 /// @param formatH 水平format
 /// @param formatV 垂直format
@@ -479,17 +479,88 @@
 /// 添加中心约束centerX
 /// @param centerView 需要居中的View
 /// @param centerX X偏移量
--(void)fan_addConstraintsCenterX:(id)centerView centerX:(CGFloat)centerX{
+/// @param multiplier 距离中心百分比 默认中心1.0
+-(void)fan_addConstraintsCenterX:(id)centerView centerX:(CGFloat)centerX multiplier:(CGFloat)multiplier{
     ((UIView *)centerView).translatesAutoresizingMaskIntoConstraints=NO;
     //水平居中
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:centerView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:centerX]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:centerView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:multiplier constant:centerX]];
 }
 /// 添加中心约束centerY
 /// @param centerView 需要居中的View
 /// @param centerY Y偏移量
--(void)fan_addConstraintsCenterY:(id)centerView centerY:(CGFloat)centerY{
+/// @param multiplier 距离中心百分比 默认中心1.0
+-(void)fan_addConstraintsCenterY:(id)centerView centerY:(CGFloat)centerY multiplier:(CGFloat)multiplier{
     ((UIView *)centerView).translatesAutoresizingMaskIntoConstraints=NO;
     //垂直居中
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:centerView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:centerY]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:centerView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:multiplier constant:centerY]];
+}
+/// 添加宽高固定的View
+/// @param view 宽高固定view
+/// @param size view尺寸
+-(void)fan_addConstraintsWidthHeightView:(id)view viewSize:(CGSize)size{
+    ((UIView *)view).translatesAutoresizingMaskIntoConstraints=NO;
+    NSDictionary* views = NSDictionaryOfVariableBindings(view);
+    //宽高固定
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[constraintView(%f)]",size.width] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[constraintView(%f)]",size.height] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+}
+
+/// 自己一边依赖另外一个view的边
+/// @param constraintView 自己View
+/// @param dependView 依赖view
+/// @param attribute NSLayoutAttribute
+/// @param dependAttribute 依赖的
+/// @param space 间距
+-(void)fan_addConstraintsDepend:(id)constraintView dependView:(id)dependView attribute:(NSLayoutAttribute)attribute dependAttribute:(NSLayoutAttribute)dependAttribute space:(CGFloat)space{
+    ((UIView *)constraintView).translatesAutoresizingMaskIntoConstraints=NO;
+    NSMutableDictionary* views = [NSDictionaryOfVariableBindings(constraintView) mutableCopy];
+    [views setValue:dependView forKey:@"dependView"];
+    NSLayoutConstraint *constraint=[NSLayoutConstraint
+                                    constraintWithItem:constraintView
+                                    attribute:attribute
+                                    relatedBy:NSLayoutRelationEqual
+                                    toItem:dependView
+                                    attribute:dependAttribute
+                                    multiplier:1.0
+                                    constant:space];
+    //constraint.priority=UILayoutPriorityDefaultHigh;
+    [self addConstraint:constraint];
+}
+/// 自己一边依赖另外一个view的边,也可以是自己和自己宽高比
+/// @param constraintView 自己View
+/// @param dependView 依赖view
+/// @param attribute NSLayoutAttribute
+/// @param dependAttribute 依赖的
+/// @param space 间距
+/// @param multiplier 默认1.0  宽高比
+-(void)fan_addConstraintsDepend:(id)constraintView dependView:(id)dependView attribute:(NSLayoutAttribute)attribute dependAttribute:(NSLayoutAttribute)dependAttribute space:(CGFloat)space multiplier:(CGFloat)multiplier{
+    ((UIView *)constraintView).translatesAutoresizingMaskIntoConstraints=NO;
+    NSMutableDictionary* views = [NSDictionaryOfVariableBindings(constraintView) mutableCopy];
+    [views setValue:dependView forKey:@"dependView"];
+    NSLayoutConstraint *constraint=[NSLayoutConstraint
+                                    constraintWithItem:constraintView
+                                    attribute:attribute
+                                    relatedBy:NSLayoutRelationEqual
+                                    toItem:dependView
+                                    attribute:dependAttribute
+                                    multiplier:multiplier
+                                    constant:space];
+    constraint.priority=UILayoutPriorityDefaultHigh;
+    [self addConstraint:constraint];
+}
+/// 添加在父类安全区域的一边约束
+/// @param constraintView 需要约束的控件
+/// @param attribute 需要约束的方位
+/// @param safeAttribute 依赖的方位
+/// @param space 间距
+-(void)fan_addSafeAreaConstraintsView:(id)constraintView attribute:(NSLayoutAttribute)attribute safeAttribute:(NSLayoutAttribute)safeAttribute space:(CGFloat)space{
+    ((UIView *)constraintView).translatesAutoresizingMaskIntoConstraints=NO;
+    if (@available(iOS 11.0, *)) {
+        NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:constraintView attribute:attribute relatedBy:NSLayoutRelationEqual toItem:self.safeAreaLayoutGuide attribute:safeAttribute multiplier:1.0 constant:space];
+        [self addConstraint:constraint];
+    } else {
+        NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:constraintView attribute:attribute relatedBy:NSLayoutRelationEqual toItem:self attribute:safeAttribute multiplier:1.0 constant:space];
+        [self addConstraint:constraint];
+    }
 }
 @end

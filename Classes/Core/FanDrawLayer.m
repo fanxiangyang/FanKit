@@ -70,7 +70,7 @@
 +(CAGradientLayer*)fan_gradientLayerFrame:(CGRect)frame startColor:(UIColor *)startColor endColor:(UIColor *)endColor isVertical:(BOOL)isVertical{
     CAGradientLayer *gradientLayer = [CAGradientLayer layer];
     gradientLayer.colors = @[(__bridge id)startColor.CGColor, (__bridge id)endColor.CGColor];
-    gradientLayer.locations = @[@(0.5), @1.0];
+    gradientLayer.locations = @[@(0.1), @1.0];
     gradientLayer.startPoint = CGPointMake(0, 0);
     if (isVertical) {
         gradientLayer.endPoint = CGPointMake(0, 1.0);
@@ -212,5 +212,13 @@
     [path addLineToPoint:CGPointMake(0, frame.size.height/2.0)];
     layer.path=[path CGPath];
     return layer;
+}
++(CAShapeLayer *)fan_roundCutoutView:(UIView *)cutoutView cutoutFrame:(CGRect)frame byRoundingCorners:(UIRectCorner)roundingCorners cornerRadius:(CGFloat)cornerRadius{
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRect:cutoutView.bounds];
+    [maskPath appendPath:[[UIBezierPath bezierPathWithRoundedRect:frame byRoundingCorners:roundingCorners cornerRadii:CGSizeMake(cornerRadius, cornerRadius)]bezierPathByReversingPath]];
+    CAShapeLayer *maskLayer = [[CAShapeLayer alloc]init];
+    maskLayer.path = maskPath.CGPath;
+    cutoutView.layer.mask=maskLayer;
+    return maskLayer;
 }
 @end

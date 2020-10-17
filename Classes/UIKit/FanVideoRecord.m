@@ -8,7 +8,6 @@
 
 #import "FanVideoRecord.h"
 #import <Photos/Photos.h>
-//#import <AssetsLibrary/AssetsLibrary.h>
 #import "NSBundle+FanKit.h"
 #import "FanToolBox.h"
 
@@ -111,7 +110,15 @@
     
     //音频输入
     // 获取音频输入设备
-    AVCaptureDevice *audioCaptureDevice=[[AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio] firstObject];
+    AVCaptureDevice *audioCaptureDevice=nil;
+    if (@available(iOS 10.0, *)) {
+        //AVCaptureDeviceTypeBuiltInWideAngleCamera 视频
+        AVCaptureDeviceDiscoverySession *avDeviceDiscoverySession=[AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInMicrophone] mediaType:AVMediaTypeAudio position:AVCaptureDevicePositionUnspecified];
+        audioCaptureDevice=[avDeviceDiscoverySession.devices firstObject];
+        
+    } else {
+        audioCaptureDevice=[[AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio]firstObject];
+    }
     NSError *audoError=nil;
     //创建音频输入源
     self.audioInput = [[AVCaptureDeviceInput alloc] initWithDevice:audioCaptureDevice error:&audoError];
@@ -259,7 +266,13 @@
     [self fan_saveVideoToAlbum:[self.videoUrl path]];
 }
 -(void)fan_saveVideoToAlbum:(NSString *)videoPath{
-    PHAuthorizationStatus photoAuthorStatus = [PHPhotoLibrary authorizationStatus];
+    PHAuthorizationStatus photoAuthorStatus=0;
+    if (@available(iOS 14, *)) {
+        PHAccessLevel level = PHAccessLevelReadWrite;
+        photoAuthorStatus = [PHPhotoLibrary authorizationStatusForAccessLevel:level];
+    } else {
+        photoAuthorStatus = [PHPhotoLibrary authorizationStatus];
+    }
     if (photoAuthorStatus==PHAuthorizationStatusDenied||photoAuthorStatus==PHAuthorizationStatusRestricted) {
         //用户拒绝当前应用访问相册,我们需要提醒用户打开访问开关 ||  不允许访问
         if (self.saveAlbumBlock) {
@@ -274,7 +287,7 @@
         }];
         return;
     }else{
-        //允许访问  PHAuthorizationStatusAuthorized
+        //允许访问  PHAuthorizationStatusAuthorized  PHAuthorizationStatusLimited
         [self fan_saveVideoToAlbumAuthorization:videoPath];
     }
 }
@@ -285,10 +298,6 @@
         }
         //文件存在
         NSURL *url=[NSURL fileURLWithPath:videoPath];
-        
-        //        ALAssetsLibrary *lib = [[ALAssetsLibrary alloc] init];
-        //        [lib writeVideoAtPathToSavedPhotosAlbum:url completionBlock:nil];
-        //
         __weak typeof(self)weakSelf=self;
         [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
             [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:url];

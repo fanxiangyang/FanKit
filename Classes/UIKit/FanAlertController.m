@@ -141,43 +141,17 @@
     }
     return YES;
 }
-
-
-//+(BOOL)fan_hideAllProgressHUD{
-//    return [self fan_hideAllProgressHUDForView:[UIApplication sharedApplication].keyWindow];
-//}
-//+(BOOL)fan_hideAllProgressHUDForView:(UIView *)view{
-//    NSEnumerator *subviewsEnum = [view.subviews reverseObjectEnumerator];
-//    for (UIView *subview in subviewsEnum) {
-//        if ([subview isKindOfClass:self]) {
-//            FanAlertController *hud = (FanAlertController *)subview ;
-//            [hud fan_removeSelfView:NO];
-//        }
-//    }
-//    return YES;
-//}
 #pragma mark - 初始化
 
 - (void)commonInit {
     self.view.backgroundColor=[UIColor clearColor];
     _showTime=-1;
-    _isAnimation=YES;
     _isAutoHidden=YES;
-    _blackAlpha=0.0;//空白区域黑色，半透明
     _isTouchRemove=YES;//是否支持触摸空白区域消失
     _progressHUDStyle=FanAlertControllerStyleText;
     
     
 }
-
-//- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-//    if ((self = [super initWithCoder:aDecoder])) {
-//        [self commonInit];
-//    }
-//    return self;
-//}
-
-
 - (void)dealloc {
     [_afterTimer setFireDate:[NSDate distantFuture]];
     [_afterTimer invalidate];
@@ -194,24 +168,15 @@
     
 //    self.view.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     
-    
     self.blackAlphaView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    self.blackAlphaView.backgroundColor=[UIColor blackColor];
+    self.blackAlphaView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.5];
     self.blackAlphaView.clipsToBounds=YES;
-    self.blackAlphaView.alpha=self.blackAlpha;
     [self.view addSubview:self.blackAlphaView];
     
     self.blackAlphaView.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     
     
     [self fan_configUI];
-    
-    
-    
-    //    [self.blackAlphaView.layer addAnimation:[[self class] fan_transitionAnimationWithSubType:kCATransitionFromBottom withType:kCATransitionFade duration:0.3f] forKey:@"alpha.animation"];
-    
-    [self.fan_cententView.layer addAnimation:[[self class] fan_transitionAnimationWithSubType:kCATransitionFromTop withType:kCATransitionFade duration:0.3f] forKey:@"animation"];
-    
 }
 -(void)fan_configUI{
     switch (self.progressHUDStyle) {
@@ -456,11 +421,6 @@
 }
 #pragma mark - get set
 
--(void)setBlackAlpha:(CGFloat)blackAlpha{
-    _blackAlpha=blackAlpha;
-    _blackAlphaView.alpha=blackAlpha;
-}
-
 #pragma mark - 移除View
 -(void)buttonClick:(UIButton *)btn{
     if (self.alertBlock) {
@@ -468,11 +428,6 @@
     }
     if (self.isAutoHidden==NO) {
         return;
-    }
-    if (self.isAnimation==NO) {
-        if ([[self class] fan_alertWindow]) {
-            [[self class] fan_alertWindow].hidden=YES;
-        }
     }
     [self fan_removeSelfView:NO];
 }
@@ -493,9 +448,6 @@
     if (animation) {
         [self removeSelfView];
     }else{
-        [self.blackAlphaView.layer removeAllAnimations];
-        [self.fan_cententView.layer removeAllAnimations];
-//        [self performSelector:@selector(removeFromWindow) withObject:nil afterDelay:0.01f];
         [self performSelectorOnMainThread:@selector(removeFromWindow) withObject:nil waitUntilDone:YES];
     }
 }
@@ -503,14 +455,7 @@
     if (self.isAutoHidden==NO) {
         return;
     }
-    [self.fan_cententView.layer removeAllAnimations];
-    self.blackAlphaView.alpha=0;
-    [self.blackAlphaView.layer addAnimation:[[self class] fan_transitionAnimationWithSubType:kCATransitionFromBottom withType:kCATransitionFade duration:0.3] forKey:@"alpha.animation.no"];
-    
-    self.fan_cententView.alpha=0;
-    [self.fan_cententView.layer addAnimation:[[self class] fan_transitionAnimationWithSubType:nil withType:kCATransitionFade duration:0.3f] forKey:@"animation.no"];
-    
-    [self performSelector:@selector(removeFromWindow) withObject:nil afterDelay:0.3f];
+    [self performSelectorOnMainThread:@selector(removeFromWindow) withObject:nil waitUntilDone:YES];
 }
 -(void)removeFromWindow{
     if ([[self class] fan_alertWindow]) {
