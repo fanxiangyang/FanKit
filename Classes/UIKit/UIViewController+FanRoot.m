@@ -31,6 +31,7 @@
 -(CGFloat)fan_navigationHeight{
     return [[UIApplication sharedApplication] statusBarFrame].size.height+self.navigationController.navigationBar.frame.size.height;
 }
-
-
+-(CGFloat)fan_tabBarHeight{
+    return self.tabBarController.tabBar.frame.size.height;
+}
 @end

@@ -149,6 +149,31 @@
     
     return [UIColor colorWithRed:(float)(red/255.0f) green:(float)(green / 255.0f) blue:(float)(blue / 255.0f) alpha:1.0f];
 }
+///color转换成hex字符串'ff0088'没有 alpha
++(NSString *)fan_hexFromColor:(UIColor *)rgbColor{
+    CGFloat red;
+    CGFloat green;
+    CGFloat blue;
+    CGFloat alpha;
+    BOOL success = [rgbColor getRed:&red green:&green blue:&blue alpha:&alpha];
+    if (success) {
+        NSString *rgb=[NSString stringWithFormat:@"#%02x%02x%02x",(int)(red*255.0),(int)(green*255.0),(int)(blue*255.0)];
+        return rgb;
+    }
+    return @"ffffff";
+}
+///color转换成rgb字典 @{@"r":@(1.0),@"g":@(1.0),@"b":@(1.0),@"a":@(1.0)}
++(NSDictionary *)fan_rgbDicFromColor:(UIColor *)rgbColor{
+    CGFloat red;
+    CGFloat green;
+    CGFloat blue;
+    CGFloat alpha;
+    BOOL success = [rgbColor getRed:&red green:&green blue:&blue alpha:&alpha];
+    if (success) {
+        return @{@"r":@(red),@"g":@(green),@"b":@(blue),@"a":@(alpha)};
+    }
+    return @{@"r":@(1.0),@"g":@(1.0),@"b":@(1.0),@"a":@(1.0)};
+}
 /** 等比例缩放图片到指定大小
  
  *  CGSize  :   缩放后的大小

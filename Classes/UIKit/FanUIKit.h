@@ -58,6 +58,10 @@
 #pragma mark - 颜色转化From:#FD87ED To:UIColor
 /** 颜色转化From:#FD87ED To:UIColor */
 + (UIColor *)fan_colorFromHexColor:(NSString *)hexColor;
+///color转换成hex字符串'ff0088'没有 alpha
++(NSString *)fan_hexFromColor:(UIColor *)rgbColor;
+///color转换成rgb字典 @{@"r":@(1.0),@"g":@(1.0),@"b":@(1.0),@"a":@(1.0)}
++(NSDictionary *)fan_rgbDicFromColor:(UIColor *)rgbColor;
 #pragma mark - 图片的处理
 /** 等比例缩放图片到指定大小
  *  CGSize  :   缩放后的大小

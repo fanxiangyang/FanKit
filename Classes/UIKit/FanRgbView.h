@@ -39,13 +39,13 @@ typedef NS_ENUM(NSUInteger, FanHSVTouchType) {
 
 @class FanHSVView;
 
-typedef void(^FanHSVViewBlock)(UIColor * _Nullable hsvColor);
+typedef void(^FanHSVViewBlock)(UIColor * _Nullable hsvColor,FanHSVTouchType touchType);
 
 typedef void(^FanHSVTouchBlock)(CGPoint touchPoint,FanHSVTouchType touchType);
 
 @class FanRgbView;
 
-typedef void(^FanRgbViewBlock)(FanRgbView *_Nullable rgbView,  UIColor * _Nullable rgbColor);
+typedef void(^FanRgbViewBlock)(FanRgbView *_Nullable rgbView,  UIColor * _Nullable rgbColor,FanHSVTouchType touchType);
 
 @interface FanRgbView : UIView
 
@@ -71,7 +71,7 @@ typedef void(^FanRgbViewBlock)(FanRgbView *_Nullable rgbView,  UIColor * _Nullab
 
 @property(nonatomic,strong)FanHSVView *hsvView;
 
-//必须执行此方法来绘制，不然就没有数据
+//必须执行此方法来绘制，不然就没有数据，且只执行一次
 -(void)fan_drawStyle:(FanHSVType)hsvType;
 ///重新绘制 调整好属性后
 -(void)fan_resetDraw;
@@ -93,6 +93,8 @@ typedef void(^FanRgbViewBlock)(FanRgbView *_Nullable rgbView,  UIColor * _Nullab
 ///是否是垂直类型 默认=NO
 @property(nonatomic,assign)BOOL isVertical;
 
+///是否重置每次重新绘制的拖动点 默认YES
+@property(nonatomic,assign)BOOL resetPanPoint;
 
 ///传过来的颜色,会重新计算HSV，记得setNeedsDisplay
 @property(nonatomic,strong)UIColor *hsvColor;
@@ -102,6 +104,8 @@ typedef void(^FanRgbViewBlock)(FanRgbView *_Nullable rgbView,  UIColor * _Nullab
 //必须执行此方法来绘制，不然就没有数据
 -(void)fan_drawHsv;
 
+
+-(void)fan_touchPoint:(CGPoint)point touchType:(FanHSVTouchType)touchType;
 
 @end
 NS_ASSUME_NONNULL_END

@@ -19,5 +19,7 @@
 -(CGFloat)fan_statusbarHeight;
 ///获取导航栏高度(状态栏+导航)
 -(CGFloat)fan_navigationHeight;
+///获取底部TabBar高度
+-(CGFloat)fan_tabBarHeight;
 
 @end

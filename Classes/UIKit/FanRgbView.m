@@ -40,10 +40,10 @@
     if (_hsvView==nil) {
         __weak typeof(self)weakSelf=self;
         _hsvView=[[FanHSVView alloc]init];
-        [_hsvView setHsvBlock:^(UIColor * _Nullable hsvColor) {
+        [_hsvView setHsvBlock:^(UIColor * _Nullable hsvColor, FanHSVTouchType touchType) {
             weakSelf.panColor=hsvColor;
             if (weakSelf.rgbBlock) {
-                weakSelf.rgbBlock(weakSelf, hsvColor);
+                weakSelf.rgbBlock(weakSelf, hsvColor,touchType);
             }
         }];
         [_hsvView setHsvTouchBlock:^(CGPoint touchPoint, FanHSVTouchType touchType) {
@@ -57,10 +57,14 @@
     if (_pointView==nil) {
         _pointView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 16, 16)];
         _pointView.layer.cornerRadius=16/2.0;
+        _pointView.userInteractionEnabled=YES;
         _pointView.layer.borderWidth=3;
         _pointView.layer.borderColor=[UIColor whiteColor].CGColor;
         [FanUIKit fan_addShadowToView:_pointView shadowColor:[[UIColor blackColor] colorWithAlphaComponent:0.8]shadowOpacity:1.0 shadowOffset:CGSizeZero];
         [self addSubview:_pointView];
+        
+        UIPanGestureRecognizer *pan=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(pan:)];
+        [_pointView addGestureRecognizer:pan];
     }
     return _pointView;
 }
@@ -106,7 +110,22 @@
     }
     
 }
-
+-(void)pan:(UIPanGestureRecognizer *)pan{
+    CGPoint point = [pan locationInView:self.hsvView];
+    FanHSVTouchType touchType=FanHSVTouchTypeBegan;
+    if (pan.state==UIGestureRecognizerStateBegan) {
+        touchType=FanHSVTouchTypeBegan;
+    }else if (pan.state==UIGestureRecognizerStateChanged) {
+        touchType=FanHSVTouchTypeMoved;
+    }else if (pan.state==UIGestureRecognizerStateEnded) {
+        touchType=FanHSVTouchTypeEnded;
+    }else if (pan.state==UIGestureRecognizerStateCancelled) {
+        touchType=FanHSVTouchTypeCancelled;
+    }else if (pan.state==UIGestureRecognizerStateFailed) {
+        touchType=FanHSVTouchTypeCancelled;
+    }
+    [self.hsvView fan_touchPoint:point touchType:touchType];
+}
 
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
@@ -141,6 +160,8 @@
 @property(nonatomic,assign)CGFloat fan_brightness;
 @property(nonatomic,assign)CGFloat fan_alpha;
 
+//是否是第一次
+@property(nonatomic,assign)BOOL fan_first;
 
 @end
 
@@ -160,6 +181,10 @@
 }
 -(void)initHsv{
     _hsvColor=[UIColor redColor];
+    _resetPanPoint=YES;
+    _progressX=1.0f;
+    _progressY=0.0f;
+    _fan_first=YES;
 }
 
 
@@ -193,71 +218,78 @@
         self.fan_saturation=saturation;
         self.fan_brightness=brightness;
         self.fan_alpha=alpha;
-        if (self.hsvType==FanHSVTypeCicle_HS) {
-            self.layer.cornerRadius=MIN(self.w/2.0f,self.h/2.0f);
-            self.clipsToBounds=YES;
-            CGPoint cPoint=CGPointMake(self.w/2.0f, self.h/2.0f);
-            double dis =self.r * self.fan_saturation;//手指半径
-            CGFloat at=self.fan_hue*(M_PI*2.0f);//0-180  0-(-180)
-            point.x=cPoint.x + dis*cos(at);
-            point.y=cPoint.y + dis*sin(at);
-            
-        }else if(self.hsvType==FanHSVTypeRect_H){
-            if (self.isVertical) {
-                self.progressX=0.5;
-                self.progressY=1.0f-self.fan_hue;
-            }else{
-                self.progressX=1.0f-self.fan_hue;
-                self.progressY=0.5;
+        if (self.resetPanPoint||self.fan_first) {
+            if (self.fan_first) {
+                self.fan_first=NO;
             }
-        }else if(self.hsvType==FanHSVTypeRect_SL){
-            self.progressX=self.fan_saturation;
-            self.progressY=1.0f-self.fan_brightness;
-        }else if(self.hsvType==FanHSVTypeRect_S){
-            if (self.isVertical) {
-                self.progressX=0.5;
-                self.progressY=self.fan_saturation;
-            }else{
+            if (self.hsvType==FanHSVTypeCicle_HS) {
+                self.layer.cornerRadius=MIN(self.w/2.0f,self.h/2.0f);
+                self.clipsToBounds=YES;
+                
+            }else if(self.hsvType==FanHSVTypeRect_H){
+                if (self.isVertical) {
+                    self.progressX=0.5;
+                    self.progressY=1.0f-self.fan_hue;
+                }else{
+                    self.progressX=1.0f-self.fan_hue;
+                    self.progressY=0.5;
+                }
+            }else if(self.hsvType==FanHSVTypeRect_SL){
                 self.progressX=self.fan_saturation;
-                self.progressY=0.5;
-            }
-            
-        }else if(self.hsvType==FanHSVTypeRect_L){
-            if (self.isVertical) {
-                self.progressX=0.5;
                 self.progressY=1.0f-self.fan_brightness;
-            }else{
-                self.progressX=1.0f-self.fan_brightness;
-                self.progressY=0.5;
+            }else if(self.hsvType==FanHSVTypeRect_S){
+                if (self.isVertical) {
+                    self.progressX=0.5;
+                    self.progressY=self.fan_saturation;
+                }else{
+                    self.progressX=self.fan_saturation;
+                    self.progressY=0.5;
+                }
+                
+            }else if(self.hsvType==FanHSVTypeRect_L){
+                if (self.isVertical) {
+                    self.progressX=0.5;
+                    self.progressY=1.0f-self.fan_brightness;
+                }else{
+                    self.progressX=1.0f-self.fan_brightness;
+                    self.progressY=0.5;
+                }
             }
-        }
-//        NSLog(@"HSV===%f======%f=======%f=====%f",self.fan_hue,self.fan_saturation,self.fan_brightness,self.alpha);
-        if (self.hsvType==FanHSVTypeCicle_HS) {
-            
+            if (self.hsvType==FanHSVTypeCicle_HS) {
+                CGPoint cPoint=CGPointMake(self.w/2.0f, self.h/2.0f);
+                double dis =self.r * self.fan_saturation;//手指半径
+                CGFloat at=self.fan_hue*(M_PI*2.0f);//0-180  0-(-180)
+                point.x=cPoint.x + dis*cos(at);
+                point.y=cPoint.y + dis*sin(at);
+            }else{
+                point=CGPointMake(self.progressX*self.w, self.progressY*self.h);
+            }
+
+            if (self.hsvTouchBlock) {
+                self.hsvTouchBlock(point, FanHSVTouchTypeInit);
+            }
         }else{
-            point=CGPointMake(self.progressX*self.w, self.progressY*self.h);
+            if (self.hsvType==FanHSVTypeCicle_HS) {
+                CGPoint cPoint=CGPointMake(self.w/2.0f, self.h/2.0f);
+                double dis =self.r * self.fan_saturation;//手指半径
+                CGFloat at=self.fan_hue*(M_PI*2.0f);//0-180  0-(-180)
+                point.x=cPoint.x + dis*cos(at);
+                point.y=cPoint.y + dis*sin(at);
+            }else{
+                point=CGPointMake(self.progressX*self.w, self.progressY*self.h);
+            }
+
+            if (self.hsvTouchBlock) {
+                self.hsvTouchBlock(point, FanHSVTouchTypeInit);
+            }
+            //不重置拖动点时初始化回调颜色
+            [self getPanRgbTouchType:FanHSVTouchTypeInit];
         }
-        if (self.hsvTouchBlock) {
-            self.hsvTouchBlock(point, FanHSVTouchTypeInit);
-        }
-        
     }
 }
 -(void)setHsvColor:(UIColor *)hsvColor{
     if (hsvColor) {
         _hsvColor=hsvColor;
-    }
-}
--(void)getRgba:(UIColor *)color{
-    
-    CGFloat red;
-    CGFloat green;
-    CGFloat blue;
-    CGFloat alpha;
-    
-    BOOL success = [color getRed:&red green:&green blue:&blue alpha:&alpha];
-    if (success) {
-//        NSLog(@"rgb:%f==%f==%f==%f",red,green,blue,alpha);
     }
 }
 #pragma mark - 手势处理
@@ -320,9 +352,9 @@
     }
 //    NSLog(@"饱和度%f=========亮度%f",self.progressX,self.progressY);
   
-    [self getPanRgb];
+    [self getPanRgbTouchType:touchType];
 }
-- (void)getPanRgb{
+- (void)getPanRgbTouchType:(FanHSVTouchType)touchType{
     if (self.hsvType==FanHSVTypeCicle_HS) {
         self.panColor = [UIColor colorWithHue:self.progressX saturation:self.progressY brightness:1.0 alpha:1.0];
         
@@ -356,9 +388,8 @@
         }
     }
     
-//    [self getRgba:self.panColor];
     if (self.hsvBlock) {
-        self.hsvBlock(self.panColor);
+        self.hsvBlock(self.panColor,touchType);
     }
 }
 #pragma mark - draw 画图

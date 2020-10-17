@@ -72,29 +72,29 @@
     [rgbView4 fan_drawStyle:FanHSVTypeRect_SL];
     
     
-    [rgbView1 setRgbBlock:^(FanRgbView * _Nullable rgbView, UIColor * _Nullable rgbColor) {
+    [rgbView1 setRgbBlock:^(FanRgbView * _Nullable rgbView, UIColor * _Nullable rgbColor, FanHSVTouchType touchType) {
         if (rgbColor) {
             self.view.backgroundColor=rgbColor;
         }
     }];
     
-    [rgbView2 setRgbBlock:^(FanRgbView * _Nullable rgbView, UIColor * _Nullable rgbColor) {
+    [rgbView2 setRgbBlock:^(FanRgbView * _Nullable rgbView, UIColor * _Nullable rgbColor, FanHSVTouchType touchType) {
         if (rgbColor) {
             self.view.backgroundColor=rgbColor;
         }
     }];
     
-    [rgbView3 setRgbBlock:^(FanRgbView * _Nullable rgbView, UIColor * _Nullable rgbColor) {
+    [rgbView3 setRgbBlock:^(FanRgbView * _Nullable rgbView, UIColor * _Nullable rgbColor, FanHSVTouchType touchType) {
         if (rgbColor) {
             self.view.backgroundColor=rgbColor;
         }
     }];
-    [rgbView4 setRgbBlock:^(FanRgbView * _Nullable rgbView, UIColor * _Nullable rgbColor) {
+    [rgbView4 setRgbBlock:^(FanRgbView * _Nullable rgbView, UIColor * _Nullable rgbColor, FanHSVTouchType touchType) {
         if (rgbColor) {
             self.view.backgroundColor=rgbColor;
         }
     }];
-    [rgbView12 setRgbBlock:^(FanRgbView * _Nullable rgbView, UIColor * _Nullable rgbColor) {
+    [rgbView12 setRgbBlock:^(FanRgbView * _Nullable rgbView, UIColor * _Nullable rgbColor, FanHSVTouchType touchType) {
         if (rgbColor) {
             self.view.backgroundColor=rgbColor;
         }
