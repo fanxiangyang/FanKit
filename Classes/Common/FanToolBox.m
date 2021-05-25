@@ -7,7 +7,6 @@
 //
 
 #import "FanToolBox.h"
-#import <UIKit/UIKit.h>
 //获取WiFi
 #import <SystemConfiguration/CaptiveNetwork.h>
 #include <ifaddrs.h>
@@ -21,6 +20,20 @@
 
 +(NSDictionary *)fan_dictionaryWithString:(NSString *)jsonString{
     NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    return [FanToolBox fan_dictionaryWithJsonData:jsonData];
+}
+
++(NSDictionary *)fan_dictionaryWithJsonPath:(NSString *)jsonPath{
+    if (![[NSFileManager defaultManager] fileExistsAtPath:jsonPath]){
+        return nil;
+    }
+    NSData *jsonData = [NSData dataWithContentsOfFile:jsonPath];
+    return [FanToolBox fan_dictionaryWithJsonData:jsonData];
+}
++(NSDictionary *)fan_dictionaryWithJsonData:(NSData *)jsonData{
+    if (jsonData==nil) {
+        return nil;
+    }
     NSError *error=nil;
     //NSJSONReadingMutableContainers 可变的数组和字典
     //NSJSONReadingMutableLeaves 指定返回json对象内部的字符串为可变字符串的实例
@@ -37,6 +50,19 @@
 }
 +(NSArray *)fan_arrayWithString:(NSString *)jsonString{
     NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    return [FanToolBox fan_arrayWithJsonData:jsonData];
+}
++(NSArray *)fan_arrayWithJsonPath:(NSString *)jsonPath{
+    if (![[NSFileManager defaultManager] fileExistsAtPath:jsonPath]){
+        return nil;
+    }
+    NSData *jsonData = [NSData dataWithContentsOfFile:jsonPath];
+    return [FanToolBox fan_arrayWithJsonData:jsonData];
+}
++(NSArray *)fan_arrayWithJsonData:(NSData *)jsonData{
+    if (jsonData==nil) {
+        return nil;
+    }
     NSError *error=nil;
     //NSJSONReadingMutableContainers 可变的数组和字典
     //NSJSONReadingMutableLeaves 指定返回json对象内部的字符串为可变字符串的实例
@@ -461,4 +487,44 @@
     }
     return platform;
 }
+
+#pragma mark - 数学公式
+
+/// 获取三次Hermite插值函数y
+/// @param p0 开始点
+/// @param p1 结束点
+/// @param rp0 开始点倒数
+/// @param rp1 结束点倒数
+/// @param x 带入x
++(double)fan_hemiteP0:(CGPoint)p0 p1:(CGPoint)p1 rp0:(float)rp0 rp1:(float)rp1 x:(float)x{
+    if (p1.x-p0.x==0.0f) {
+        return 0;
+    }
+    double y=p0.y*(1.0+2.0f*(x-p0.x)/(p1.x-p0.x))*pow(((x-p1.x)/(p0.x-p1.x)), 2)+p1.y*(1.0+2.0f*(x-p1.x)/(p0.x-p1.x))*pow(((x-p0.x)/(p1.x-p0.x)), 2)+rp0*(x-p0.x)*pow(((x-p1.x)/(p0.x-p1.x)), 2)+rp1*(x-p1.x)*pow(((x-p0.x)/(p1.x-p0.x)), 2);
+    return y;
+}
+
+/// 获取3次贝塞尔曲线函数方程
+/// @param p0 开始点
+/// @param p1 结束点
+/// @param c0 控制点0
+/// @param c1 控制点1
+/// @param t 相对x取值区间 0<t<1
++(CGPoint)fan_bezierPointP0:(CGPoint)p0 p1:(CGPoint)p1 c0:(CGPoint)c0 c1:(CGPoint)c1 t:(float)t{
+    CGPoint b=CGPointZero;
+    b.x=[FanToolBox fan_bezierP0:p0.x p1:p1.x c0:c0.x c1:c1.x t:t];
+    b.y=[FanToolBox fan_bezierP0:p0.y p1:p1.y c0:c0.y c1:c1.y t:t];
+    return b;
+}
+/// 获取3次贝塞尔曲线函数方程
+/// @param p0 开始点
+/// @param p1 结束点
+/// @param c0 控制点0
+/// @param c1 控制点1
+/// @param t 相对x取值区间 0<t<1
++(double)fan_bezierP0:(float)p0 p1:(float)p1 c0:(float)c0 c1:(float)c1 t:(float)t{
+    double b=p0*pow((1.0-t), 3)+3.0f*c0*t*pow((1.0f-t), 2)+3.0*c1*pow(t, 2)*(1.0-t)+p1*pow(t, 3);
+    return b;
+}
+
 @end

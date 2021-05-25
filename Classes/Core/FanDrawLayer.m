@@ -68,38 +68,26 @@
     return layer;
 }
 +(CAGradientLayer*)fan_gradientLayerFrame:(CGRect)frame startColor:(UIColor *)startColor endColor:(UIColor *)endColor isVertical:(BOOL)isVertical{
-    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-    gradientLayer.colors = @[(__bridge id)startColor.CGColor, (__bridge id)endColor.CGColor];
-    gradientLayer.locations = @[@(0.1), @1.0];
-    gradientLayer.startPoint = CGPointMake(0, 0);
-    if (isVertical) {
-        gradientLayer.endPoint = CGPointMake(0, 1.0);
-    }else{
-        gradientLayer.endPoint = CGPointMake(1.0, 0);
-    }
-    gradientLayer.frame =frame;
-    
-    return gradientLayer;
+    return [FanDrawLayer fan_gradientLayerFrame:frame colors:@[startColor,endColor] cornerRadius:0 isVertical:isVertical locations:@[@(0.1), @1.0]];
 }
 +(CAGradientLayer*)fan_gradientLayerFrame:(CGRect)frame startColor:(UIColor *)startColor endColor:(UIColor *)endColor isVertical:(BOOL)isVertical locations:(NSArray *)locations{
-    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-    gradientLayer.colors = @[(__bridge id)startColor.CGColor, (__bridge id)endColor.CGColor];
-    gradientLayer.locations = locations;
-    gradientLayer.startPoint = CGPointMake(0, 0);
-    if (isVertical) {
-        gradientLayer.endPoint = CGPointMake(0, 1.0);
-    }else{
-        gradientLayer.endPoint = CGPointMake(1.0, 0);
-    }
-    gradientLayer.frame =frame;
-    
-    return gradientLayer;
+    return [FanDrawLayer fan_gradientLayerFrame:frame colors:@[startColor,endColor] cornerRadius:0 isVertical:isVertical locations:locations];
 }
 +(CAGradientLayer*)fan_gradientLayerFrame:(CGRect)frame startColor:(UIColor *)startColor endColor:(UIColor *)endColor cornerRadius:(CGFloat)cornerRadius isVertical:(BOOL)isVertical locations:(NSArray *)locations{
+    return [FanDrawLayer fan_gradientLayerFrame:frame colors:@[startColor,endColor] cornerRadius:cornerRadius isVertical:isVertical locations:locations];
+}
+///生成多颜色渐变色和区域
++(CAGradientLayer*)fan_gradientLayerFrame:(CGRect)frame colors:(NSArray<UIColor *>*)colors cornerRadius:(CGFloat)cornerRadius isVertical:(BOOL)isVertical locations:(NSArray *)locations{
     CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-    gradientLayer.colors = @[(__bridge id)startColor.CGColor, (__bridge id)endColor.CGColor];
+    NSMutableArray *cls=[[NSMutableArray alloc]init];
+    for (UIColor *c in colors) {
+        [cls addObject:(__bridge id)c.CGColor];
+    }
+    gradientLayer.colors = cls;
     gradientLayer.locations = locations;
-    gradientLayer.cornerRadius=cornerRadius;
+    if (cornerRadius>0.0) {
+        gradientLayer.cornerRadius=cornerRadius;
+    }
     gradientLayer.startPoint = CGPointMake(0, 0);
     if (isVertical) {
         gradientLayer.endPoint = CGPointMake(0, 1.0);
@@ -125,7 +113,22 @@
     [gLayer setMask:boardLayer];
     return gLayer;
 }
-
+///生成多颜色渐变边框
++(CAGradientLayer *)fan_gradientMaskLayerFrame:(CGRect)frame lineWidth:(CGFloat)lineWidth colors:(NSArray<UIColor *>*)colors cornerRadius:(CGFloat)cornerRadius isVertical:(BOOL)isVertical locations:(NSArray *)locations{
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:frame cornerRadius:cornerRadius];
+    CAShapeLayer * boardLayer = [CAShapeLayer layer];
+    boardLayer.frame = frame;
+    boardLayer.fillColor =  [[UIColor clearColor] CGColor];
+    //指定path的渲染颜色
+    boardLayer.strokeColor  =[UIColor whiteColor].CGColor;
+    boardLayer.lineCap = kCALineCapRound;
+    boardLayer.lineWidth = lineWidth;
+    boardLayer.path = [path CGPath];
+  
+    CAGradientLayer *gLayer = [FanDrawLayer fan_gradientLayerFrame:frame colors:(NSArray<UIColor *>*)colors cornerRadius:cornerRadius isVertical:isVertical locations:locations];
+    [gLayer setMask:boardLayer];
+    return gLayer;
+}
 +(CAShapeLayer *)fan_triangleFillColor:(UIColor *)fillColor topPoint:(CGPoint)topPoint leftPoint:(CGPoint)leftPoint rightPoint:(CGPoint)rightPoint {
     CAShapeLayer *layer=[[CAShapeLayer alloc]init];
     //    layer.strokeColor=lineColor.CGColor;

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface FanToolBox : NSObject
 
@@ -16,9 +17,17 @@
 /// json字符串转字典
 /// @param jsonString json字符串
 +(NSDictionary *)fan_dictionaryWithString:(NSString *)jsonString;
+///json路径转字典
++(NSDictionary *)fan_dictionaryWithJsonPath:(NSString *)jsonPath;
+///json data转字典
++(NSDictionary *)fan_dictionaryWithJsonData:(NSData *)jsonData;
 /// json字符串转数组
 /// @param jsonString json字符串
 +(NSArray *)fan_arrayWithString:(NSString *)jsonString;
+///json路径转数组
++(NSArray *)fan_arrayWithJsonPath:(NSString *)jsonPath;
+///json Data转数组
++(NSArray *)fan_arrayWithJsonData:(NSData *)jsonData;
 
 
 #pragma mark - 文件操作
@@ -56,4 +65,29 @@
 + (BOOL)fan_isOpenWiFi;
 #pragma mark 返回设备类型
 +(NSString *)fan_platformString;
+
+#pragma mark - 数学公式
+
+/// 获取三次Hermite插值函数y
+/// @param p0 开始点
+/// @param p1 结束点
+/// @param rp0 开始点倒数
+/// @param rp1 结束点倒数
+/// @param x 带入x
++(double)fan_hemiteP0:(CGPoint)p0 p1:(CGPoint)p1 rp0:(float)rp0 rp1:(float)rp1 x:(float)x;
+
+/// 获取3次贝塞尔曲线函数方程
+/// @param p0 开始点
+/// @param p1 结束点
+/// @param c0 控制点0
+/// @param c1 控制点1
+/// @param t 相对x取值区间 0<t<1
++(CGPoint)fan_bezierPointP0:(CGPoint)p0 p1:(CGPoint)p1 c0:(CGPoint)c0 c1:(CGPoint)c1 t:(float)t;
+/// 获取3次贝塞尔曲线函数方程
+/// @param p0 开始点
+/// @param p1 结束点
+/// @param c0 控制点0
+/// @param c1 控制点1
+/// @param t 相对x取值区间 0<t<1
++(double)fan_bezierP0:(float)p0 p1:(float)p1 c0:(float)c0 c1:(float)c1 t:(float)t;
 @end

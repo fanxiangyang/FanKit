@@ -41,11 +41,16 @@
  @param wordSpace 字间距,<=0 不设置
  */
 +(void)fan_changeSpaceFromlabel:(UILabel *)label lineSpace:(CGFloat)lineSpace wordSpace:(CGFloat)wordSpace;
+/// 获取HTML富文本
+/// @param htmlStr html
+/// @param font 字体
+/// @param lineSpace 行间距
++(NSMutableAttributedString*)fan_htmlAttributedString:(NSString *)htmlStr font:(UIFont *)font lineSpace:(CGFloat)lineSpace;
 /// 计算HTML文本的宽高
 /// @param maxSize 限定Size
 /// @param htmlStr HTML字符串
 /// @param font 字体
-/// @param lineSpace 行间距
+/// @param lineSpace 行间距 <0不设置默认好像大概10
 +(CGSize)fan_htmlTextSizeWithMaxSize:(CGSize)maxSize html:(NSString *)htmlStr font:(UIFont *)font lineSpace:(CGFloat)lineSpace;
 
 /// 根据HTML富文本获取宽高
@@ -80,7 +85,7 @@
 + (UIImage *)fan_imageWithColor:(UIColor *)color frame:(CGRect)rect cornerRadius:(CGFloat)cornerRadius;
 /** 截屏*/
 +(UIImage*)fan_beginImageContext:(CGRect)rect fromView:(UIView*)view;
-/** OpenGL截图*/
+/** OpenGL的View或者Metal渲染的，或者视频播放器截图*/
 + (UIImage *)fan_openglSnapshotImage:(UIView *)openGLView;
 /** 高斯模糊*/
 + (UIImage *)fan_gaussianBlurImage:(UIImage *)image;
@@ -98,7 +103,8 @@
 +(UIImage *)fan_stretchableImage:(UIImage *)image edgeInset:(UIEdgeInsets)edgeInset;
 /** 添加阴影*/
 +(void)fan_addShadowToView:(UIView *)shadowView shadowColor:(UIColor *)shadowColor shadowOpacity:(CGFloat)shadowOpacity shadowOffset:(CGSize)shadowOffset;
-
+///添加阴影，路径，注意frame
++(void)fan_addShadowToView:(UIView *)shadowView shadowColor:(UIColor *)shadowColor shadowOpacity:(CGFloat)shadowOpacity shadowOffset:(CGSize)shadowOffset shadowBounds:(CGRect)shadowBounds;
 /**
  添加阴影
  

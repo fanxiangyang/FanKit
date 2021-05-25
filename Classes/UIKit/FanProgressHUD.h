@@ -47,7 +47,11 @@ typedef NS_ENUM(NSInteger,FanProgressHUDStyle) {
     /**
      *  特殊
      */
-    FanProgressHUDStyleTips
+    FanProgressHUDStyleTips,
+    /**
+     *  自定义view
+     */
+    FanProgressHUDStyleCustomeView
 };
 
 
@@ -63,24 +67,29 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
 
 @property(nonatomic,assign)FanProgressHUDStyle progressHUDStyle;
 
-@property(nonatomic,copy)FanProgressHUDAlertBlock _Nullable alertBlock;
+@property(nonatomic,nullable,copy)FanProgressHUDAlertBlock alertBlock;
 /** 显示几秒后，消失*/
 @property (assign, nonatomic) NSTimeInterval showTime;
 @property(nullable, nonatomic,strong)NSArray *buttonTitleArray;
 
 #pragma mark - 外部可以修改属性
-@property(nonatomic,strong)UIView * _Nullable blackAlphaView;//修改背景颜色
-@property(nonatomic,strong)NSMutableArray * _Nullable dataArray;
+@property(nonatomic,nullable,strong)UIView * blackAlphaView;//修改背景颜色
+@property(nonatomic,nullable,strong)NSMutableArray * dataArray;
 /**是不是触摸其他区域，自动消失*/
 @property(nonatomic,assign)BOOL isTouchRemove;
 
 //
-@property(nonatomic,copy)NSString * _Nullable title;
-@property(nonatomic,copy)NSString * _Nullable subTitle;
-@property(nonatomic,copy)NSString * _Nullable iconName;
+@property(nonatomic,nullable,copy)NSString * title;
+@property(nonatomic,nullable,copy)NSString * subTitle;
+@property(nonatomic,nullable,copy)NSString * iconName;
+@property(nonatomic,nullable,strong)UILabel *textLabel;
+@property(nonatomic,nullable,strong)UILabel *subTitleLabel;
+@property(nonatomic,nullable,strong)UIImageView *iconImgView;
+@property(nonatomic,nullable,strong)UITextField *textField;
 
-//获取keywindow
-+(UIWindow *_Nullable)showKeyWindow;
+
+//获取keywindow(后期如果适配UIScene需要改动)
++(nullable UIWindow *)showKeyWindow;
 
 #pragma mark -  显示和隐藏的类方法
 /**
@@ -89,19 +98,19 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
  @param textStr 提示文本
  @return self
  */
-+ (instancetype _Nullable )fan_showHUDWithStatus:(NSString*_Nullable)textStr;
-+ (instancetype _Nullable )fan_showHUDWithStatus:(NSString *_Nullable)textStr afterDelay:(NSTimeInterval)seconds;
++ (instancetype _Nullable)fan_showHUDWithStatus:(nullable NSString*)textStr;
++ (instancetype _Nullable)fan_showHUDWithStatus:(nullable NSString *)textStr afterDelay:(NSTimeInterval)seconds;
 
 /**
  弹出加载等待框
 
  @return self
  */
-+ (instancetype _Nullable )fan_showProgressHUD;
-+ (instancetype _Nullable )fan_showProgressHUDToView:(UIView *_Nullable)view;
-+ (instancetype _Nullable )fan_showProgressHUD:(NSString *_Nullable)textStr;
-+ (instancetype _Nullable )fan_showProgressHUDToView:(UIView *_Nullable)view title:(NSString * _Nullable)textStr;
-+ (instancetype _Nullable )fan_showProgressHUD:(NSString *_Nullable)textStr afterDelay:(NSTimeInterval)seconds;
++ (instancetype _Nullable)fan_showProgressHUD;
++ (instancetype _Nullable)fan_showProgressHUDToView:(nullable UIView *)view;
++ (instancetype _Nullable)fan_showProgressHUD:(nullable NSString *)textStr;
++ (instancetype _Nullable)fan_showProgressHUDToView:(nullable UIView *)view title:(nullable NSString *)textStr;
++ (instancetype _Nullable)fan_showProgressHUD:(nullable NSString *)textStr afterDelay:(NSTimeInterval)seconds;
 /**
  隐藏弹窗
 
@@ -109,9 +118,9 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
  */
 + (BOOL)fan_hideProgressHUD;
 + (BOOL)fan_hideAllProgressHUD;
-+ (BOOL)fan_hideProgressHUDForView:(UIView *_Nullable)view;
-+ (instancetype _Nullable)fan_progressHUDForView:(UIView *_Nullable)view;
-+ (BOOL)fan_hideAllProgressHUDForView:(UIView *_Nullable)view;
++ (BOOL)fan_hideProgressHUDForView:(nullable UIView *)view;
++ (instancetype _Nullable )fan_progressHUDForView:(nullable UIView *)view;
++ (BOOL)fan_hideAllProgressHUDForView:(nullable UIView *)view;
 
 
 /**
@@ -123,8 +132,8 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
  @param alertBlock 按钮回调
  @return self
  */
-+ (instancetype _Nullable )fan_showAlertHUDTitle:(NSString *_Nullable)textStr subTitle:(NSString *_Nonnull)subTitle buttonTitles:(NSArray*_Nullable)btnTitleArray  alertBlock:(FanProgressHUDAlertBlock _Nullable )alertBlock;
-+ (instancetype _Nullable )fan_showAlertHUDTitle:(NSString *_Nullable)textStr subTitle:( NSString * _Nonnull )subTitle buttonTitle:(NSString *_Nullable)buttonTitle alertBlock:(FanProgressHUDAlertBlock _Nullable)alertBlock;
++ (instancetype _Nullable)fan_showAlertHUDTitle:(nullable NSString *)textStr subTitle:(nullable NSString *)subTitle buttonTitles:(nullable NSArray*)btnTitleArray  alertBlock:(nullable FanProgressHUDAlertBlock)alertBlock;
++ (instancetype _Nullable)fan_showAlertHUDTitle:(nullable NSString *)textStr subTitle:(nullable NSString * )subTitle buttonTitle:(nullable NSString *)buttonTitle alertBlock:(nullable FanProgressHUDAlertBlock)alertBlock;
 /**
  弹窗类似系统对话框
  
@@ -134,16 +143,17 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
  @param alertBlock 按钮回调
  @return self
  */
-+ (instancetype _Nullable )fan_showIconAlertHUDTitle:(NSString *_Nullable)textStr imageName:(NSString *_Nonnull)imageName buttonTitles:(NSArray*_Nullable)btnTitleArray  alertBlock:(FanProgressHUDAlertBlock _Nullable )alertBlock;
-+ (instancetype _Nullable )fan_showIconAlertHUDTitle:(NSString *_Nullable)textStr imageName:(NSString *_Nonnull)imageName buttonTitle:(NSString *_Nullable)buttonTitle alertBlock:(FanProgressHUDAlertBlock _Nullable)alertBlock;
++ (instancetype _Nullable )fan_showIconAlertHUDTitle:(nullable NSString *)textStr imageName:(nullable NSString *)imageName buttonTitles:(nullable NSArray*)btnTitleArray  alertBlock:(nullable FanProgressHUDAlertBlock  )alertBlock;
++ (instancetype _Nullable )fan_showIconAlertHUDTitle:(nullable NSString *)textStr imageName:(nullable NSString *)imageName buttonTitle:(nullable NSString *)buttonTitle alertBlock:(nullable FanProgressHUDAlertBlock)alertBlock;
 
 
+///现在没有动画，不用考虑传值
 -(void)fan_removeSelfView:(BOOL)animation;
 
 
--(void)fan_setTitleColor:(UIColor *_Nullable)titleColor subTitleColor:(UIColor *_Nullable)subTitleColor;
+-(void)fan_setTitleColor:(nullable UIColor *)titleColor subTitleColor:(nullable UIColor *)subTitleColor;
 
--(void)fan_setTitleColor:(UIColor *_Nullable)titleColor;
+-(void)fan_setTitleColor:(nullable UIColor *)titleColor;
 
 #pragma mark - 子类可以重写
 -(void)configUIWithData;
@@ -154,8 +164,7 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
 -(void)fan_createIconAlertUI;
 
 #pragma mark - 子类调用的方法
--(CGSize)fan_currentSizeWithContent:(NSString *_Nullable)content font:(UIFont *_Nullable)font cgSize:(CGSize)cgsize;
 -(void)buttonClick:(nullable UIButton *)btn;
-- (id _Nullable )initWithShowView:(UIView *_Nullable)view;
+- (id _Nullable )initWithShowView:(nullable UIView *)view;
 - (void)commonInit;//继承要执行父类方法
 @end

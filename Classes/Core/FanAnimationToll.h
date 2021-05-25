@@ -70,7 +70,8 @@
 +(CABasicAnimation *)fan_rockWithTime:(float)time fromX:(float)fromX toX:(float)toX repeatCount:(int)repeatCount;
 /**上下晃动:是偏移量移动*/
 +(CABasicAnimation *)fan_rockWithTime:(float)time fromY:(float)fromY toY:(float)toY repeatCount:(int)repeatCount;
-
+/**点晃动:是点移动*/
++(CABasicAnimation *)fan_rockWithTime:(float)time fromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint repeatCount:(int)repeatCount;
 #pragma mark - CAKeyframeAnimation动画
 /**路径动画（点的移动，圆，曲线）
  

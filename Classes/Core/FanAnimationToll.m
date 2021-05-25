@@ -210,6 +210,19 @@
     
     return animation;
 }
+/**点晃动:是点移动*/
++(CABasicAnimation *)fan_rockWithTime:(float)time fromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint repeatCount:(int)repeatCount{
+    CABasicAnimation *animation=[CABasicAnimation animationWithKeyPath:@"transform.translation"];
+    [animation setFromValue:[NSValue valueWithCGPoint:fromPoint]];
+    animation.toValue=[NSValue valueWithCGPoint:toPoint];
+    animation.duration=time;
+    animation.removedOnCompletion=NO;
+    animation.fillMode=kCAFillModeForwards;
+    
+    animation.repeatCount=repeatCount;//动画重复次数
+    animation.autoreverses=YES;//是否自动重复
+    return animation;
+}
 #pragma mark - CAKeyframeAnimation动画
 /**左右摇晃,图标的抖动:抖动宽度(0-360)+强度(单次时间)*/
 +(CAKeyframeAnimation * )fan_shakeAnimationDegress:(float)shakeDegress sigleDuration:(float)sigleDuration repeatCount:(float)repeatCount {

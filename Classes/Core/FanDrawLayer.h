@@ -78,7 +78,8 @@
 +(CAGradientLayer*)fan_gradientLayerFrame:(CGRect)frame startColor:(UIColor *)startColor endColor:(UIColor *)endColor isVertical:(BOOL)isVertical locations:(NSArray *)locations;
 ///含圆角
 +(CAGradientLayer*)fan_gradientLayerFrame:(CGRect)frame startColor:(UIColor *)startColor endColor:(UIColor *)endColor cornerRadius:(CGFloat)cornerRadius isVertical:(BOOL)isVertical locations:(NSArray *)locations;
-
+///生成多颜色渐变色和区域
++(CAGradientLayer*)fan_gradientLayerFrame:(CGRect)frame colors:(NSArray<UIColor *>*)colors cornerRadius:(CGFloat)cornerRadius isVertical:(BOOL)isVertical locations:(NSArray *)locations;
 /**
  生成渐变遮罩边框
 
@@ -92,6 +93,8 @@
  @return 渐变边框
  */
 +(CAGradientLayer *)fan_gradientMaskLayerFrame:(CGRect)frame lineWidth:(CGFloat)lineWidth startColor:(UIColor *)startColor endColor:(UIColor *)endColor cornerRadius:(CGFloat)cornerRadius isVertical:(BOOL)isVertical locations:(NSArray *)locations;
+///生成多颜色渐变边框
++(CAGradientLayer *)fan_gradientMaskLayerFrame:(CGRect)frame lineWidth:(CGFloat)lineWidth colors:(NSArray<UIColor *>*)colors cornerRadius:(CGFloat)cornerRadius isVertical:(BOOL)isVertical locations:(NSArray *)locations;
 /**
  生成三角形
 
