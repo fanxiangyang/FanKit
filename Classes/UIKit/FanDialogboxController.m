@@ -199,7 +199,15 @@
 #pragma mark - 创建UI
 -(void)configUIWithData{
     if(self.showTime>0){
-        self.afterTimer=[NSTimer scheduledTimerWithTimeInterval:self.showTime target:self selector:@selector(hiddenTimer) userInfo:nil repeats:NO];
+        if (@available(iOS 10.0, *)) {
+            __weak typeof(self)weakSelf=self;
+            self.afterTimer = [NSTimer scheduledTimerWithTimeInterval:weakSelf.showTime repeats:NO block:^(NSTimer * _Nonnull timer) {
+                __strong typeof(self)strongSelf=weakSelf;
+                [strongSelf hiddenTimer];
+            }];
+        }else{
+            self.afterTimer = [NSTimer scheduledTimerWithTimeInterval:self.showTime target:self selector:@selector(hiddenTimer) userInfo:nil repeats:NO];
+        }
     }
     self.blackAlphaView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     self.blackAlphaView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.5];

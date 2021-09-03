@@ -45,7 +45,10 @@
 +(BOOL)fan_moveSrcPath:(NSString *)srcPath pathName:(NSString *)pathName;
 /**删除目录下所有文件*/
 + (BOOL)fan_deleteFilesAtPath:(NSString *)filePath;
-+ (BOOL)fan_deleteFile:(NSString *)filePath;//删除文件
+///删除目录所有内容包括他本身
++ (BOOL)fan_deleteAllAtPath:(NSString *)filePath;
+///只删除文件不删除路径
++ (BOOL)fan_deleteFile:(NSString *)filePath;
 /** 请求文件（夹）路径的所有文件大小（字节）*/
 + (unsigned long long)fan_fileSizeFromPath:(NSString *)path;
 

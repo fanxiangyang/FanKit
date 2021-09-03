@@ -10,13 +10,15 @@
 #import <Photos/Photos.h>
 #import "NSBundle+FanKit.h"
 #import "FanToolBox.h"
+#import "FanDeviceOrientation.h"
 
-@interface FanVideoRecord()<AVCaptureFileOutputRecordingDelegate>
+@interface FanVideoRecord()<AVCaptureFileOutputRecordingDelegate,AVCapturePhotoCaptureDelegate,FanDeviceOrientationDelegate>
 @property (nonatomic, strong) AVCaptureSession *captureSession;//会话session
 @property (nonatomic,strong) AVCaptureVideoPreviewLayer *captureVideoPreviewLayer;//预览层Layer
 @property (nonatomic, strong) AVCaptureDeviceInput *videoInput;
 @property (nonatomic, strong) AVCaptureDeviceInput *audioInput;
 @property (nonatomic, strong) AVCaptureMovieFileOutput *fileOutput;
+@property(nonatomic,strong)AVCapturePhotoOutput *photoOutput;
 
 @property (nonatomic, strong) NSString *videoPath;//输出视频路径
 
@@ -25,6 +27,11 @@
 @property (nonatomic, assign) CGFloat recordTime;
 //设备每次打开录制瞬间时的方向
 @property (nonatomic, assign)AVCaptureVideoOrientation currentOrientation;
+
+@property(nonatomic,strong)FanDeviceOrientation *deviceMotion;
+//通过加速计判断当前设备方向
+@property (nonatomic, assign)UIDeviceOrientation currentDeviceOrientation;
+
 @end
 
 
@@ -53,8 +60,32 @@
     
     self.recordState=FanRecordStateInit;
     
+    self.deviceMotion = [[FanDeviceOrientation alloc]initWithDelegate:self];
+    self.currentDeviceOrientation =[UIDevice currentDevice].orientation;
 }
-
+-(void)directionChange:(FanDirection)direction{
+    switch (direction) {
+        case FanDirectionPortrait:
+//            NSLog(@"竖着");
+            _currentDeviceOrientation = UIDeviceOrientationPortrait;
+            break;
+        case FanDirectionDown:
+//            NSLog(@"倒着");
+            _currentDeviceOrientation = UIDeviceOrientationPortraitUpsideDown;
+            break;
+        case FanDirectionRight:
+//            NSLog(@"home在左手");
+            _currentDeviceOrientation = UIDeviceOrientationLandscapeRight;
+            break;
+        case FanDirectionleft:
+//            NSLog(@"home在右手");
+            _currentDeviceOrientation = UIDeviceOrientationLandscapeLeft;
+            break;
+            
+        default:
+            break;
+    }
+}
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIDeviceOrientationDidChangeNotification
@@ -65,16 +96,19 @@
     
     [self.timer invalidate];
     self.timer=nil;
-    
+    [self.deviceMotion stop];
+    NSLog(@"FanVideoRecord录制界面销毁");
 }
 -(BOOL)fan_openVideo{
     if ([self.captureSession isRunning]) {
+        [self.deviceMotion startMonitor];
         return YES;
     }
     
     //第二次打开，只需要启动运行就OK了，不需要配置摄像机
     if (self.captureSession) {
         [self.captureSession startRunning];
+        [self.deviceMotion startMonitor];
         return YES;;
     }
     
@@ -163,7 +197,14 @@
     self.captureVideoPreviewLayer.frame=self.layer.bounds;
     [self.layer addSublayer:self.captureVideoPreviewLayer];
     
-    
+    //添加拍照输出
+    self.photoOutput=[[AVCapturePhotoOutput alloc]init];
+    if ([self.captureSession canAddOutput:self.photoOutput]) {
+        [self.captureSession addOutput:self.photoOutput];
+    }
+    //开启截图
+//    [self.photoOutput capturePhotoWithSettings:[AVCapturePhotoSettings photoSettings] delegate:self];
+
     //启动扫描
     [self.captureSession startRunning];
     
@@ -171,6 +212,7 @@
     if (self.recordBlock) {
         self.recordBlock(self, FanRecordStateOpenCamera, 0);
     }
+    [self.deviceMotion startMonitor];
     return  YES;
 }
 -(void)fan_closeVideo{
@@ -178,6 +220,7 @@
     self.timer=nil;
     [self.fileOutput stopRecording];
     [self.captureSession stopRunning];
+    [self.deviceMotion stop];
 }
 -(void)fan_flashLight{
     AVCaptureDevice * device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
@@ -197,6 +240,90 @@
     }
     [device unlockForConfiguration];
     
+}
+///开启拍照
+-(void)fan_startCapturePhoto{
+    AVCaptureConnection *pConnection=[self.photoOutput connectionWithMediaType:AVMediaTypeVideo];
+    if ([pConnection isVideoStabilizationSupported ]) {
+        pConnection.preferredVideoStabilizationMode=AVCaptureVideoStabilizationModeAuto;
+    }
+    if (pConnection.isVideoOrientationSupported) {
+//        NSLog(@"支持方向");
+    }
+    //设置默认当前屏幕方向的视频方向
+    pConnection.videoOrientation=[self avOrientationFromDeviceOrientation:self.currentDeviceOrientation];
+    [self.photoOutput capturePhotoWithSettings:[AVCapturePhotoSettings photoSettings] delegate:self];
+}
+///拍照代理
+- (void)captureOutput:(AVCapturePhotoOutput *)output didFinishProcessingPhoto:(AVCapturePhoto *)photo error:(nullable NSError *)error  API_AVAILABLE(ios(11.0)){
+    //photo.metadata固定videoOrientation=AVCaptureVideoOrientationPortrait  Orientation右方向，默认=6
+//    NSLog(@"参数：%@",photo.metadata);
+//    NSLog(@"视频方向：%@",@(self.photoOutput.connections.lastObject.videoOrientation));
+    //生成图片时的设备方向，如果需要按照拍照时的设备方向
+    //可以在capureOutput:willCapturePhotoForResolvedSettings:中保存
+    //这种生成的图片恒定是UIImageOrientationRight
+//    NSData *data=[photo fileDataRepresentation];
+//    UIImage *image0=[UIImage imageWithData:data];
+//    image=[FanVideoRecord fan_fixOrientation:image];
+    
+    //这种生成的图片恒定是UIImageOrientationUp 根据设备方向修正
+    CGImageRef cgImage = [photo CGImageRepresentation];
+    UIImage * image = [UIImage imageWithCGImage:cgImage];
+//    NSLog(@"图片CGImage:%@   dataImage:%@",@(image.imageOrientation),@(image0.imageOrientation));
+    //前置摄像头拍照会旋转180解决办法
+//    if (self.videoInput.device.position == AVCaptureDevicePositionFront) {
+//        UIImageOrientation imgOrientation = UIImageOrientationLeftMirrored;
+//        image = [[UIImage alloc]initWithCGImage:cgImage scale:1.0f orientation:imgOrientation];
+//    }else {
+//        UIImageOrientation imgOrientation = UIImageOrientationRight;
+//        image = [[UIImage alloc]initWithCGImage:cgImage scale:1.0f orientation:imgOrientation];
+//    }
+    
+    UIImageOrientation imgOrientation = [self fan_imageOrientationFromDevice];
+    image = [[UIImage alloc]initWithCGImage:image.CGImage scale:1.0f orientation:imgOrientation];
+//    NSLog(@"图片转化后:%@ ",@(image.imageOrientation));
+    if (self.photoBlock) {
+        self.photoBlock(image);
+    }
+}
+-(UIImageOrientation)fan_imageOrientationFromDevice{
+    UIImageOrientation imgOrientation = UIImageOrientationUp;
+//    NSLog(@"屏幕方向：%ld",self.currentDeviceOrientation);
+    switch (self.currentDeviceOrientation) {
+        case UIDeviceOrientationUnknown: {
+            break;
+        }
+        case UIDeviceOrientationPortrait: {
+            imgOrientation = UIImageOrientationRight;
+            break;
+        }
+        case UIDeviceOrientationPortraitUpsideDown: {
+            imgOrientation = UIImageOrientationLeft;
+            break;
+        }
+        case UIDeviceOrientationLandscapeLeft: {
+            imgOrientation = UIImageOrientationUp;
+            break;
+        }
+        case UIDeviceOrientationLandscapeRight: {
+            imgOrientation = UIImageOrientationDown;
+            break;
+        }
+        case UIDeviceOrientationFaceUp: {
+            // 面朝上
+            imgOrientation = UIImageOrientationRight;
+            break;
+        }
+        case UIDeviceOrientationFaceDown: {
+            //面朝下
+            imgOrientation = UIImageOrientationLeft;
+            break;
+        }
+        default:{
+
+        }
+    }
+    return imgOrientation;
 }
 /**
  开始录像
@@ -249,6 +376,7 @@
     [self.timer invalidate];
     self.timer=nil;
     [self.fileOutput stopRecording];
+    [self.deviceMotion stop];
 }
 
 /**
@@ -377,7 +505,11 @@
     //1 — 采集
     AVAsset *asset = [AVAsset assetWithURL:anInputFileURL];
     //    AVURLAsset * urlAsset = [[AVURLAsset alloc]initWithURL:anInputFileURL options:nil];
-    
+    if (asset==nil) {
+        if (self.saveAlbumBlock) {
+            self.saveAlbumBlock(-3);
+        }
+    }
     
     /********************************************************************************************/
     //配置图像转码时属性和通道，可以旋转和裁剪图像
@@ -557,7 +689,15 @@
     }
     [self.timer invalidate];
     self.timer=nil;
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(refreshRecordTime) userInfo:nil repeats:YES];
+    if (@available(iOS 10.0, *)) {
+        __weak typeof(self)weakSelf=self;
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.5 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            __strong typeof(self)strongSelf=weakSelf;
+            [strongSelf refreshRecordTime];
+        }];
+    }else{
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(refreshRecordTime) userInfo:nil repeats:YES];
+    }
 }
 
 - (void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error{
@@ -636,12 +776,16 @@
 #pragma mark - notification
 //设备方向改变
 -(void)deviceOrientationDidChange:(NSObject*)sender{
+//    NSLog(@"设备方向改变：%@",sender);
+    [self.deviceMotion stop];
+    
     if (self.captureVideoPreviewLayer==nil) {
         return;
     }
     AVCaptureVideoOrientation orientation=0;
     
     UIDevice* device = [sender valueForKey:@"object"];
+    self.currentDeviceOrientation=device.orientation;
     switch (device.orientation) {
         case UIDeviceOrientationUnknown: {
             orientation=[self.captureVideoPreviewLayer connection].videoOrientation;
@@ -701,6 +845,45 @@
     [self.captureVideoPreviewLayer connection].videoOrientation=orientation;
     //    AVCaptureConnection *captureConnection=[self.fileOutput connectionWithMediaType:AVMediaTypeVideo];
     //    captureConnection.videoOrientation=[self.captureVideoPreviewLayer connection].videoOrientation;
+}
+-(AVCaptureVideoOrientation)avOrientationFromDeviceOrientation:(UIDeviceOrientation)deviceOrientation{
+//    NSLog(@"当前屏幕方向：%ld",(long)deviceOrientation);
+    switch (deviceOrientation) {
+        case UIDeviceOrientationUnknown: {
+            return AVCaptureVideoOrientationPortrait;
+            break;
+        }
+        case UIDeviceOrientationPortrait: {
+            return AVCaptureVideoOrientationPortrait;
+            break;
+        }
+        case UIDeviceOrientationPortraitUpsideDown: {
+            return AVCaptureVideoOrientationPortraitUpsideDown;
+            break;
+        }
+        case UIDeviceOrientationLandscapeLeft: {
+            return AVCaptureVideoOrientationLandscapeLeft;
+            break;
+        }
+        case UIDeviceOrientationLandscapeRight: {
+            return AVCaptureVideoOrientationLandscapeRight;
+            break;
+        }
+        case UIDeviceOrientationFaceUp: {
+            // 面朝上
+            return AVCaptureVideoOrientationPortrait;
+            break;
+        }
+        case UIDeviceOrientationFaceDown: {
+            //面朝下
+            return AVCaptureVideoOrientationPortrait;
+            break;
+        }
+        default:{
+
+        }
+    }
+    return AVCaptureVideoOrientationPortrait;
 }
 
 //用设备方向没有解决当用户锁定屏幕时解决方案
@@ -763,6 +946,84 @@
     }
     //在回调里面，可以重新打开摄像头
     
+}
++ (UIImage *)fan_fixOrientation:(UIImage *)aImage {
+//    NSLog(@"方向：%@",@(aImage.imageOrientation));
+    UIImageOrientation imageOrientation=aImage.imageOrientation;
+    // 如果方向已经正确，则无操作
+    if (imageOrientation == UIImageOrientationUp)
+        return aImage;
+    
+    //我们需要计算适当的变换使图像直立。
+    //我们分两步进行：左/右/下旋转，镜像时翻转。
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    
+    switch (imageOrientation) {
+        case UIImageOrientationDown:
+        case UIImageOrientationDownMirrored:{
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, aImage.size.height);
+            transform = CGAffineTransformRotate(transform, M_PI);
+            break;
+        }
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:{
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
+            transform = CGAffineTransformRotate(transform, M_PI_2);
+            break;
+        }
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:{
+            transform = CGAffineTransformTranslate(transform, 0, aImage.size.height);
+            transform = CGAffineTransformRotate(transform, -M_PI_2);
+            break;
+        }
+        default:
+            break;
+    }
+    
+    switch (imageOrientation) {
+        case UIImageOrientationUpMirrored:
+        case UIImageOrientationDownMirrored:{
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
+            transform = CGAffineTransformScale(transform, -1, 1);
+            break;
+        }
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRightMirrored:{
+            transform = CGAffineTransformTranslate(transform, aImage.size.height, 0);
+            transform = CGAffineTransformScale(transform, -1, 1);
+            break;
+        }
+        default:
+            break;
+    }
+    
+    //现在，我们将底层CGImage绘制到一个新的上下文中，应用转换
+    CGContextRef ctx = CGBitmapContextCreate(NULL, aImage.size.width, aImage.size.height,
+                                             CGImageGetBitsPerComponent(aImage.CGImage), 0,
+                                             CGImageGetColorSpace(aImage.CGImage),
+                                             CGImageGetBitmapInfo(aImage.CGImage));
+    CGContextConcatCTM(ctx, transform);
+    switch (imageOrientation) {
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:{
+            CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.height,aImage.size.width), aImage.CGImage);
+            break;
+        }
+        default:{
+            CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.width,aImage.size.height), aImage.CGImage);
+            break;
+        }
+    }
+    //现在我们只是从绘图上下文中创建一个新的UIImage
+    CGImageRef cgimg = CGBitmapContextCreateImage(ctx);
+    UIImage *img = [UIImage imageWithCGImage:cgimg];
+    CGContextRelease(ctx);
+    CGImageRelease(cgimg);
+//    NSLog(@"转换后方向：%@",@(img.imageOrientation));
+    return img;
 }
 /*
  // Only override drawRect: if you perform custom drawing.

@@ -48,6 +48,7 @@ typedef void(^FanVideoRecordBlock)(FanVideoRecord *videoRecord, FanRecordState r
  */
 typedef void(^FanVideoSaveAlbumBlock)(NSInteger saveType);
 
+typedef void(^FanVideoPhotoBlock)(UIImage *_Nullable image);
 
 @interface FanVideoRecord : UIView
 
@@ -58,10 +59,11 @@ typedef void(^FanVideoSaveAlbumBlock)(NSInteger saveType);
 @property (nonatomic, assign) BOOL autoSaveToAlbum;
 @property (nonatomic, copy) FanVideoRecordBlock recordBlock;
 @property (nonatomic, copy) FanVideoSaveAlbumBlock saveAlbumBlock;
+@property (nonatomic, copy) FanVideoPhotoBlock photoBlock;
 
 ///打开摄像头
 -(BOOL)fan_openVideo;
-///关闭摄像头
+///关闭摄像头(dealloc之前一定要执行，有定时器，陀螺仪需要关闭)
 -(void)fan_closeVideo;
 ///打开闪光灯
 -(void)fan_flashLight;
@@ -72,6 +74,8 @@ typedef void(^FanVideoSaveAlbumBlock)(NSInteger saveType);
 - (BOOL)fan_reStartVideoRecord;
 /**停止录像*/
 - (void)fan_stopVideoRecord;
+///开启拍照-截图保存
+-(void)fan_startCapturePhoto;
 
 
 
@@ -110,6 +114,9 @@ typedef void(^FanVideoSaveAlbumBlock)(NSInteger saveType);
  @param completeBlock 完成的回调 成功、失败   type=0 失败 =1 关闭  =2 成功
  */
 - (void)fan_convertVideoWithURL:(NSURL *)fileUrl outPath:(NSString *)outPath completeBlock:(void(^)(BOOL success, NSInteger statusType))completeBlock;
+
+///图片修正方向
++ (UIImage *)fan_fixOrientation:(UIImage *)aImage ;
 @end
 
 NS_ASSUME_NONNULL_END

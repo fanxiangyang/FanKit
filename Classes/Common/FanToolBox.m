@@ -251,6 +251,23 @@
     
     return YES;
 }
+///删除目录所有内容包括他本身
++ (BOOL)fan_deleteAllAtPath:(NSString *)filePath{
+    NSFileManager* manager = [NSFileManager defaultManager];
+    if (![manager fileExistsAtPath:filePath]){
+        return YES;
+    }
+    NSEnumerator *childFilesEnumerator = [[manager subpathsAtPath:filePath] objectEnumerator];
+    NSString* fileName;
+    while ((fileName = [childFilesEnumerator nextObject]) != nil)
+    {
+        NSString* fileAbsolutePath = [filePath stringByAppendingPathComponent:fileName];
+        NSError *error;
+        [manager removeItemAtPath:fileAbsolutePath error:&error];
+    }
+    [manager removeItemAtPath:filePath error:nil];
+    return YES;
+}
 + (BOOL)fan_deleteFile:(NSString *)filePath{
     NSFileManager* manager = [NSFileManager defaultManager];
     NSError *error;
