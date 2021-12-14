@@ -34,4 +34,17 @@
 -(CGFloat)fan_tabBarHeight{
     return self.tabBarController.tabBar.frame.size.height;
 }
+
+///添加子VC-并且添加view
+-(void)fan_addChildViewController:(UIViewController *)vc{
+    if (vc) {
+        [self addChildViewController:vc];
+        [self.view addSubview:vc.view];
+    }
+}
+///从父控制器移除-并且移除view
+-(void)fan_removeFromParentViewController{
+    [self.view removeFromSuperview];
+    [self removeFromParentViewController];
+}
 @end

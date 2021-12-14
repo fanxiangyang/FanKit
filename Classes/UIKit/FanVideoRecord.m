@@ -593,6 +593,18 @@
     layerTransform=CGAffineTransformTranslate(layerTransform, moveX, moveY);
     //    layerTransform = CGAffineTransformScale(layerTransform, 1, 1);
     [layerInstruction setTransform:layerTransform atTime:kCMTimeZero];
+    //FIXME:  -这里有崩溃（The time of an opacity setting must be numeric.）
+    //    {
+    //      value = 7587
+    //      timescale = 600
+    //      flags = kCMTimeFlags_Valid
+    //      epoch = 0
+    //    }
+    if (totalDuration.value==0) {
+        [layerInstruction setOpacity:0.0 atTime:kCMTimeZero];
+    }else{
+        [layerInstruction setOpacity:0.0 atTime:totalDuration];
+    }
     [layerInstruction setOpacity:0.0 atTime:totalDuration];
     
     //8. 创建视频组合指令AVMutableVideoCompositionInstruction，并设置指令在视频的作用时间范围和旋转矩阵变换

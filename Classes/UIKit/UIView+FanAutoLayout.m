@@ -56,7 +56,7 @@
         {
             [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"[centerView(%f)]",size.width] options:0 metrics:nil views:views]];
             //高度
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[centerView(%f)]",padding, size.height] options:0 metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[centerView(%f)]",padding, size.height] options:0 metrics:nil views:views]];
             //水平居中
             [self addConstraint:[NSLayoutConstraint constraintWithItem:centerView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
         }
@@ -65,14 +65,14 @@
         {
             [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"[centerView(%f)]",size.width] options:0 metrics:nil views:views]];
             //高度
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[centerView(%f)]-%f-|",size.height,padding] options:0 metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[centerView(%f)]-(%f)-|",size.height,padding] options:0 metrics:nil views:views]];
             //水平居中
             [self addConstraint:[NSLayoutConstraint constraintWithItem:centerView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
         }
             break;
         case FanLayoutCenterYLeft:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"|-%f-[centerView(%f)]",padding,size.width] options:0 metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"|-(%f)-[centerView(%f)]",padding,size.width] options:0 metrics:nil views:views]];
             //高度
             [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[centerView(%f)]",size.height] options:0 metrics:nil views:views]];
             //垂直居中
@@ -81,7 +81,7 @@
             break;
         case FanLayoutCenterYRight:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"[centerView(%f)]-%f-|",size.width,padding] options:0 metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"[centerView(%f)]-(%f)-|",size.width,padding] options:0 metrics:nil views:views]];
             //高度
             [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[centerView(%f)]",size.height] options:0 metrics:nil views:views]];
             //垂直居中
@@ -118,56 +118,56 @@
     switch (layoutAttribute) {
         case FanLayoutAttributeTop:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%f-[constraintView]-%f-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[constraintView(%f)]",edgeInsets.top,size.height] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[constraintView]-(%f)-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[constraintView(%f)]",edgeInsets.top,size.height] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
         }
             break;
         case FanLayoutAttributeLeft:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%f-[constraintView(%f)]",edgeInsets.left,size.width] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[constraintView]-%f-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[constraintView(%f)]",edgeInsets.left,size.width] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[constraintView]-(%f)-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
         }
             break;
         case FanLayoutAttributeBottom:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%f-[constraintView]-%f-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[constraintView(%f)]-%f-|",size.height,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[constraintView]-(%f)-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[constraintView(%f)]-(%f)-|",size.height,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
         }
             break;
         case FanLayoutAttributeRight:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[constraintView(%f)]-%f-|",size.width,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[constraintView]-%f-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[constraintView(%f)]-(%f)-|",size.width,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[constraintView]-(%f)-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
         }
             break;
         case FanLayoutAttributeAll:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%f-[constraintView]-%f-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[constraintView]-%f-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[constraintView]-(%f)-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[constraintView]-(%f)-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
         }
             break;
         case FanLayoutAttributeTopLeft:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%f-[constraintView(%f)]",edgeInsets.left,size.width] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[constraintView(%f)]",edgeInsets.top,size.height] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[constraintView(%f)]",edgeInsets.left,size.width] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[constraintView(%f)]",edgeInsets.top,size.height] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
         }
             break;
         case FanLayoutAttributeTopRight:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[constraintView(%f)]-%f-|",size.width,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[constraintView(%f)]",edgeInsets.top,size.height] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[constraintView(%f)]-(%f)-|",size.width,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[constraintView(%f)]",edgeInsets.top,size.height] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
         }
             break;
         case FanLayoutAttributeBottomLeft:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%f-[constraintView(%f)]",edgeInsets.left,size.width] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[constraintView(%f)]-%f-|",size.height,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[constraintView(%f)]",edgeInsets.left,size.width] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[constraintView(%f)]-(%f)-|",size.height,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
         }
             break;
         case FanLayoutAttributeBottomRight:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[constraintView(%f)]-%f-|",size.width,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[constraintView(%f)]-%f-|",size.height,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[constraintView(%f)]-(%f)-|",size.width,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[constraintView(%f)]-(%f)-|",size.height,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
         }
             break;
         default:
@@ -188,8 +188,8 @@
     switch (layoutAspectRatio) {
         case FanLayoutAspectRatioTop:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%f-[constraintView]-%f-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[constraintView]",edgeInsets.top] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[constraintView]-(%f)-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[constraintView]",edgeInsets.top] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
             //定义高度比
             NSLayoutConstraint *constraint=[NSLayoutConstraint
              constraintWithItem:constraintView
@@ -204,8 +204,8 @@
             break;
         case FanLayoutAspectRatioBottom:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%f-[constraintView]-%f-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[constraintView]-%f-|",edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[constraintView]-(%f)-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[constraintView]-(%f)-|",edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
             //定义高度比
             NSLayoutConstraint *constraint=[NSLayoutConstraint
                                             constraintWithItem:constraintView
@@ -220,8 +220,8 @@
             break;
         case FanLayoutAspectRatioLeft:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%f-[constraintView]",edgeInsets.left] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[constraintView]-%f-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[constraintView]",edgeInsets.left] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[constraintView]-(%f)-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
             //定义高度比
             NSLayoutConstraint *constraint=[NSLayoutConstraint
                                             constraintWithItem:constraintView
@@ -237,8 +237,8 @@
             break;
         case FanLayoutAspectRatioRight:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[constraintView]-%f-|",edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[constraintView]-%f-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[constraintView]-(%f)-|",edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[constraintView]-(%f)-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
             //定义高度比
             NSLayoutConstraint *constraint=[NSLayoutConstraint
                                             constraintWithItem:constraintView
@@ -272,8 +272,8 @@
     switch (layoutAttribute) {
         case FanLayoutAttributeTop:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%f-[constraintView]-%f-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[constraintView]-%f-|",edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[constraintView]-(%f)-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[constraintView]-(%f)-|",edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
             NSLayoutConstraint *constraint=[NSLayoutConstraint
                                             constraintWithItem:constraintView
                                             attribute:NSLayoutAttributeTop
@@ -289,8 +289,8 @@
             break;
         case FanLayoutAttributeLeft:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[constraintView]-%f-|",edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[constraintView]-%f-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[constraintView]-(%f)-|",edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[constraintView]-(%f)-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
             NSLayoutConstraint *constraint=[NSLayoutConstraint
                                             constraintWithItem:constraintView
                                             attribute:NSLayoutAttributeLeft
@@ -306,8 +306,8 @@
             break;
         case FanLayoutAttributeBottom:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%f-[constraintView]-%f-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[constraintView]",edgeInsets.top] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[constraintView]-(%f)-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[constraintView]",edgeInsets.top] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
             NSLayoutConstraint *constraint=[NSLayoutConstraint
                                             constraintWithItem:constraintView
                                             attribute:NSLayoutAttributeBottom
@@ -323,8 +323,8 @@
             break;
         case FanLayoutAttributeRight:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%f-[constraintView]",edgeInsets.left] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[constraintView]-%f-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[constraintView]",edgeInsets.left] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[constraintView]-(%f)-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
             NSLayoutConstraint *constraint=[NSLayoutConstraint
                                             constraintWithItem:constraintView
                                             attribute:NSLayoutAttributeRight
@@ -359,7 +359,7 @@
     switch (layoutAttribute) {
         case FanLayoutAttributeTop:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%f-[constraintView]-%f-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[constraintView]-(%f)-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
             [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[constraintView(%f)]",size.height] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
             NSLayoutConstraint *constraint=[NSLayoutConstraint
                                             constraintWithItem:constraintView
@@ -376,7 +376,7 @@
         case FanLayoutAttributeLeft:
         {
             [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[constraintView(%f)]",size.width] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[constraintView]-%f-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[constraintView]-(%f)-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
             NSLayoutConstraint *constraint=[NSLayoutConstraint
                                             constraintWithItem:constraintView
                                             attribute:NSLayoutAttributeLeft
@@ -391,7 +391,7 @@
             break;
         case FanLayoutAttributeBottom:
         {
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-%f-[constraintView]-%f-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[constraintView]-(%f)-|",edgeInsets.left,edgeInsets.right] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
             [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[constraintView(%f)]",size.height] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
             NSLayoutConstraint *constraint=[NSLayoutConstraint
                                             constraintWithItem:constraintView
@@ -408,7 +408,7 @@
         case FanLayoutAttributeRight:
         {
             [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[constraintView(%f)]",size.width] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[constraintView]-%f-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[constraintView]-(%f)-|",edgeInsets.top,edgeInsets.bottom] options:NSLayoutFormatDirectionLeadingToTrailing metrics:nil views:views]];
             NSLayoutConstraint *constraint=[NSLayoutConstraint
                                             constraintWithItem:constraintView
                                             attribute:NSLayoutAttributeRight

@@ -196,14 +196,14 @@
     CGSize imageSize = sourceImage.size;
     CGFloat width = imageSize.width;
     CGFloat height = imageSize.height;
-    CGFloat targetWidth = targetSize.width;
-    CGFloat targetHeight = targetSize.height;
-    CGFloat scaleFactor = 0.0;
-    CGFloat scaledWidth = targetWidth;
-    CGFloat scaledHeight = targetHeight;
+    CGFloat scaledWidth = targetSize.width;
+    CGFloat scaledHeight = targetSize.height;
     CGPoint thumbnailPoint = CGPointMake(0.0,0.0);
     
     if (CGSizeEqualToSize(imageSize, targetSize) == NO){
+        CGFloat targetWidth = targetSize.width;
+        CGFloat targetHeight = targetSize.height;
+        CGFloat scaleFactor = 0.0;
         CGFloat widthFactor = targetWidth / width;
         CGFloat heightFactor = targetHeight / height;
         if (widthFactor > heightFactor){

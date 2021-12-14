@@ -21,5 +21,9 @@
 -(CGFloat)fan_navigationHeight;
 ///获取底部TabBar高度
 -(CGFloat)fan_tabBarHeight;
+///添加子VC-并且添加view
+-(void)fan_addChildViewController:(UIViewController *)vc;
+///从父控制器移除-并且移除view
+-(void)fan_removeFromParentViewController;
 
 @end

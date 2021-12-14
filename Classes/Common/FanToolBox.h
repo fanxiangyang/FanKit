@@ -34,6 +34,8 @@
 /** 缓存路径  NSTemporaryDirectory() = tmp文件夹*/
 +(NSString *)fan_cachePath;
 +(NSString *)fan_documentPath;
+///获取缓存目录/tmp
++(NSString *)fan_tmpPath;
 +(BOOL)fan_createDirectoryAtPath:(NSString *)filePath;
 ///文件copy,必须是全路径包括扩展名，不然不能copy
 +(BOOL)fan_copyAtFilePath:(NSString *)srcFilePath toFilePath:(NSString *)toFilePath;

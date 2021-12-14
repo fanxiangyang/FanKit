@@ -91,6 +91,10 @@
     NSString *cachePath = ([paths count] > 0) ? [paths objectAtIndex:0] : [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] ;
     return cachePath;
 }
++(NSString *)fan_tmpPath{
+    //NSTemporaryDirectory()生成的带/private/var---/tmp/
+    return [NSHomeDirectory() stringByAppendingPathComponent:@"tmp"];
+}
 +(BOOL)fan_createDirectoryAtPath:(NSString *)filePath{
     NSString *filePathCopy=[filePath copy];
     NSFileManager *fileManager = [NSFileManager defaultManager];
