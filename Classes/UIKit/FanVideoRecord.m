@@ -408,11 +408,19 @@
         }
     }else if (photoAuthorStatus==PHAuthorizationStatusNotDetermined){
         //获取用户对是否允许访问相册的操作
-        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-            if (status==PHAuthorizationStatusAuthorized) {
-                [self fan_saveVideoToAlbumAuthorization:videoPath];
-            }
-        }];
+        if (@available(iOS 14, *)) {
+            [PHPhotoLibrary requestAuthorizationForAccessLevel:PHAccessLevelReadWrite handler:^(PHAuthorizationStatus status) {
+                if (status == PHAuthorizationStatusAuthorized||status== PHAuthorizationStatusLimited) {
+                    [self fan_saveVideoToAlbumAuthorization:videoPath];
+                }
+            }];
+        } else {
+            [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+                if (status==PHAuthorizationStatusAuthorized) {
+                    [self fan_saveVideoToAlbumAuthorization:videoPath];
+                }
+            }];
+        }
         return;
     }else{
         //允许访问  PHAuthorizationStatusAuthorized  PHAuthorizationStatusLimited
@@ -535,6 +543,10 @@
     totalDuration = CMTimeAdd(totalDuration, videoAssetTrack.timeRange.duration);
     // 6.videoAssetTrack.naturalSize 就是录制的视频的实际宽高
     CGSize renderSize = videoAssetTrack.naturalSize;
+    //可能获取为空，崩溃
+    if (renderSize.width==0) {
+        renderSize.width=(1280.f/720.0f)*renderSize.height;
+    }
     CGFloat maxsize=MAX(renderSize.width, renderSize.height);
     CGFloat minsize=MIN(renderSize.width, renderSize.height);
     

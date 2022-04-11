@@ -288,6 +288,18 @@
     }
     return YES;
 }
+///判断是否 只存在文件，不是路径
++(BOOL)fan_fileExistsAtFilePath:(NSString *)filePath{
+    BOOL isDir=NO;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDir]) {
+        return NO;
+    }else{
+        if (isDir) {
+            return NO;
+        }
+        return YES;
+    }
+}
 /**
  *  请求文件（夹）路径的所有文件大小
  *
@@ -345,10 +357,10 @@
     NSArray *ifs=(__bridge_transfer id)CNCopySupportedInterfaces();
     id info = nil;
     for (NSString *ifnam in ifs) {
+        //iOS14之后建议用NEHotspotNetwork，需要向苹果申请权限
         info=(__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
-        //        NSLog(@"22222:%@=>%@",ifnam,info);
         if(info){
-            ssid=info[@"SSID"];
+            ssid=info[(__bridge NSString*)kCNNetworkInfoKeySSID];
             break;
         }
         if(info&&[info count]){

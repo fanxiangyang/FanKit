@@ -12,6 +12,7 @@
 		661741131D2B66D5005A5221 /* FanKitTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 661741121D2B66D5005A5221 /* FanKitTableViewController.m */; };
 		661ECA5D2431BB0A00634010 /* FanRSA.m in Sources */ = {isa = PBXBuildFile; fileRef = 661ECA5B2431BB0A00634010 /* FanRSA.m */; };
 		662D05E122A79DE80016723A /* FanCopyLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 662D05DF22A79DE80016723A /* FanCopyLabel.m */; };
+		662D14C727C32A4C00F3396E /* FanTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 662D14C627C32A4C00F3396E /* FanTextField.m */; };
 		6639A19F2171B4EE00231B42 /* FanDrawLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6639A19D2171B4EE00231B42 /* FanDrawLayer.m */; };
 		6639A1A42171B6CA00231B42 /* FanAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6639A1A22171B6CA00231B42 /* FanAlertController.m */; };
 		6639A1A52171B6CA00231B42 /* FanProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 6639A1A32171B6CA00231B42 /* FanProgressHUD.m */; };
@@ -89,6 +90,8 @@
 		661ECA5C2431BB0A00634010 /* FanRSA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanRSA.h; sourceTree = "<group>"; };
 		662D05DF22A79DE80016723A /* FanCopyLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanCopyLabel.m; sourceTree = "<group>"; };
 		662D05E022A79DE80016723A /* FanCopyLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanCopyLabel.h; sourceTree = "<group>"; };
+		662D14C527C32A4B00F3396E /* FanTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanTextField.h; sourceTree = "<group>"; };
+		662D14C627C32A4C00F3396E /* FanTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanTextField.m; sourceTree = "<group>"; };
 		6639A19D2171B4EE00231B42 /* FanDrawLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanDrawLayer.m; sourceTree = "<group>"; };
 		6639A19E2171B4EE00231B42 /* FanDrawLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanDrawLayer.h; sourceTree = "<group>"; };
 		6639A1A02171B6CA00231B42 /* FanAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanAlertController.h; sourceTree = "<group>"; };
@@ -357,6 +360,8 @@
 		66A5071B1D06E1AA00D5EC34 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				662D14C527C32A4B00F3396E /* FanTextField.h */,
+				662D14C627C32A4C00F3396E /* FanTextField.m */,
 				664AA54C25398852003845D9 /* FanRgbView.h */,
 				664AA54D25398853003845D9 /* FanRgbView.m */,
 				666C0A7424AD8A1D00974DAB /* FanDialogboxController.h */,
@@ -650,6 +655,7 @@
 				66B3967F1D2A52B400A40A06 /* FanShareView.m in Sources */,
 				66E81A651E72C069008E887E /* FanSwiperbleViewController.m in Sources */,
 				6683109122842F1500444009 /* FanColorView.m in Sources */,
+				662D14C727C32A4C00F3396E /* FanTextField.m in Sources */,
 				66B3965C1D2A1F9A00A40A06 /* UIViewController+FanRoot.m in Sources */,
 				66E02E4126D65787002C1BC4 /* FanDeviceOrientation.m in Sources */,
 				66A5071F1D06E1AA00D5EC34 /* UIView+FanAutoLayout.m in Sources */,

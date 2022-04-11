@@ -10,13 +10,18 @@
 #define FanKitHead_h
 
 #import "FanUIKit.h"
+/// 过期提醒  NS_DEPRECATED(2.0)
+#define FanDeprecated(DESCRIPTION) __attribute__((deprecated(DESCRIPTION)))
 
+#define FanWeakSelf __weak typeof(self) weakSelf = self;
 
 //系统版本号
 #define Fan_iOS_Version [[[UIDevice currentDevice] systemVersion] floatValue]
 //屏幕宽高
 #define FanScreenWidth [UIScreen mainScreen].bounds.size.width
 #define FanScreenHeight [UIScreen mainScreen].bounds.size.height
+#define FanWidth [UIScreen mainScreen].bounds.size.width
+#define FanHeight [UIScreen mainScreen].bounds.size.height
 //强制取长边为宽
 #define FanScreenWidthRotion  (FanScreenWidth>FanScreenHeight?FanScreenWidth:FanScreenHeight)
 #define FanScreenHeightRotion (FanScreenWidth>FanScreenHeight?FanScreenHeight:FanScreenWidth)
@@ -25,13 +30,13 @@
 #ifdef DEBUG
 # define FanLog(fmt, ...) NSLog((@"[%s:%d]\n" fmt), [[[NSString stringWithUTF8String: __FILE__] lastPathComponent] UTF8String], __LINE__, ##__VA_ARGS__)
 #else
-# define FanLog(fmt, ...)
+# define FanLog(...)
 #endif
 //print打印
 #ifdef DEBUG
 #define FanPrintf(fmt, ...) fprintf(stderr, "%s:%d\t%s\n", [[[NSString stringWithUTF8String: __FILE__] lastPathComponent] UTF8String], __LINE__, [[NSString stringWithFormat: fmt, ##__VA_ARGS__] UTF8String]);
 #else
-#define FanPrintf(fmt, ...) nil
+#define FanPrintf(...)
 #endif
 
 //颜色
@@ -43,18 +48,28 @@
 #define FanWhiteColor(a)  [UIColor colorWithWhite:1.0 alpha:a]
 //黑色
 #define FanBlackColor(a) [[UIColor blackColor]colorWithAlphaComponent:a]
-//本地化
+//本地化-废弃
 #define FanLocalizedString(key) NSLocalizedString(key, @"")
 #define FanLocalizedStringFromTable(key,tbl) NSLocalizedStringFromTable(key, tbl, @"")
+//本地化-简化版
+#define FanString(key) NSLocalizedString(key, @"")
+#define FanStringTable(key,tbl) NSLocalizedStringFromTable(key, tbl, @"")
 
-//自定义字体
+//自定义字体(废弃)
 #define FanSystemFontOfSize(fontSize) [UIFont systemFontOfSize:fontSize]
 #define FanBoldSystemFontOfSize(fontSize) [UIFont boldSystemFontOfSize:fontSize]
 
 #define FanCustomFontOfSize(fontName,fontSize) [UIFont fontWithName:fontName size:fontSize]
+//自定义字体(新)
+#define FanFont(fontSize) [UIFont systemFontOfSize:fontSize]
+#define FanBoldFont(fontSize) [UIFont boldSystemFontOfSize:fontSize]
+#define FanFontName(fontName,fontSize) [UIFont fontWithName:fontName size:fontSize]
 
 //图片内存优化(对于大图片建议的加载模式) asset.xcassets，只能用[UIImage imageName:@""]，支持@2x,@3x
 
+///获取图片，可以读取asset.xcassets里面的图片
+#define FanImageName(name) [UIImage imageNamed:name]
+//---------------读取Bundle图片，不支持asset.xcassets--------------------
 ///自动获取bundle全名路径 user@2x.png
 #define FanFileBundlePath(fileBundleName) [[NSBundle mainBundle]pathForResource:[fileBundleName stringByDeletingPathExtension] ofType:[fileBundleName pathExtension]]
 #define FanFileBundleSubPath(fileBundleName,subPath) [[NSBundle mainBundle]pathForResource:[fileBundleName stringByDeletingPathExtension] ofType:[fileBundleName pathExtension] inDirectory:subPath]
@@ -77,5 +92,6 @@
 #define FanBundleFilePath(bundleName,fileName)  [[FanBundle(bundleName) resourcePath] stringByAppendingString:fileName]
 ///获取自定义bundle里面的图片
 #define FanImageWithBundle(bundleName,fileName) [UIImage imageWithContentsOfFile:FanBundleFilePath(bundleName,fileName)]
+//---------------end--------------------
 
 #endif /* FanKitHead_h */

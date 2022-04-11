@@ -548,6 +548,12 @@
     image=nil;
     return returnImage;
 }
++(void)fan_addShadowToView:(UIView *)shadowView shadowColor:(UIColor *)shadowColor shadowOpacity:(CGFloat)shadowOpacity shadowOffset:(CGSize)shadowOffset{
+    shadowView.layer.shadowColor =shadowColor.CGColor;
+    //阴影透明度，默认为0，如果不设置的话看不到阴影，切记，这是个大坑
+    shadowView.layer.shadowOpacity = shadowOpacity;
+    shadowView.layer.shadowOffset=shadowOffset;
+}
 +(void)fan_addShadowToView:(UIView *)shadowView shadowColor:(UIColor *)shadowColor shadowOpacity:(CGFloat)shadowOpacity shadowOffset:(CGSize)shadowOffset shadowBounds:(CGRect)shadowBounds{
     shadowView.layer.shadowColor =shadowColor.CGColor;
     //阴影透明度，默认为0，如果不设置的话看不到阴影，切记，这是个大坑
@@ -555,12 +561,6 @@
     shadowView.layer.shadowOffset=shadowOffset;
     //阴影路径设置好后，会加快渲染
     shadowView.layer.shadowPath = [UIBezierPath bezierPathWithRect:shadowBounds].CGPath;
-}
-+(void)fan_addShadowToView:(UIView *)shadowView shadowColor:(UIColor *)shadowColor shadowOpacity:(CGFloat)shadowOpacity shadowOffset:(CGSize)shadowOffset{
-    shadowView.layer.shadowColor =shadowColor.CGColor;
-    //阴影透明度，默认为0，如果不设置的话看不到阴影，切记，这是个大坑
-    shadowView.layer.shadowOpacity = shadowOpacity;
-    shadowView.layer.shadowOffset=shadowOffset;
 }
 +(void)fan_addShadowToView:(UIView *)shadowView shadowColor:(UIColor *)shadowColor shadowOpacity:(CGFloat)shadowOpacity shadowOffset:(CGSize)shadowOffset shadowRadius:(CGFloat)shadowRadius byRoundingCorners:(UIRectCorner)corners{
     shadowView.layer.shadowColor =shadowColor.CGColor;
@@ -796,4 +796,55 @@
     tapView.userInteractionEnabled=YES;
     [tapView addGestureRecognizer:imageTapGesture];
 }
+#pragma mark UIWindow相关
+/// 获取keywindow
++(nullable UIWindow *)fan_keyWindow{
+    UIWindow *kWindow=[UIApplication sharedApplication].keyWindow;
+    if (kWindow) {
+    }else{
+        if([[UIApplication sharedApplication] windows].count>0){
+            kWindow=[[[UIApplication sharedApplication] windows] objectAtIndex:0];
+        }
+    }
+    if (kWindow==nil) {
+        if (@available(iOS 13.0, *)) {
+            if (@available(iOS 15.0, *)) {
+                kWindow=[FanUIKit fan_activeWindowScene].keyWindow;
+            } else {
+                kWindow=[FanUIKit fan_activeWindowScene].windows.firstObject;
+            }
+        } else {
+            if ([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(window)]) {
+                kWindow = [[[UIApplication sharedApplication] delegate] window];
+            }
+        }
+    }
+    return kWindow;
+}
+///获取活跃的windowScene
++(nullable UIWindowScene*)fan_activeWindowScene API_AVAILABLE(ios(13.0)){
+    if (@available(iOS 13.0, *)) {
+        UIWindowScene *actWindowScene;
+        for (UIWindowScene *windowScene in [UIApplication sharedApplication].connectedScenes) {
+            if (windowScene.activationState == UISceneActivationStateForegroundActive) {
+                actWindowScene = windowScene;
+                break;
+            }
+        }
+        if (actWindowScene==nil) {
+            actWindowScene = UIApplication.sharedApplication.keyWindow.windowScene;
+        }
+        if (actWindowScene==nil) {
+            for (UIWindowScene *windowScene in [UIApplication sharedApplication].connectedScenes) {
+                if ([windowScene isKindOfClass:[UIWindowScene class]]) {
+                    actWindowScene = windowScene;
+                    break;
+                }
+            }
+        }
+        return actWindowScene;
+    }
+    return nil;
+}
 @end
+

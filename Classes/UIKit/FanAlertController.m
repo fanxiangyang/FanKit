@@ -22,6 +22,11 @@
         if (fan_alertWindow==nil) {
             fan_alertWindow=[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
             fan_alertWindow.windowLevel=UIWindowLevelAlert;
+            if (@available(iOS 13.0, *)) {
+                if (fan_alertWindow.windowScene == nil) {
+                    fan_alertWindow.windowScene = UIApplication.sharedApplication.keyWindow.windowScene;
+                }
+            }
         }
     });
     //    [fan_alertWindow makeKeyAndVisible];

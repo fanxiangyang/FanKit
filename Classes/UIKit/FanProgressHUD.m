@@ -25,7 +25,44 @@
             kWindow=[[[UIApplication sharedApplication] windows] objectAtIndex:0];
         }
     }
+    if (kWindow==nil) {
+        if (@available(iOS 13.0, *)) {
+            if (@available(iOS 15.0, *)) {
+                kWindow=[FanProgressHUD progress_activeWindowScene].keyWindow;
+            } else {
+                kWindow=[FanProgressHUD progress_activeWindowScene].windows.firstObject;
+            }
+        } else {
+            if ([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(window)]) {
+                kWindow = [[[UIApplication sharedApplication] delegate] window];
+            }
+        }
+    }
     return kWindow;
+}
++(UIWindowScene*)progress_activeWindowScene API_AVAILABLE(ios(13.0)){
+    if (@available(iOS 13.0, *)) {
+        UIWindowScene *actWindowScene;
+        for (UIWindowScene *windowScene in [UIApplication sharedApplication].connectedScenes) {
+            if (windowScene.activationState == UISceneActivationStateForegroundActive) {
+                actWindowScene = windowScene;
+                break;
+            }
+        }
+        if (actWindowScene==nil) {
+            actWindowScene = UIApplication.sharedApplication.keyWindow.windowScene;
+        }
+        if (actWindowScene==nil) {
+            for (UIWindowScene *windowScene in [UIApplication sharedApplication].connectedScenes) {
+                if ([windowScene isKindOfClass:[UIWindowScene class]]) {
+                    actWindowScene = windowScene;
+                    break;
+                }
+            }
+        }
+        return actWindowScene;
+    }
+    return nil;
 }
 
 /**
@@ -202,7 +239,10 @@
             self.afterTimer = [NSTimer scheduledTimerWithTimeInterval:self.showTime target:self selector:@selector(hiddenTimer) userInfo:nil repeats:NO];
         }
     }
-
+    
+    [self fan_configUI];
+}
+-(void)fan_configUI{
     self.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
 
     
@@ -212,11 +252,6 @@
     [self addSubview:self.blackAlphaView];
     
     self.blackAlphaView.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-
-    
-    [self fan_configUI];
-}
--(void)fan_configUI{
     
     switch (self.progressHUDStyle) {
         case FanProgressHUDStyleText:

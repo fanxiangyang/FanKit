@@ -51,6 +51,8 @@
 + (BOOL)fan_deleteAllAtPath:(NSString *)filePath;
 ///只删除文件不删除路径
 + (BOOL)fan_deleteFile:(NSString *)filePath;
+///判断是否 只存在文件，不是路径
++(BOOL)fan_fileExistsAtFilePath:(NSString *)filePath;
 /** 请求文件（夹）路径的所有文件大小（字节）*/
 + (unsigned long long)fan_fileSizeFromPath:(NSString *)path;
 

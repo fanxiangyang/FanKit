@@ -153,5 +153,14 @@
 +(id)fan_classFromName:(NSString *)aClassName;
 #pragma mark 创建手势和其他
 +(void)fan_addTapGestureTarget:(id)target action:(SEL)action toView:(UIView *)tapView;
+
+#pragma mark UIWindow相关
+/// 获取keywindow
++(nullable UIWindow *)fan_keyWindow;
+///获取活跃的windowScene
++(nullable UIWindowScene*)fan_activeWindowScene API_AVAILABLE(ios(13.0));
+
+
+
 /***************************************创建UI  End******************************************/
 @end
