@@ -67,6 +67,24 @@
 
     return layer;
 }
+/// 获取圆环进度Layer
+/// @param progress 总进度
+/// @param rightWidth 圆环宽度
+/// @param ringColor 圆环颜色
+/// @param center 中心点
+/// @param radius 半径
+/// @param startAngle 开始角度
+/// @param clockwise 顺时针
++(CAShapeLayer *)fan_ringProgress:(CGFloat)progress ringWidth:(CGFloat)rightWidth ringColor:(UIColor *)ringColor Center:(CGPoint)center radius:(CGFloat)radius startAngle:(CGFloat)startAngle clockwise:(BOOL)clockwise{
+    CAShapeLayer *layer=[[CAShapeLayer alloc]init];
+    layer.lineWidth=rightWidth;
+    layer.strokeColor=ringColor.CGColor;
+    layer.fillColor=[UIColor clearColor].CGColor;
+    layer.lineCap = kCALineCapRound;
+    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:startAngle endAngle:startAngle+progress*2*M_PI clockwise:clockwise];
+    layer.path=[path CGPath];
+    return layer;
+}
 +(CAGradientLayer*)fan_gradientLayerFrame:(CGRect)frame startColor:(UIColor *)startColor endColor:(UIColor *)endColor isVertical:(BOOL)isVertical{
     return [FanDrawLayer fan_gradientLayerFrame:frame colors:@[startColor,endColor] cornerRadius:0 isVertical:isVertical locations:@[@(0.1), @1.0]];
 }

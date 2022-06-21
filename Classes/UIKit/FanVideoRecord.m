@@ -544,8 +544,8 @@
     // 6.videoAssetTrack.naturalSize 就是录制的视频的实际宽高
     CGSize renderSize = videoAssetTrack.naturalSize;
     //可能获取为空，崩溃
-    if (renderSize.width==0) {
-        renderSize.width=(1280.f/720.0f)*renderSize.height;
+    if (CGSizeEqualToSize(renderSize, CGSizeZero)) {
+        renderSize = CGSizeMake(1280, 720);
     }
     CGFloat maxsize=MAX(renderSize.width, renderSize.height);
     CGFloat minsize=MIN(renderSize.width, renderSize.height);

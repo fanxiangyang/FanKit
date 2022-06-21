@@ -298,7 +298,18 @@
     UIGraphicsEndImageContext();
     return img;
 }
-/** 截屏*/
+/** 截屏View*/
++(UIImage*)fan_beginImageContextView:(UIView*)view
+{
+    //currentView 当前的view
+    UIGraphicsBeginImageContextWithOptions(view.frame.size, NO, [UIScreen mainScreen].scale);
+    //取得当前画布的上下文UIGraphicsGetCurrentContext  render渲染
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return viewImage;
+}
+/** 一倍截屏*/
 +(UIImage*)fan_beginImageContext:(CGRect)rect fromView:(UIView*)view
 {
     

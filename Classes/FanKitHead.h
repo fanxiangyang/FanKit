@@ -62,6 +62,7 @@
 #define FanCustomFontOfSize(fontName,fontSize) [UIFont fontWithName:fontName size:fontSize]
 //自定义字体(新)
 #define FanFont(fontSize) [UIFont systemFontOfSize:fontSize]
+#define FanMediumFont(fontSize) [UIFont systemFontOfSize:fontSize weight:UIFontWeightMedium]
 #define FanBoldFont(fontSize) [UIFont boldSystemFontOfSize:fontSize]
 #define FanFontName(fontName,fontSize) [UIFont fontWithName:fontName size:fontSize]
 

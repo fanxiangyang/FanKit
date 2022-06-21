@@ -83,7 +83,9 @@
 + (UIImage *)fan_imageWithColor:(UIColor *)color frame:(CGRect)rect;
 /** 通过UIcolor获取一张图片圆角 */
 + (UIImage *)fan_imageWithColor:(UIColor *)color frame:(CGRect)rect cornerRadius:(CGFloat)cornerRadius;
-/** 截屏*/
+/** 截屏View*/
++(UIImage*)fan_beginImageContextView:(UIView*)view;
+/** 一倍截屏*/
 +(UIImage*)fan_beginImageContext:(CGRect)rect fromView:(UIView*)view;
 /** OpenGL的View或者Metal渲染的，或者视频播放器截图*/
 + (UIImage *)fan_openglSnapshotImage:(UIView *)openGLView;

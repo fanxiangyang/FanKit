@@ -217,6 +217,9 @@
 }
 
 - (id)initWithShowView:(UIView *)view {
+    if (view==nil) {
+        return nil;
+    }
     NSAssert(view, @"View must not be nil.");
     return [self initWithFrame:view.bounds];
 }

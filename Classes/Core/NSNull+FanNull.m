@@ -9,7 +9,7 @@
 
 #import "NSNull+FanNull.h"
 
-#define FanNSNullObjects @[@"",@0,@{},@[]]
+#define FanNSNullObjects @[@"",@0,@{},@[],[NSData new]]
 
 
 

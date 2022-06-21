@@ -64,6 +64,15 @@
  @return layer
  */
 +(CAShapeLayer *)fan_ringProgress:(CGFloat)progress ringWidth:(CGFloat)rightWidth ringColor:(UIColor *)ringColor Center:(CGPoint)center radius:(CGFloat)radius startAngle:(CGFloat)startAngle;
+/// 获取圆环进度Layer
+/// @param progress 总进度
+/// @param rightWidth 圆环宽度
+/// @param ringColor 圆环颜色
+/// @param center 中心点
+/// @param radius 半径
+/// @param startAngle 开始角度
+/// @param clockwise 顺时针
++(CAShapeLayer *)fan_ringProgress:(CGFloat)progress ringWidth:(CGFloat)rightWidth ringColor:(UIColor *)ringColor Center:(CGPoint)center radius:(CGFloat)radius startAngle:(CGFloat)startAngle clockwise:(BOOL)clockwise;
 /**
  获取渐变色Layer就两种（水平和垂直）
  

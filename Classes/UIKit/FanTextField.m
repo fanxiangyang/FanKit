@@ -33,16 +33,25 @@
     CGRect textRect = [super textRectForBounds:bounds];
     
     textRect.origin.x += _leftSpace;
-    textRect.size.width-=_leftSpace+_rightSpace;
+    textRect.size.width-=(_leftSpace+_rightSpace);
     return textRect;
 }
 -(CGRect)editingRectForBounds:(CGRect)bounds{
     CGRect textRect = [super editingRectForBounds:bounds];
     
     textRect.origin.x += _leftSpace;
-    textRect.size.width-=_leftSpace+_rightSpace;
+    textRect.size.width-=(_leftSpace+_rightSpace);
     return textRect;
 }
+#pragma mark  - 添加下划线
+-(UIImageView *)lineImgView{
+    if (_lineImgView==nil) {
+        _lineImgView = [[UIImageView alloc]init];
+        [self addSubview:_lineImgView];
+    }
+    return _lineImgView;
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
