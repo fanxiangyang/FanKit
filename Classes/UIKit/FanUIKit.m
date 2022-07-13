@@ -235,6 +235,39 @@
     UIGraphicsEndImageContext();
     return scaledImage;
 }
+///等比适配到固定大小里面(图片不超过maxsize)
+/// @param sourceImage 图片
+/// @param maxSize 最大边的尺寸
++(UIImage*)fan_scalImage:(UIImage *)sourceImage scaleAspectFitSize:(CGSize)maxSize{
+    CGSize imageSize = sourceImage.size;
+    CGFloat width = imageSize.width;
+    CGFloat height = imageSize.height;
+    CGFloat scaledWidth = maxSize.width;
+    CGFloat scaledHeight = maxSize.height;
+    if (CGSizeEqualToSize(imageSize, maxSize) == NO){
+        CGFloat scaleFactor = 0.0;
+        CGFloat widthFactor = scaledWidth / width;
+        CGFloat heightFactor = scaledHeight / height;
+        if (widthFactor > heightFactor){
+            scaleFactor = heightFactor;
+        }else{
+            scaleFactor = widthFactor;
+        }
+        scaledWidth= width * scaleFactor;
+        scaledHeight = height * scaleFactor;
+    }
+    CGRect contextFrame = CGRectMake(0, 0, scaledWidth, scaledHeight);
+    //把图片画在等比例的区域内
+    UIGraphicsBeginImageContext(contextFrame.size);
+    [sourceImage drawInRect:contextFrame];
+    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    if ( scaledImage == nil ){
+        NSLog(@"UIImageRetinal:could not scale image!!!");
+        return nil;
+    }
+    UIGraphicsEndImageContext();
+    return scaledImage;
+}
 /// 不变形裁剪图片
 /// @param image 图片
 /// @param size 图片View的控件大小
@@ -331,14 +364,14 @@
     
     return sendImage;
 }
-+ (UIImage *)fan_openglSnapshotImage:(UIView *)openGLView{
++ (UIImage *)fan_snapshotLayerImage:(UIView *)view{
     //图片位图的大小
-    CGSize size = openGLView.frame.size;
+    CGSize size = view.frame.size;
     UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
     //View 内的图像放到size位图的位置
-    CGRect rect = openGLView.bounds;
+    CGRect rect = view.bounds;
     //  自iOS7开始它允许你截取一个UIView或者其子类中的内容，并且以位图的形式（bitmap）保存到UIImage中
-    [openGLView drawViewHierarchyInRect:rect afterScreenUpdates:YES];
+    [view drawViewHierarchyInRect:rect afterScreenUpdates:YES];
     UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return snapshotImage;

@@ -156,7 +156,9 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
 -(void)fan_setTitleColor:(nullable UIColor *)titleColor;
 
 #pragma mark - 子类可以重写
+///初始化类调用
 -(void)configUIWithData;
+///所有UI的实现
 -(void)fan_configUI;//子类重写
 -(void)fan_createTextUI;
 -(void)fan_createLodingUI;

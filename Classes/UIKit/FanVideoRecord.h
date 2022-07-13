@@ -48,7 +48,8 @@ typedef void(^FanVideoRecordBlock)(FanVideoRecord *videoRecord, FanRecordState r
  */
 typedef void(^FanVideoSaveAlbumBlock)(NSInteger saveType);
 
-typedef void(^FanVideoPhotoBlock)(UIImage *_Nullable image);
+///photoType=0失败 1=成功
+typedef void(^FanVideoPhotoBlock)(UIImage *_Nullable image,NSInteger photoType);
 
 @interface FanVideoRecord : UIView
 

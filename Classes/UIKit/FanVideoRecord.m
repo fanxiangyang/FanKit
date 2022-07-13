@@ -104,14 +104,6 @@
         [self.deviceMotion startMonitor];
         return YES;
     }
-    
-    //第二次打开，只需要启动运行就OK了，不需要配置摄像机
-    if (self.captureSession) {
-        [self.captureSession startRunning];
-        [self.deviceMotion startMonitor];
-        return YES;;
-    }
-    
     //判断摄像头权限
     AVAuthorizationStatus deviceStatus=[AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
     if (deviceStatus == AVAuthorizationStatusRestricted||deviceStatus==AVAuthorizationStatusDenied) {
@@ -119,6 +111,13 @@
             self.saveAlbumBlock(-4);
         }
         return NO;
+    }
+    
+    //第二次打开，只需要启动运行就OK了，不需要配置摄像机
+    if (self.captureSession) {
+        [self.captureSession startRunning];
+        [self.deviceMotion startMonitor];
+        return YES;;
     }
     
     //初始化会话
@@ -282,8 +281,14 @@
     UIImageOrientation imgOrientation = [self fan_imageOrientationFromDevice];
     image = [[UIImage alloc]initWithCGImage:image.CGImage scale:1.0f orientation:imgOrientation];
 //    NSLog(@"图片转化后:%@ ",@(image.imageOrientation));
-    if (self.photoBlock) {
-        self.photoBlock(image);
+    if (image) {
+        if (self.photoBlock) {
+            self.photoBlock(image,1);
+        }
+    }else{
+        if (self.photoBlock) {
+            self.photoBlock(image,0);
+        }
     }
 }
 -(UIImageOrientation)fan_imageOrientationFromDevice{
@@ -532,10 +537,12 @@
     //获取duration的时候，不要用asset.duration，应该用track.timeRange.duration，用前者的时间不准确，会导致黑帧
     [videoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoAssetTrack.timeRange.duration) ofTrack:videoAssetTrack atTime:kCMTimeZero error:nil];
     
-    // 4. 音频通道
-    AVMutableCompositionTrack *audioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    // 4. 音频通道-有些视频没有音频
     AVAssetTrack *audioAssetTrack =[[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
-    [audioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoAssetTrack.timeRange.duration) ofTrack:audioAssetTrack atTime:kCMTimeZero error:nil];
+    if (audioAssetTrack) {
+        AVMutableCompositionTrack *audioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+        [audioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoAssetTrack.timeRange.duration) ofTrack:audioAssetTrack atTime:kCMTimeZero error:nil];
+    }
     
     //5 创建视频组合图层指令AVMutableVideoCompositionLayerInstruction，并设置图层指令在视频的作用时间范围和旋转矩阵变换
     CMTime totalDuration = kCMTimeZero;
@@ -617,8 +624,6 @@
     }else{
         [layerInstruction setOpacity:0.0 atTime:totalDuration];
     }
-    [layerInstruction setOpacity:0.0 atTime:totalDuration];
-    
     //8. 创建视频组合指令AVMutableVideoCompositionInstruction，并设置指令在视频的作用时间范围和旋转矩阵变换
     AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
     instruction.timeRange = CMTimeRangeMake(kCMTimeZero, totalDuration);
@@ -640,6 +645,8 @@
     }
     
     NSURL *outurl = [[NSURL alloc] initFileURLWithPath:outputPath];
+    //如果创建AVURLAsset时传入的AVURLAssetPreferPreciseDurationAndTimingKey值为NO(不传默认为NO)，duration会取一个估计值，计算量比较小。反之如果为YES，duration需要返回一个精确值，计算量会比较大，耗时比较长
+//    NSDictionary* options = @{AVURLAssetPreferPreciseDurationAndTimingKey:@YES};
     AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:anInputFileURL options:nil];
     NSString * presetName=AVAssetExportPresetMediumQuality;
     NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:urlAsset];

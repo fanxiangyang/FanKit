@@ -73,6 +73,10 @@
  *  return  :   更改后的图片对象
  */
 +(UIImage*)fan_scalImage:(UIImage *)sourceImage scalingForSize:(CGSize)targetSize;
+///等比适配到固定大小里面(图片不超过maxsize)
+/// @param sourceImage 图片
+/// @param maxSize 最大边的尺寸
++(UIImage*)fan_scalImage:(UIImage *)sourceImage scaleAspectFitSize:(CGSize)maxSize;
 /// 不变形裁剪图片
 /// @param image 图片
 /// @param size 图片View的控件大小
@@ -87,8 +91,8 @@
 +(UIImage*)fan_beginImageContextView:(UIView*)view;
 /** 一倍截屏*/
 +(UIImage*)fan_beginImageContext:(CGRect)rect fromView:(UIView*)view;
-/** OpenGL的View或者Metal渲染的，或者视频播放器截图*/
-+ (UIImage *)fan_openglSnapshotImage:(UIView *)openGLView;
+/** Layer动画的View或者Metal渲染的，或者视频播放器截图*/
++ (UIImage *)fan_snapshotLayerImage:(UIView *)view;
 /** 高斯模糊*/
 + (UIImage *)fan_gaussianBlurImage:(UIImage *)image;
 /** 没有白边的高斯模糊 blur 1-100 */

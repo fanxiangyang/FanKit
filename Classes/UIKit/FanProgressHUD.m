@@ -248,13 +248,7 @@
 -(void)fan_configUI{
     self.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
 
-    
-    self.blackAlphaView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-    self.blackAlphaView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.8];
-    self.blackAlphaView.clipsToBounds=YES;
-    [self addSubview:self.blackAlphaView];
-    
-    self.blackAlphaView.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+    self.blackAlphaView.hidden=NO;
     
     switch (self.progressHUDStyle) {
         case FanProgressHUDStyleText:
@@ -499,7 +493,16 @@
     [self fan_setTitleColor:titleColor subTitleColor:nil];
 }
 #pragma mark - get set
-
+-(UIView *)blackAlphaView{
+    if (_blackAlphaView==nil) {
+        _blackAlphaView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+        _blackAlphaView.backgroundColor=[[UIColor blackColor]colorWithAlphaComponent:0.7];
+        _blackAlphaView.clipsToBounds=YES;
+        [self addSubview:_blackAlphaView];
+        _blackAlphaView.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+    }
+    return _blackAlphaView;
+}
 #pragma mark - 移除View
 -(void)buttonClick:(UIButton *)btn{
     if (self.alertBlock) {
