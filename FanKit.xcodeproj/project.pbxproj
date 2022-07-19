@@ -136,6 +136,7 @@
 		667A9FEC1CFEC619009B1D53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6683108F22842F1500444009 /* FanColorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanColorView.h; sourceTree = "<group>"; };
 		6683109022842F1500444009 /* FanColorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanColorView.m; sourceTree = "<group>"; };
+		669A277328869CA6001EBFCB /* FanKit_palette.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FanKit_palette.png; sourceTree = "<group>"; };
 		66A507181D06E1AA00D5EC34 /* FanAnimationToll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanAnimationToll.h; sourceTree = "<group>"; };
 		66A507191D06E1AA00D5EC34 /* FanAnimationToll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanAnimationToll.m; sourceTree = "<group>"; };
 		66A5071A1D06E1AA00D5EC34 /* FanKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanKit.h; sourceTree = "<group>"; };
@@ -281,6 +282,7 @@
 		667A9FC41CFEC619009B1D53 /* FanKit */ = {
 			isa = PBXGroup;
 			children = (
+				66B3965D1D2A3ECE00A40A06 /* Libs */,
 				66E81A591E727792008E887E /* images */,
 				661741091D2B6268005A5221 /* Viewcontrollers */,
 				667A9FC81CFEC619009B1D53 /* AppDelegate.h */,
@@ -329,10 +331,19 @@
 				66A507171D06E1AA00D5EC34 /* Core */,
 				66A5071A1D06E1AA00D5EC34 /* FanKit.h */,
 				66B396591D2A1E7200A40A06 /* FanKitHead.h */,
-				66B3965D1D2A3ECE00A40A06 /* Libs */,
 				66A5071B1D06E1AA00D5EC34 /* UIKit */,
 			);
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		669A277228869B5C001EBFCB /* FanColor */ = {
+			isa = PBXGroup;
+			children = (
+				669A277328869CA6001EBFCB /* FanKit_palette.png */,
+				6683108F22842F1500444009 /* FanColorView.h */,
+				6683109022842F1500444009 /* FanColorView.m */,
+			);
+			path = FanColor;
 			sourceTree = "<group>";
 		};
 		66A507171D06E1AA00D5EC34 /* Core */ = {
@@ -373,8 +384,6 @@
 				664095BD22C37AA20097F4CB /* FanVideoRecord.m */,
 				662D05E022A79DE80016723A /* FanCopyLabel.h */,
 				662D05DF22A79DE80016723A /* FanCopyLabel.m */,
-				6683108F22842F1500444009 /* FanColorView.h */,
-				6683109022842F1500444009 /* FanColorView.m */,
 				6639A1A02171B6CA00231B42 /* FanAlertController.h */,
 				6639A1A22171B6CA00231B42 /* FanAlertController.m */,
 				6639A1A12171B6CA00231B42 /* FanProgressHUD.h */,
@@ -394,6 +403,7 @@
 		66B3965D1D2A3ECE00A40A06 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				669A277228869B5C001EBFCB /* FanColor */,
 				66B396891D2A536400A40A06 /* FanSwiperble */,
 				66B396821D2A532000A40A06 /* FanGesturePassword */,
 				66B396751D2A52B400A40A06 /* FanShowView */,

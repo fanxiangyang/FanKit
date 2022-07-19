@@ -19,6 +19,7 @@
     // Do any additional setup after loading the view.
     //设置导航为不透明
     self.navigationBar.translucent=NO;
+    self.view.backgroundColor=[UIColor whiteColor];
 
 }
 
