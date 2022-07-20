@@ -18,8 +18,8 @@ let package = Package(
 //    defaultLocalization: "en",
 //    platforms: [
 //        .macOS(.v10_11),
-//        .iOS(.v9),
-//        .tvOS(.v9),
+//        .iOS(.v10),
+//        .tvOS(.v10),
 //        .watchOS(.v2)
 //    ],
     products: [

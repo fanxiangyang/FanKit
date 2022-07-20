@@ -45,9 +45,9 @@ Installation（安装）
 
 Requirements(系统要求)
 ==============
-FanKit该项目最低支持 iOS 9.0。
+FanKit该项目最低支持 iOS 10.0。
 
-注意：随着iOS系统更新换代，iOS9.0以下，不适配了
+注意：随着iOS系统更新换代，iOS10.0以下，不适配了,部分API必须10.0。
 
 
 Function Example(功能事例)

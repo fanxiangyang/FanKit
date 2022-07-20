@@ -150,7 +150,8 @@
         audioCaptureDevice=[avDeviceDiscoverySession.devices firstObject];
         
     } else {
-        audioCaptureDevice=[[AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio]firstObject];
+//        audioCaptureDevice=[[AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio]firstObject];
+        audioCaptureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
     }
     NSError *audoError=nil;
     //创建音频输入源
