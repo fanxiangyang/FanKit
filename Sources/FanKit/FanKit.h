@@ -14,6 +14,7 @@
  
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 #ifndef FanKit_h
 #define FanKit_h
@@ -28,6 +29,8 @@
 #import "FanDataTool.h"
 #import "FanToolBox.h"
 #import "FanDrawLayer.h"
+#import "FanAuthManager.h"
+#import "FanRSA.h"
 
 //基本类和扩展
 #import "FanUIKit.h"
@@ -37,6 +40,15 @@
 #import "NSString+FanTime.h"
 #import "NSObject+FanDictionary.h"
 #import "FanCopyLabel.h"
+#import "FanAlertController.h"
+#import "FanAudioConverter.h"
+#import "FanDeviceOrientation.h"
+#import "FanDialogboxController.h"
+#import "FanProgressHUD.h"
+#import "FanRgbView.h"
+#import "FanTextField.h"
+#import "FanVideoRecord.h"
+#import "NSNull+FanNull.h"
 
 
 #endif /* FanKit_h */

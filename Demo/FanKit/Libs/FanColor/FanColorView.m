@@ -7,8 +7,7 @@
 //
 
 #import "FanColorView.h"
-#import "FanUIKit.h"
-#import "NSBundle+FanKit.h"
+#import "FanKit.h"
 
 
 @interface FanColorView ()
@@ -223,7 +222,8 @@
     }];
     self.layer.cornerRadius = self.frame.size.width/2.0;
     self.layer.masksToBounds = YES;
-    self.image = [NSBundle fan_bundleImageName:@"FanKit_palette"];
+//    self.image = [NSBundle fan_bundleImageName:@"FanKit_palette"];
+    self.image = FanImageName(@"FanKit_palette");
 }
 /*
 // Only override drawRect: if you perform custom drawing.

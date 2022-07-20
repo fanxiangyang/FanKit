@@ -43,7 +43,9 @@
 //    NSString *ipon=[FanUIKit fan_platformString];
     
 //    self.tableView.tableHeaderView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, FanScreenWidth, 0.1)];
-
+    //测试资源调用
+    NSLog(@"文案：%@",[NSBundle fan_localizedStringForKey:@"FanKit_Confirm"]);
+    NSLog(@"文案：%@",[NSString fan_stringFromTimeStamp:1500000000]);
 }
 
 - (void)didReceiveMemoryWarning {

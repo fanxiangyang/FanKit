@@ -14,7 +14,12 @@
 {
     static NSBundle *fankitBundle = nil;
     if (fankitBundle == nil) {
-        fankitBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[FanAnyObject class]] pathForResource:@"FanKit" ofType:@"bundle"]];
+#ifdef SWIFT_PACKAGE
+        NSBundle *containnerBundle = SWIFTPM_MODULE_BUNDLE;
+#else
+        NSBundle *containnerBundle = [NSBundle bundleForClass:[FanAnyObject class]];
+#endif
+        fankitBundle = [NSBundle bundleWithPath:[containnerBundle pathForResource:@"FanKit" ofType:@"bundle"]];
     }
     return fankitBundle;
 }

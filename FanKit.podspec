@@ -31,18 +31,18 @@ Pod::Spec.new do |s|
 
   s.source       = { :git => "https://github.com/fanxiangyang/FanKit.git", :tag => s.version.to_s }
 
-  s.source_files  = "Classes/FanKit.h","Classes/FanKitHead.h"
+  s.source_files  = "Sources/FanKit/*.{h,m}"
   #s.exclude_files = "Classes/Exclude"
 
-  s.public_header_files = "Classes/FanKit.h","Classes/FanKitHead.h"
+  s.public_header_files = "Sources/FanKit/*.h"
 
   # s.resource  = "icon.png"
   # s.resources = "Resources/*.png"
-  s.resources = "Classes/Common/FanKit.bundle"
+  s.resources = "Sources/Resources/FanKit.bundle"
 
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
-  #s.frameworks = "UIKit", "QuartzCore"
+  s.frameworks = "UIKit", "QuartzCore","SystemConfiguration","AudioToolbox","AVFoundation","CoreLocation","Photos"
 
   # s.library   = "iconv"
   # s.libraries = "iconv", "xml2"
@@ -53,27 +53,27 @@ Pod::Spec.new do |s|
   # s.dependency "JSONKit", "~> 1.4"
 
   #这个作为公共的子文件夹，其他子文件有引用这里的东西，所以放在这里面
-  s.subspec 'Common' do |ss|
-    ss.public_header_files = 'Classes/Common/*.h'
-    ss.source_files = 'Classes/Common/*.{h,m}'
-    ss.frameworks = "UIKit","SystemConfiguration"
-  end
+  # s.subspec 'Common' do |ss|
+  #   ss.public_header_files = 'Classes/Common/*.h'
+  #   ss.source_files = 'Classes/Common/*.{h,m}'
+  #   ss.frameworks = "UIKit","SystemConfiguration"
+  # end
   
 
-  s.subspec 'Core' do |ss|
-    #ss.dependency 是库的依赖不是路径Class
-    ss.dependency 'FanKit/Common'
-    ss.source_files  = "Classes/Core/*.{h,m}"
-    ss.public_header_files = "Classes/Core/*.h"
-    ss.frameworks = "UIKit", "QuartzCore","AudioToolbox","AVFoundation"
-  end
+  # s.subspec 'Core' do |ss|
+  #   #ss.dependency 是库的依赖不是路径Class
+  #   ss.dependency 'FanKit/Common'
+  #   ss.source_files  = "Classes/Core/*.{h,m}"
+  #   ss.public_header_files = "Classes/Core/*.h"
+  #   ss.frameworks = "UIKit", "QuartzCore","AudioToolbox","AVFoundation"
+  # end
 
-  s.subspec 'UIKit' do |ss|
-    ss.dependency 'FanKit/Common'
-    ss.public_header_files = 'Classes/UIKit/*.h'
-    ss.source_files = 'Classes/UIKit/*.{h,m}'
-    ss.frameworks = "UIKit","AVFoundation","Photos","CoreLocation"
-  end
+  # s.subspec 'UIKit' do |ss|
+  #   ss.dependency 'FanKit/Common'
+  #   ss.public_header_files = 'Classes/UIKit/*.h'
+  #   ss.source_files = 'Classes/UIKit/*.{h,m}'
+  #   ss.frameworks = "UIKit","AVFoundation","Photos","CoreLocation"
+  # end
 
   #s.subspec 'Libs' do |ss|
   #  ss.public_header_files = 'Classes/Libs/**/*.h'
