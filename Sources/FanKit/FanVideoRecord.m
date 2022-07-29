@@ -400,6 +400,7 @@
     [self fan_saveVideoToAlbum:[self.videoUrl path]];
 }
 -(void)fan_saveVideoToAlbum:(NSString *)videoPath{
+    __weak typeof(self)weakSelf=self;
     PHAuthorizationStatus photoAuthorStatus=0;
     if (@available(iOS 14, *)) {
         PHAccessLevel level = PHAccessLevelReadWrite;
@@ -417,13 +418,13 @@
         if (@available(iOS 14, *)) {
             [PHPhotoLibrary requestAuthorizationForAccessLevel:PHAccessLevelReadWrite handler:^(PHAuthorizationStatus status) {
                 if (status == PHAuthorizationStatusAuthorized||status== PHAuthorizationStatusLimited) {
-                    [self fan_saveVideoToAlbumAuthorization:videoPath];
+                    [weakSelf fan_saveVideoToAlbumAuthorization:videoPath];
                 }
             }];
         } else {
             [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
                 if (status==PHAuthorizationStatusAuthorized) {
-                    [self fan_saveVideoToAlbumAuthorization:videoPath];
+                    [weakSelf fan_saveVideoToAlbumAuthorization:videoPath];
                 }
             }];
         }
@@ -434,6 +435,9 @@
     }
 }
 -(void)fan_saveVideoToAlbumAuthorization:(NSString *)videoPath{
+    if(self.recordState == FanRecordStateEnterBack){
+        return;
+    }
     if ([[NSFileManager defaultManager] fileExistsAtPath:videoPath isDirectory:nil]) {
         if (self.saveAlbumBlock) {
             self.saveAlbumBlock(0);
@@ -452,7 +456,7 @@
                     if (weakSelf.saveAlbumBlock) {
                         weakSelf.saveAlbumBlock(1);
                     }
-                } else if (error) {
+                } else{
 //                    NSLog(@"保存视频出错:%@",error.localizedDescription);
                     if (weakSelf.saveAlbumBlock) {
                         weakSelf.saveAlbumBlock(2);
@@ -460,6 +464,10 @@
                 }
             });
         }];
+    }else{
+        if (self.saveAlbumBlock) {
+            self.saveAlbumBlock(2);
+        }
     }
 }
 //录制的时候保存mP4,在转码的时候o超过10秒有问题，所以录制成mov，保存成mp4
