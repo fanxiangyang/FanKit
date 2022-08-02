@@ -108,13 +108,13 @@
 /// @param avBlock 【-1=不允许 -2 =用户点击不允许 0 = 弹窗询问 1=允许】
 +(void)requestAVAuthorizationWithMediaType:(AVMediaType)mediaType avBlock:(void(^)(NSInteger status))avBlock{
     //判断摄像头权限
-    AVAuthorizationStatus deviceStatus=[AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    AVAuthorizationStatus deviceStatus=[AVCaptureDevice authorizationStatusForMediaType:mediaType];
     if (deviceStatus == AVAuthorizationStatusRestricted||deviceStatus==AVAuthorizationStatusDenied) {
         if (avBlock) {
             avBlock(-1);
         }
     }else if (deviceStatus == AVAuthorizationStatusNotDetermined){
-        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+        [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (granted) {
                     //用户接受授权
