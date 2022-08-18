@@ -25,8 +25,6 @@
 @property (nonatomic, strong, readwrite) NSURL *videoUrl;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, assign) CGFloat recordTime;
-//设备每次打开录制瞬间时的方向
-@property (nonatomic, assign)AVCaptureVideoOrientation currentOrientation;
 
 @property(nonatomic,strong)FanDeviceOrientation *deviceMotion;
 //通过加速计判断当前设备方向
@@ -46,11 +44,8 @@
     return self;
 }
 -(void)initVideo{
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterBack) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(becomeActive) name:UIApplicationWillEnterForegroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
     
     [self fan_clearAllFiles];
     //初始化最大录制时间
@@ -59,6 +54,7 @@
     }
     
     self.recordState=FanRecordStateInit;
+    self.backgoundFrontState=FanRecordStateBecomeActive;
     
     self.deviceMotion = [[FanDeviceOrientation alloc]initWithDelegate:self];
     self.currentDeviceOrientation =[UIDevice currentDevice].orientation;
@@ -87,11 +83,6 @@
     }
 }
 -(void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIDeviceOrientationDidChangeNotification
-                                                  object:nil];
-    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [self.timer invalidate];
@@ -99,6 +90,7 @@
     [self.deviceMotion stop];
     NSLog(@"FanVideoRecord录制界面销毁");
 }
+#pragma mark - 打开摄像头
 -(BOOL)fan_openVideo{
     if ([self.captureSession isRunning]) {
         [self.deviceMotion startMonitor];
@@ -161,8 +153,13 @@
         [self.captureSession addInput:self.audioInput];
     }
     
+    self.defaultAVCaptureVideoOrientation=[self getAvOrientationFromViewStatusBar];
+
     //设置输出对象
     self.fileOutput = [[AVCaptureMovieFileOutput alloc]init];
+    if ([self.captureSession canAddOutput:self.fileOutput]) {
+        [self.captureSession addOutput:self.fileOutput];
+    }
     // 设置输出对象的一些属性
     AVCaptureConnection *captureConnection=[self.fileOutput connectionWithMediaType:AVMediaTypeVideo];
     //视频防抖 是在 iOS 6 和 iPhone 4S 发布时引入的功能。到了 iPhone 6，增加了更强劲和流畅的防抖模式，被称为影院级的视频防抖动。相关的 API 也有所改动 (目前为止并没有在文档中反映出来，不过可以查看头文件）。防抖并不是在捕获设备上配置的，而是在 AVCaptureConnection 上设置。由于不是所有的设备格式都支持全部的防抖模式，所以在实际应用中应事先确认具体的防抖模式是否支持：
@@ -178,19 +175,14 @@
         self.captureVideoPreviewLayer.videoGravity=AVLayerVideoGravityResizeAspectFill;
     }
     
-    [self.captureVideoPreviewLayer connection].videoOrientation=[self viewStatusBrarOrientation];
-    //设置后，输出的方向，随着预览图变化（但是不起作用，给每次启动录制时设备是什么方向，视频就是什么方向）
-    captureConnection.videoOrientation=[self.captureVideoPreviewLayer connection].videoOrientation;
+    [self.captureVideoPreviewLayer connection].videoOrientation=self.defaultAVCaptureVideoOrientation;
+    //设置后，输出的方向，录制的时候设置，让方向随预览层方向改变
+    NSLog(@"视频输出方向：%ld",self.defaultAVCaptureVideoOrientation);
     //    captureConnection.videoMirrored=NO;
-    //    if ([captureConnection isVideoOrientationSupported]) {
-    //        captureConnection.videoOrientation=AVCaptureVideoOrientationLandscapeLeft;//[self.captureVideoPreviewLayer connection].videoOrientation;
-    //    }else{
-    //        NSLog(@"----------不支持---------");
-    //    }
-    
-    
-    if ([self.captureSession canAddOutput:self.fileOutput]) {
-        [self.captureSession addOutput:self.fileOutput];
+    if ([captureConnection isVideoOrientationSupported]) {
+        captureConnection.videoOrientation=self.defaultAVCaptureVideoOrientation;
+    }else{
+        NSLog(@"----------不支持---------");
     }
     
     
@@ -241,18 +233,40 @@
     [device unlockForConfiguration];
     
 }
+#pragma mark - 拍照
+
 ///开启拍照
 -(void)fan_startCapturePhoto{
     AVCaptureConnection *pConnection=[self.photoOutput connectionWithMediaType:AVMediaTypeVideo];
     if ([pConnection isVideoStabilizationSupported ]) {
         pConnection.preferredVideoStabilizationMode=AVCaptureVideoStabilizationModeAuto;
     }
-    if (pConnection.isVideoOrientationSupported) {
-//        NSLog(@"支持方向");
-    }
     //设置默认当前屏幕方向的视频方向
-    pConnection.videoOrientation=[self avOrientationFromDeviceOrientation:self.currentDeviceOrientation];
+    if (pConnection.isVideoOrientationSupported) {
+        NSLog(@"这里设置支持方向好像没有效果");
+//        pConnection.videoOrientation = self.defaultAVCaptureVideoOrientation;
+        pConnection.videoOrientation=[self avOrientationFromDeviceOrientation:self.currentDeviceOrientation];
+    }else{
+        
+    }
     [self.photoOutput capturePhotoWithSettings:[AVCapturePhotoSettings photoSettings] delegate:self];
+}
+- (void)captureOutput:(AVCapturePhotoOutput *)output didFinishProcessingPhotoSampleBuffer:(nullable CMSampleBufferRef)photoSampleBuffer previewPhotoSampleBuffer:(nullable CMSampleBufferRef)previewPhotoSampleBuffer resolvedSettings:(AVCaptureResolvedPhotoSettings *)resolvedSettings bracketSettings:(nullable AVCaptureBracketedStillImageSettings *)bracketSettings error:(nullable NSError *)error API_AVAILABLE(ios(10.0)){
+    NSData *imageData=[AVCapturePhotoOutput JPEGPhotoDataRepresentationForJPEGSampleBuffer:photoSampleBuffer previewPhotoSampleBuffer:previewPhotoSampleBuffer];
+    UIImage *image=[UIImage imageWithData:imageData];
+    
+    UIImageOrientation imgOrientation = [self fan_imageOrientationFromDevice];
+    image = [[UIImage alloc]initWithCGImage:image.CGImage scale:1.0f orientation:imgOrientation];
+    
+    if (image) {
+        if (self.photoBlock) {
+            self.photoBlock(image,1);
+        }
+    }else{
+        if (self.photoBlock) {
+            self.photoBlock(image,0);
+        }
+    }
 }
 ///拍照代理
 - (void)captureOutput:(AVCapturePhotoOutput *)output didFinishProcessingPhoto:(AVCapturePhoto *)photo error:(nullable NSError *)error  API_AVAILABLE(ios(11.0)){
@@ -291,6 +305,9 @@
             self.photoBlock(image,0);
         }
     }
+//    if (image&&self.autoSaveToAlbum) {
+//        [self savePhotoToAlbum:image];
+//    }
 }
 -(UIImageOrientation)fan_imageOrientationFromDevice{
     UIImageOrientation imgOrientation = UIImageOrientationUp;
@@ -331,6 +348,8 @@
     }
     return imgOrientation;
 }
+#pragma mark - 录制相关
+
 /**
  开始录像
  */
@@ -343,8 +362,13 @@
     
     if ([self fan_openVideo]) {
         //修正每次拍摄时的方向,每次录制时，记录当前屏幕方向
-        self.currentOrientation=[self viewStatusBrarOrientation];
+        self.defaultAVCaptureVideoOrientation=[self getAvOrientationFromViewStatusBar];
+        if ([self.fileOutput connectionWithMediaType:AVMediaTypeVideo].supportsVideoOrientation) {
+            [self.fileOutput connectionWithMediaType:AVMediaTypeVideo].videoOrientation = self.defaultAVCaptureVideoOrientation;
+        }
         
+        [self updatePreviewLayerVideoOrientation:self.defaultAVCaptureVideoOrientation];
+
         if (videoPath.length>0) {
             self.videoPath=videoPath;
         }else{
@@ -368,7 +392,6 @@
         return YES;
         
     }else{
-        self.recordState=FanRecordStateReRecord;
         //没有启动，直接启动
         return [self fan_startVideoRecord];
     }
@@ -385,16 +408,47 @@
     [self.deviceMotion stop];
 }
 
+/// 清理所有录制
+-(void)fan_clearAllRecord{
+    [self fan_stopTimer];
+    self.recordState=FanRecordStatePause;
+    [self fan_stopVideoRecord];
+    [self fan_closeVideo];
+    [self fan_deleteVideoRecord];
+}
+#pragma mark - 文件操作
 /**
  删除录像
  */
 - (void)fan_deleteVideoRecord{
     [FanToolBox fan_deleteFile:self.videoPath];
 }
+
+/// 清空所有文件
 -(void)fan_clearAllFiles{
     NSString *path = [[FanToolBox fan_cachePath] stringByAppendingPathComponent:@"FanVideoRecordFolder"];
     [FanToolBox fan_deleteFilesAtPath:path];
     
+}
+
+/// 停止定时器
+- (void)fan_stopTimer{
+    [self.timer invalidate];
+    self.timer=nil;
+}
+#pragma mark - 保存相册
+
+//保存图片到相册
+-(void)savePhotoToAlbum:(UIImage *)image{
+    if (image==nil) {
+        return;
+    }
+    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+        PHAssetChangeRequest *request = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
+       NSString * localIdentifier = request.placeholderForCreatedAsset.localIdentifier;
+    } completionHandler:^(BOOL success, NSError * _Nullable error) {
+        NSLog(@"图片保存成功");
+    }];
 }
 -(void)fan_saveVideoToAlbum{
     [self fan_saveVideoToAlbum:[self.videoUrl path]];
@@ -435,9 +489,9 @@
     }
 }
 -(void)fan_saveVideoToAlbumAuthorization:(NSString *)videoPath{
-    if(self.recordState == FanRecordStateEnterBack){
-        return;
-    }
+//    if(self.backgoundFrontState == FanRecordStateEnterBack){
+//        return;
+//    }
     if ([[NSFileManager defaultManager] fileExistsAtPath:videoPath isDirectory:nil]) {
         if (self.saveAlbumBlock) {
             self.saveAlbumBlock(0);
@@ -484,14 +538,9 @@
     return path;
     
 }
-//    NSString *outPath=[self fan_createTmpVideoFilePath];
-//    __weak typeof(self)weakSelf=self;
-//    [self fan_convertVideoWithURL:self.videoUrl outPath:outPath completeBlock:^(BOOL success, NSInteger statusType) {
-//        if (success) {
-//            [weakSelf fan_saveVideoToAlbum:outPath];
-//        }
-//
-//    }];
+#pragma mark - 视频转化，裁剪
+
+
 - (void)fan_convertVideoWithURL:(NSURL *)fileUrl outPath:(NSString *)outPath completeBlock:(void(^)(BOOL success, NSInteger statusType))completeBlock{
     __block NSURL *outputFileURL = fileUrl;
     NSString *path = [outPath copy];
@@ -719,274 +768,6 @@
     }
     return degress;
 }
-
-#pragma mark - AVCaptureFileOutputRecordingDelegate
-- (void)captureOutput:(AVCaptureFileOutput *)captureOutput didStartRecordingToOutputFileAtURL:(NSURL *)fileURL fromConnections:(NSArray *)connections{
-    self.recordTime=0;
-    self.recordState = FanRecordStateRecording;
-    if (self.recordBlock) {
-        self.recordBlock(self, FanRecordStateRecording, 0);
-    }
-    [self.timer invalidate];
-    self.timer=nil;
-    if (@available(iOS 10.0, *)) {
-        __weak typeof(self)weakSelf=self;
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.5 repeats:YES block:^(NSTimer * _Nonnull timer) {
-            __strong typeof(self)strongSelf=weakSelf;
-            [strongSelf refreshRecordTime];
-        }];
-    }else{
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(refreshRecordTime) userInfo:nil repeats:YES];
-    }
-}
-
-- (void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error{
-    if (self.recordState==FanRecordStateEnterBack) {
-        //系统退出后台，会自动完成录制
-        return;
-    }
-    if (self.recordState==FanRecordStateReRecord) {
-        //重新录制时，这里清空上次，重新调用新录制
-        [self fan_deleteVideoRecord];
-        if ([self fan_startVideoRecord]) {
-            if (self.recordBlock) {
-                self.recordBlock(self, FanRecordStateReRecord, 1);
-            }
-        }else{
-            if (self.recordBlock) {
-                self.recordBlock(self, FanRecordStateReRecord, 0);
-            }
-        }
-        return;
-    }
-    if (self.recordState!=FanRecordStateRecording) {
-        //重新录制时，这个停止不做处理,关闭录制时，不记录
-        return;
-    }
-    self.recordState = FanRecordStateFinish;
-    if (self.recordBlock) {
-        self.recordBlock(self, FanRecordStateFinish, 0);
-    }
-    //系统退出后台，会自动完成录制
-    if ([[NSFileManager defaultManager] fileExistsAtPath:self.videoPath isDirectory:nil]) {
-        
-//        long long length = [FanToolBox fan_fileSizeFromPath:self.videoPath];
-//        NSLog(@"文件大小：%lld",length);
-        if (self.autoSaveToAlbum) {
-            if (self.currentOrientation==AVCaptureVideoOrientationPortrait) {
-                [self fan_saveVideoToAlbum];
-            }else{
-                if (self.saveAlbumBlock) {
-                    self.saveAlbumBlock(-1);
-                }
-                __weak typeof(self)weakSelf=self;
-                [self fan_encodeVideoOrientation:self.videoUrl videoOrientation:self.currentOrientation completeBlock:^(BOOL success, NSString * _Nonnull urlStr) {
-                    if (success) {
-                        if (weakSelf.saveAlbumBlock) {
-                            weakSelf.saveAlbumBlock(-2);
-                        }
-                        [weakSelf fan_saveVideoToAlbum:urlStr];
-                    }else{
-                        if (weakSelf.saveAlbumBlock) {
-                            weakSelf.saveAlbumBlock(-3);
-                        }
-                    }
-                }];
-            }
-        }
-        
-        
-        
-        
-    }else{
-//        NSLog(@"录制失败");
-    }
-    
-}
-
-- (void)refreshRecordTime{
-    self.recordTime += 0.5;
-    if (self.recordBlock) {
-        self.recordBlock(self, FanRecordStateRecording, self.recordTime);
-    }
-    if (self.recordTime >= self.maxRecordTime) {
-        [self fan_stopVideoRecord];
-    }
-}
-#pragma mark - notification
-//设备方向改变
--(void)deviceOrientationDidChange:(NSObject*)sender{
-//    NSLog(@"设备方向改变：%@",sender);
-    [self.deviceMotion stop];
-    
-    if (self.captureVideoPreviewLayer==nil) {
-        return;
-    }
-    AVCaptureVideoOrientation orientation=0;
-    
-    UIDevice* device = [sender valueForKey:@"object"];
-    self.currentDeviceOrientation=device.orientation;
-    switch (device.orientation) {
-        case UIDeviceOrientationUnknown: {
-            orientation=[self.captureVideoPreviewLayer connection].videoOrientation;
-            break;
-        }
-        case UIDeviceOrientationPortrait: {
-            if (self.recordOrientation==FanVideoRecordOrientationLandscape) {
-                orientation=[self.captureVideoPreviewLayer connection].videoOrientation;
-            }else{
-                orientation=AVCaptureVideoOrientationPortrait;
-            }
-            
-            break;
-        }
-        case UIDeviceOrientationPortraitUpsideDown: {
-            if (self.recordOrientation==FanVideoRecordOrientationLandscape) {
-                orientation=[self.captureVideoPreviewLayer connection].videoOrientation;
-            }else{
-                orientation=AVCaptureVideoOrientationPortraitUpsideDown;
-            }
-            break;
-        }
-        case UIDeviceOrientationLandscapeLeft: {
-            if (self.recordOrientation==FanVideoRecordOrientationPortrait) {
-                orientation=[self.captureVideoPreviewLayer connection].videoOrientation;
-            }else{
-                orientation=AVCaptureVideoOrientationLandscapeRight;
-            }
-            break;
-        }
-        case UIDeviceOrientationLandscapeRight: {
-            if (self.recordOrientation==FanVideoRecordOrientationPortrait) {
-                orientation=[self.captureVideoPreviewLayer connection].videoOrientation;
-            }else{
-                orientation=AVCaptureVideoOrientationLandscapeLeft;
-            }
-            break;
-        }
-        case UIDeviceOrientationFaceUp: {
-            // 面朝上
-            orientation=[self.captureVideoPreviewLayer connection].videoOrientation;
-            
-            break;
-        }
-        case UIDeviceOrientationFaceDown: {
-            //面朝下
-            orientation=[self.captureVideoPreviewLayer connection].videoOrientation;
-            
-            break;
-        }
-        default:{
-            
-        }
-    }
-    //    self.captureVideoPreviewLayer.frame=self.layer.bounds;
-    //    [self.layer addSublayer:self.captureVideoPreviewLayer];
-    [self.captureVideoPreviewLayer connection].videoOrientation=orientation;
-    //    AVCaptureConnection *captureConnection=[self.fileOutput connectionWithMediaType:AVMediaTypeVideo];
-    //    captureConnection.videoOrientation=[self.captureVideoPreviewLayer connection].videoOrientation;
-}
--(AVCaptureVideoOrientation)avOrientationFromDeviceOrientation:(UIDeviceOrientation)deviceOrientation{
-//    NSLog(@"当前屏幕方向：%ld",(long)deviceOrientation);
-    switch (deviceOrientation) {
-        case UIDeviceOrientationUnknown: {
-            return AVCaptureVideoOrientationPortrait;
-            break;
-        }
-        case UIDeviceOrientationPortrait: {
-            return AVCaptureVideoOrientationPortrait;
-            break;
-        }
-        case UIDeviceOrientationPortraitUpsideDown: {
-            return AVCaptureVideoOrientationPortraitUpsideDown;
-            break;
-        }
-        case UIDeviceOrientationLandscapeLeft: {
-            return AVCaptureVideoOrientationLandscapeLeft;
-            break;
-        }
-        case UIDeviceOrientationLandscapeRight: {
-            return AVCaptureVideoOrientationLandscapeRight;
-            break;
-        }
-        case UIDeviceOrientationFaceUp: {
-            // 面朝上
-            return AVCaptureVideoOrientationPortrait;
-            break;
-        }
-        case UIDeviceOrientationFaceDown: {
-            //面朝下
-            return AVCaptureVideoOrientationPortrait;
-            break;
-        }
-        default:{
-
-        }
-    }
-    return AVCaptureVideoOrientationPortrait;
-}
-
-//用设备方向没有解决当用户锁定屏幕时解决方案
--(AVCaptureVideoOrientation)viewStatusBrarOrientation{
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    switch (orientation) {
-        case UIInterfaceOrientationUnknown:
-        {
-            
-        }
-            break;
-        case UIInterfaceOrientationPortrait:
-        {
-            return AVCaptureVideoOrientationPortrait;
-        }
-            break;
-        case UIInterfaceOrientationPortraitUpsideDown:
-        {
-            return AVCaptureVideoOrientationPortraitUpsideDown;
-        }
-            break;
-        case UIInterfaceOrientationLandscapeLeft:
-        {
-            return AVCaptureVideoOrientationLandscapeLeft;
-        }
-            break;
-        case UIInterfaceOrientationLandscapeRight:
-        {
-            return AVCaptureVideoOrientationLandscapeRight;
-        }
-            break;
-        default:
-            break;
-    }
-    if (self.recordOrientation==FanVideoRecordOrientationLandscape) {
-        return AVCaptureVideoOrientationLandscapeRight;
-    }else{
-        return AVCaptureVideoOrientationPortrait;
-    }
-}
-//进入后台
-- (void)enterBack
-{
-    self.videoUrl = nil;
-    self.recordState = FanRecordStateEnterBack;
-    [self fan_stopVideoRecord];
-    if (self.recordBlock) {
-        self.recordBlock(self, FanRecordStateEnterBack, 0);
-    }
-    //在回调里面，可以停止摄像头
-    
-}
-//进入前台
-- (void)becomeActive
-{
-    self.recordTime=0;
-    self.recordState = FanRecordStateBecomeActive;
-    if (self.recordBlock) {
-        self.recordBlock(self, FanRecordStateBecomeActive, 0);
-    }
-    //在回调里面，可以重新打开摄像头
-    
-}
 + (UIImage *)fan_fixOrientation:(UIImage *)aImage {
 //    NSLog(@"方向：%@",@(aImage.imageOrientation));
     UIImageOrientation imageOrientation=aImage.imageOrientation;
@@ -1064,6 +845,214 @@
     CGImageRelease(cgimg);
 //    NSLog(@"转换后方向：%@",@(img.imageOrientation));
     return img;
+}
+#pragma mark - AVCaptureFileOutputRecordingDelegate
+- (void)captureOutput:(AVCaptureFileOutput *)captureOutput didStartRecordingToOutputFileAtURL:(NSURL *)fileURL fromConnections:(NSArray *)connections{
+//    NSLog(@"开始录制：%d",self.recordState);
+    self.recordTime=0;
+    self.recordState = FanRecordStateRecording;
+    if (self.recordBlock) {
+        self.recordBlock(self, FanRecordStateRecording, 0);
+    }
+    [self.timer invalidate];
+    self.timer=nil;
+    if (@available(iOS 10.0, *)) {
+        __weak typeof(self)weakSelf=self;
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.5 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            __strong typeof(self)strongSelf=weakSelf;
+            [strongSelf refreshRecordTime];
+        }];
+    }else{
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(refreshRecordTime) userInfo:nil repeats:YES];
+    }
+}
+
+- (void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error{
+    NSLog(@"完成录制：%zd",self.recordState);
+    [self fan_stopTimer];
+    if (self.recordState==FanRecordStatePause) {
+        //停止录制时，测地停止时
+        return;
+    }
+    
+//    if (self.backgoundFrontState==FanRecordStateEnterBack) {
+//        //系统退出后台，会自动完成录制，block外部控制
+//        return;
+//    }
+    if (self.recordState==FanRecordStateReRecord) {
+        //重新录制时，这里清空上次，重新调用新录制
+        [self fan_deleteVideoRecord];
+        if ([self fan_startVideoRecord]) {
+            if (self.recordBlock) {
+                self.recordBlock(self, FanRecordStateReRecord, 1);
+            }
+        }else{
+            if (self.recordBlock) {
+                self.recordBlock(self, FanRecordStateReRecord, 0);
+            }
+        }
+        return;
+    }
+    if (self.recordState!=FanRecordStateRecording) {
+        //重新录制时，这个停止不做处理,关闭录制时，不记录
+//        NSLog(@"重新录制时，这个停止不做处理,关闭录制时，不记录");
+        return;
+    }
+    self.recordState = FanRecordStateFinish;
+    if (self.recordBlock) {
+        self.recordBlock(self, FanRecordStateFinish, 0);
+    }
+    //系统退出后台，会自动完成录制
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.videoPath isDirectory:nil]) {
+        
+//        long long length = [FanToolBox fan_fileSizeFromPath:self.videoPath];
+//        NSLog(@"文件大小：%lld",length);
+        if (self.autoSaveToAlbum) {
+            [self fan_saveVideoToAlbum];
+        }
+        
+    }else{
+//        NSLog(@"录制失败");
+    }
+    
+}
+
+- (void)refreshRecordTime{
+    self.recordTime += 0.5;
+    if (self.recordBlock) {
+        self.recordBlock(self, FanRecordStateRecording, self.recordTime);
+    }
+    if (self.recordTime >= self.maxRecordTime) {
+        [self fan_stopVideoRecord];
+    }
+}
+#pragma mark - 屏幕旋转旋转相关
+///自动更新预览层View显示方向=根据状态栏修正
+-(void)refeshPreviewLayerVideoOrientation{
+    [self updatePreviewLayerVideoOrientation:[self getAvOrientationFromViewStatusBar]];
+}
+///用户自动控制预览层视图方向
+-(void)updatePreviewLayerVideoOrientation:(AVCaptureVideoOrientation)videoOrientation{
+     if(self.captureVideoPreviewLayer){
+        self.captureVideoPreviewLayer.connection.videoOrientation=videoOrientation;
+    }
+}
+//录制开启后，不要调用此方法-
+///自动修正视频输出的方向-如果控制动态旋转时使用
+-(void)refreshVideoDataOutputOrientation{
+    //设置默认视频方向
+    if (self.defaultAVCaptureVideoOrientation==[self getAvOrientationFromViewStatusBar]) {
+        return;
+    }
+    self.defaultAVCaptureVideoOrientation=[self getAvOrientationFromViewStatusBar];
+    if ([self.fileOutput connectionWithMediaType:AVMediaTypeVideo].supportsVideoOrientation) {
+        [self.fileOutput connectionWithMediaType:AVMediaTypeVideo].videoOrientation = self.defaultAVCaptureVideoOrientation;
+    }
+}
+///修正视频输出的方向-如果控制动态旋转时使用
+-(void)updateVideoDataOutputOrientation:(AVCaptureVideoOrientation)videoOrientation{
+    //设置默认视频方向
+    if (self.defaultAVCaptureVideoOrientation==videoOrientation) {
+        return;
+    }
+    self.defaultAVCaptureVideoOrientation=videoOrientation;
+    if ([self.fileOutput connectionWithMediaType:AVMediaTypeVideo].supportsVideoOrientation) {
+        [self.fileOutput connectionWithMediaType:AVMediaTypeVideo].videoOrientation = self.defaultAVCaptureVideoOrientation;
+    }
+}
+-(AVCaptureVideoOrientation)avOrientationFromDeviceOrientation:(UIDeviceOrientation)deviceOrientation{
+//    NSLog(@"当前屏幕方向：%ld",(long)deviceOrientation);
+    switch (deviceOrientation) {
+        case UIDeviceOrientationUnknown: {
+            return AVCaptureVideoOrientationPortrait;
+            break;
+        }
+        case UIDeviceOrientationPortrait: {
+            return AVCaptureVideoOrientationPortrait;
+            break;
+        }
+        case UIDeviceOrientationPortraitUpsideDown: {
+            return AVCaptureVideoOrientationPortraitUpsideDown;
+            break;
+        }
+        case UIDeviceOrientationLandscapeLeft: {
+            return AVCaptureVideoOrientationLandscapeLeft;
+            break;
+        }
+        case UIDeviceOrientationLandscapeRight: {
+            return AVCaptureVideoOrientationLandscapeRight;
+            break;
+        }
+        case UIDeviceOrientationFaceUp: {
+            // 面朝上
+            return AVCaptureVideoOrientationPortrait;
+            break;
+        }
+        case UIDeviceOrientationFaceDown: {
+            //面朝下
+            return AVCaptureVideoOrientationPortrait;
+            break;
+        }
+        default:{
+
+        }
+    }
+    return AVCaptureVideoOrientationPortrait;
+}
+
+//用设备方向没有解决当用户锁定屏幕时解决方案
+-(AVCaptureVideoOrientation)getAvOrientationFromViewStatusBar{
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    switch (orientation) {
+        case UIInterfaceOrientationUnknown:
+        {
+            
+        }
+            break;
+        case UIInterfaceOrientationPortrait:
+        {
+            return AVCaptureVideoOrientationPortrait;
+        }
+            break;
+        case UIInterfaceOrientationPortraitUpsideDown:
+        {
+            return AVCaptureVideoOrientationPortraitUpsideDown;
+        }
+            break;
+        case UIInterfaceOrientationLandscapeLeft:
+        {
+            return AVCaptureVideoOrientationLandscapeLeft;
+        }
+            break;
+        case UIInterfaceOrientationLandscapeRight:
+        {
+            return AVCaptureVideoOrientationLandscapeRight;
+        }
+            break;
+        default:
+            break;
+    }
+    return AVCaptureVideoOrientationPortrait;
+}
+#pragma mark - 前后台通知
+//进入后台
+- (void)enterBackground{
+//    self.videoUrl = nil;
+    self.backgoundFrontState = FanRecordStateEnterBack;
+//    [self fan_stopVideoRecord];
+    if (self.recordBlock) {
+        self.recordBlock(self, FanRecordStateEnterBack, 0);
+    }
+    //在回调里面，可以停止摄像头
+    
+}
+//进入前台
+- (void)enterForeground{
+//    self.recordTime=0;
+    self.backgoundFrontState = FanRecordStateBecomeActive;
+    if (self.recordBlock) {
+        self.recordBlock(self, FanRecordStateBecomeActive, 0);
+    }
 }
 /*
  // Only override drawRect: if you perform custom drawing.

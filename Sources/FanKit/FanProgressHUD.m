@@ -526,6 +526,9 @@
     }else{
         [self removeFromSuperview];
     }
+    if (self.backBlock) {
+        self.backBlock(0);
+    }
 }
 -(void)removeSelfView{
     [self removeFromSuperview];
@@ -534,7 +537,7 @@
     if (self.isTouchRemove) {
         CGPoint touchPoint=[[touches anyObject]locationInView:self];
         if (touchPoint.y<self.fan_cententView.frame.origin.y||touchPoint.x<self.fan_cententView.frame.origin.x||touchPoint.y>self.fan_cententView.frame.origin.y+self.fan_cententView.frame.size.height||touchPoint.x>self.fan_cententView.frame.origin.x+self.fan_cententView.frame.size.width) {
-            [self removeSelfView];
+            [self fan_removeSelfView:NO];
         }
     }
 }

@@ -56,6 +56,8 @@ typedef NS_ENUM(NSInteger,FanProgressHUDStyle) {
 
 
 typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
+/// 返回回调 0-返回
+typedef void(^FanProgressHUDBackBlock)(NSInteger backType);
 
 @interface FanProgressHUD : UIView
 #pragma mark - 外部不能修改或者不建议修改的，在继承类里面可以修改的
@@ -66,8 +68,10 @@ typedef void(^FanProgressHUDAlertBlock)(NSInteger index);
 @property(nonatomic,assign)CGFloat contentHeight;
 
 @property(nonatomic,assign)FanProgressHUDStyle progressHUDStyle;
-
+/// 按钮回调
 @property(nonatomic,nullable,copy)FanProgressHUDAlertBlock alertBlock;
+///返回消失回调
+@property(nonatomic,nullable,copy)FanProgressHUDBackBlock backBlock;
 /** 显示几秒后，消失*/
 @property (assign, nonatomic) NSTimeInterval showTime;
 @property(nullable, nonatomic,strong)NSArray *buttonTitleArray;

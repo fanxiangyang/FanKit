@@ -43,5 +43,15 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>The app will use camera permissions to realize QR code scanning, image and video shooting upload and other functions, please authorize the use of camera permissions.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>The app will use the microphone permission to record audio, or take a video for saving or sharing, please authorize the use of microphone permission.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>The app will use the write permission of the album to save the user&apos;s recorded video, take photos and videos, etc. Please authorize the use of the write permission of the album.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>The app will use album permissions to upload personal avatars, image feedback, upload pictures and videos to the community, etc. Please authorize the use of album permissions to provide a rich application experience.</string>
+	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+	<true/>
 </dict>
 </plist>
