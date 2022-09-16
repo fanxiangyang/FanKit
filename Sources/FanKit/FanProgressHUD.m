@@ -521,6 +521,8 @@
 
 }
 -(void)fan_removeSelfView:(BOOL)animation{
+    [_afterTimer invalidate];
+    _afterTimer=nil;
     if (animation) {
         [self removeSelfView];
     }else{
