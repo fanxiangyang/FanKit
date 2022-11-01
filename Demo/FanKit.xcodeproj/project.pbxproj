@@ -580,7 +580,7 @@
 				TargetAttributes = {
 					667A9FC11CFEC619009B1D53 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = NW3X9NZ9UP;
+						DevelopmentTeam = T9SQ7V3YQP;
 					};
 					667A9FDA1CFEC619009B1D53 = {
 						CreatedOnToolsVersion = 7.3;
@@ -857,7 +857,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = NW3X9NZ9UP;
+				DEVELOPMENT_TEAM = T9SQ7V3YQP;
 				INFOPLIST_FILE = FanKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -870,7 +870,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = NW3X9NZ9UP;
+				DEVELOPMENT_TEAM = T9SQ7V3YQP;
 				INFOPLIST_FILE = FanKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

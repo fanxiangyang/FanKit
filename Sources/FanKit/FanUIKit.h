@@ -165,7 +165,8 @@
 +(nullable UIWindow *)fan_keyWindow;
 ///获取活跃的windowScene
 +(nullable UIWindowScene*)fan_activeWindowScene API_AVAILABLE(ios(13.0));
-
+/// 适配screen
++(nullable UIScreen *)fan_mainScreen;
 
 
 /***************************************创建UI  End******************************************/

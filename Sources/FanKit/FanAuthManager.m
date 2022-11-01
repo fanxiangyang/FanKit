@@ -156,7 +156,7 @@
 /// 获取当前定位权限 0=询问 1=允许  -1服务关闭 -2=不允许 -3=无法授权
 +(NSInteger)locationAuthorizationStatus{
     //确定用户的位置服务启用//位置服务是在设置中禁用
-    if ([CLLocationManager locationServicesEnabled]&&[CLLocationManager authorizationStatus]==kCLAuthorizationStatusDenied){
+    if (![CLLocationManager locationServicesEnabled]){
         //定位服务已经关闭，请去设置界面打开该应用的定位权限！设置 > 隐私 > 位置 > 定位服务"
         return -1;
     }else if([CLLocationManager authorizationStatus]==kCLAuthorizationStatusDenied){

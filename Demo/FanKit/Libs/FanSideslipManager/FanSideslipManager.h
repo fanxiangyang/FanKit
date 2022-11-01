@@ -35,9 +35,10 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "FanUIKit.h"
 
-#define ScreenWidth_Sides ([[UIScreen mainScreen] bounds].size.width)
-#define ScreenHeight_Sides ([[UIScreen mainScreen] bounds].size.height)
+#define ScreenWidth_Sides ([[FanUIKit fan_mainScreen] bounds].size.width)
+#define ScreenHeight_Sides ([[FanUIKit fan_mainScreen] bounds].size.height)
 
 /** 1.表示滑动的方向 2.表示只是左滑动，右滑动，不滑动 */
 typedef NS_ENUM(NSInteger, FanSideslipDirection) {

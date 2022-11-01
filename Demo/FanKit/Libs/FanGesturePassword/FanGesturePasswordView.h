@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FanLockNodeView.h"
+#import "FanUIKit.h"
 
 @class FanGesturePasswordView;
 
@@ -19,8 +20,8 @@
 @end
 
 #define iOS7_8_GP [[[UIDevice currentDevice] systemVersion]floatValue]>=7.0f
-#define kWidth_GP ([UIScreen mainScreen].bounds.size.width)
-#define kHeight_GP ([UIScreen mainScreen].bounds.size.height)
+#define kWidth_GP ([FanUIKit fan_mainScreen].bounds.size.width)
+#define kHeight_GP ([FanUIKit fan_mainScreen].bounds.size.height)
 
 @interface FanGesturePasswordView : UIView
 /**

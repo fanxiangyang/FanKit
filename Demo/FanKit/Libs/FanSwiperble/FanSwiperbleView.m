@@ -97,7 +97,7 @@ const NSUInteger FanShowViewsNumber = 3;
 }
 #pragma mark - 辅助方法
 - (CGRect)defaultCollisionRect {
-    CGSize viewSize = [UIScreen mainScreen].bounds.size;
+    CGSize viewSize = [FanUIKit fan_mainScreen].bounds.size;
     CGFloat collisionSizeScale = 6;
     CGSize collisionSize = CGSizeMake(viewSize.width * collisionSizeScale,
                                       viewSize.height * collisionSizeScale);

@@ -7,6 +7,7 @@
 //
 
 #import "FanDialogboxController.h"
+#import "FanUIKit.h"
 
 @interface FanDialogboxController ()
 
@@ -265,8 +266,8 @@
             break;
         default:
         {
-            self.contentHeight=[UIScreen mainScreen].bounds.size.height;
-            self.contentWidth=[UIScreen mainScreen].bounds.size.width;
+            self.contentHeight=[FanUIKit fan_mainScreen].bounds.size.height;
+            self.contentWidth=[FanUIKit fan_mainScreen].bounds.size.width;
             self.isTouchRemove=NO;
         }
             break;

@@ -6,7 +6,7 @@
 //
 
 #import "FanAnimationToll.h"
-
+#import "FanUIKit.h"
 
 
 @implementation FanAnimationToll
@@ -305,7 +305,7 @@ NSNumber*fan_DegreesToNumber(CGFloat degrees) {
 {
     BOOL iOS7 = [[[UIDevice currentDevice] systemVersion] floatValue] >= 7;
     
-    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
+    CGFloat screenHeight = [FanUIKit fan_mainScreen].bounds.size.height;
     if (!iOS7) {
         screenHeight -= 20;
     }

@@ -7,6 +7,7 @@
 //
 
 #import "FanAlertController.h"
+#import "FanUIKit.h"
 
 @interface FanAlertController ()
 @property(nonatomic,strong)NSTimer *afterTimer;
@@ -20,7 +21,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         if (fan_alertWindow==nil) {
-            fan_alertWindow=[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
+            fan_alertWindow=[[UIWindow alloc]initWithFrame:[[FanUIKit fan_mainScreen]bounds]];
             fan_alertWindow.windowLevel=UIWindowLevelAlert;
             if (@available(iOS 13.0, *)) {
                 if (fan_alertWindow.windowScene == nil) {
@@ -53,7 +54,7 @@
 + (instancetype)fan_showHUDWithStatus:(NSString *)textStr afterDelay:(NSTimeInterval)seconds{
     FanAlertController *hud = [[FanAlertController alloc]init];
     //    hud.isAnimation = YES;
-    hud.view.frame=[[UIScreen mainScreen]bounds];
+    hud.view.frame=[[FanUIKit fan_mainScreen]bounds];
     hud.alertTitle=textStr;
     
     hud.showTime=seconds;
@@ -67,7 +68,7 @@
 }
 + (instancetype)fan_showProgressHUD{
     FanAlertController *hud = [[FanAlertController alloc]init];
-    hud.view.frame=[[UIScreen mainScreen]bounds];
+    hud.view.frame=[[FanUIKit fan_mainScreen]bounds];
     hud.progressHUDStyle=FanAlertControllerStyleLoding;
     [hud configUIWithData];
     
@@ -85,7 +86,7 @@
 
 + (instancetype)fan_showProgressHUD:(NSString *)textStr afterDelay:(NSTimeInterval)seconds{
     FanAlertController *hud = [[FanAlertController alloc]init];
-    hud.view.frame=[[UIScreen mainScreen]bounds];
+    hud.view.frame=[[FanUIKit fan_mainScreen]bounds];
     hud.showTime=seconds;
     hud.alertTitle=textStr;
     hud.progressHUDStyle=FanAlertControllerStyleLodingText;
@@ -104,7 +105,7 @@
 }
 + (instancetype)fan_showAlertHUDTitle:(NSString *)textStr subTitle:(NSString *_Nullable)subTitle buttonTitles:(NSArray*_Nullable)btnTitleArray  alertBlock:(FanProgressHUDAlertBlock _Nullable)alertBlock{
     FanAlertController *hud = [[FanAlertController alloc]init];
-    hud.view.frame=[[UIScreen mainScreen]bounds];
+    hud.view.frame=[[FanUIKit fan_mainScreen]bounds];
     hud.alertTitle=textStr;
     hud.subTitle=subTitle;
     hud.buttonTitleArray=btnTitleArray;
@@ -124,7 +125,7 @@
 }
 + (instancetype _Nullable )fan_showIconAlertHUDTitle:(NSString *_Nullable)textStr imageName:(NSString *_Nonnull)imageName buttonTitles:(NSArray*_Nullable)btnTitleArray  alertBlock:(FanProgressHUDAlertBlock _Nullable )alertBlock{
     FanAlertController *hud = [[FanAlertController alloc]init];
-    hud.view.frame=[[UIScreen mainScreen]bounds];
+    hud.view.frame=[[FanUIKit fan_mainScreen]bounds];
     hud.alertTitle=textStr;
     hud.iconName=imageName;
     hud.buttonTitleArray=btnTitleArray;

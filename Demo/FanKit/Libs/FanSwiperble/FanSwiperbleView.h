@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FanUIKit.h"
 
-#define kFanWidth  ([UIScreen mainScreen].bounds.size.width)
-#define kFanHeight ([UIScreen mainScreen].bounds.size.height)
+#define kFanWidth  ([FanUIKit fan_mainScreen].bounds.size.width)
+#define kFanHeight ([FanUIKit fan_mainScreen].bounds.size.height)
 
 typedef NS_ENUM(NSUInteger, FanSwipeableViewDirection) {
     FanSwipeableViewDirectionNone = 0,

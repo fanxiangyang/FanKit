@@ -24,11 +24,12 @@
 
 
 #import <UIKit/UIKit.h>
+#import "FanUIKit.h"
 
 /**屏幕宽*/
-#define kFanScreenWidth_Show ([UIScreen mainScreen].bounds.size.width)
+#define kFanScreenWidth_Show ([FanUIKit fan_mainScreen].bounds.size.width)
 /**屏幕高*/
-#define kFanScreenHeight_Show ([UIScreen mainScreen].bounds.size.height)
+#define kFanScreenHeight_Show ([FanUIKit fan_mainScreen].bounds.size.height)
 
 /**
  *  显示风格

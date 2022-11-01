@@ -7,6 +7,7 @@
 //
 
 #import "FanProgressHUD.h"
+#import "FanUIKit.h"
 
 @interface FanProgressHUD()
 
@@ -17,54 +18,9 @@
 
 @implementation FanProgressHUD
 
-+(UIWindow *)showKeyWindow{
-    UIWindow *kWindow=[UIApplication sharedApplication].keyWindow;
-    if (kWindow) {
-    }else{
-        if([[UIApplication sharedApplication] windows].count>0){
-            kWindow=[[[UIApplication sharedApplication] windows] objectAtIndex:0];
-        }
-    }
-    if (kWindow==nil) {
-        if (@available(iOS 13.0, *)) {
-            if (@available(iOS 15.0, *)) {
-                kWindow=[FanProgressHUD progress_activeWindowScene].keyWindow;
-            } else {
-                kWindow=[FanProgressHUD progress_activeWindowScene].windows.firstObject;
-            }
-        } else {
-            if ([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(window)]) {
-                kWindow = [[[UIApplication sharedApplication] delegate] window];
-            }
-        }
-    }
-    return kWindow;
++(nullable UIWindow *)showKeyWindow{
+    return [FanUIKit fan_keyWindow];
 }
-+(UIWindowScene*)progress_activeWindowScene API_AVAILABLE(ios(13.0)){
-    if (@available(iOS 13.0, *)) {
-        UIWindowScene *actWindowScene;
-        for (UIWindowScene *windowScene in [UIApplication sharedApplication].connectedScenes) {
-            if (windowScene.activationState == UISceneActivationStateForegroundActive) {
-                actWindowScene = windowScene;
-                break;
-            }
-        }
-        if (actWindowScene==nil) {
-            actWindowScene = UIApplication.sharedApplication.keyWindow.windowScene;
-        }
-        if (actWindowScene==nil) {
-            for (UIWindowScene *windowScene in [UIApplication sharedApplication].connectedScenes) {
-                if ([windowScene isKindOfClass:[UIWindowScene class]]) {
-                    actWindowScene = windowScene;
-                    break;
-                }
-            }
-        }
-        return actWindowScene;
-    }
-    return nil;
-}
-
 /**
  弹出提示对话框
 
@@ -257,7 +213,7 @@
             self.contentWidth=254;//kFanScreenWidth_Show*0.8;
             self.isTouchRemove=NO;
             CGSize size=[self fan_currentSizeWithContent:self.title font:[UIFont systemFontOfSize:17] cgSize:CGSizeMake(1000, 20)];
-            CGFloat sWidth=[UIScreen mainScreen].bounds.size.width;
+            CGFloat sWidth=[FanUIKit fan_mainScreen].bounds.size.width;
             if (size.width>sWidth-60) {
                 self.contentWidth=sWidth-60;
             }else{

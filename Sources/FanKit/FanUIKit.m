@@ -335,7 +335,7 @@
 +(UIImage*)fan_beginImageContextView:(UIView*)view
 {
     //currentView 当前的view
-    UIGraphicsBeginImageContextWithOptions(view.frame.size, NO, [UIScreen mainScreen].scale);
+    UIGraphicsBeginImageContextWithOptions(view.frame.size, NO, [FanUIKit fan_mainScreen].scale);
     //取得当前画布的上下文UIGraphicsGetCurrentContext  render渲染
     [view.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -367,7 +367,7 @@
 + (UIImage *)fan_snapshotLayerImage:(UIView *)view{
     //图片位图的大小
     CGSize size = view.frame.size;
-    UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
+    UIGraphicsBeginImageContextWithOptions(size, NO, [FanUIKit fan_mainScreen].scale);
     //View 内的图像放到size位图的位置
     CGRect rect = view.bounds;
     //  自iOS7开始它允许你截取一个UIView或者其子类中的内容，并且以位图的形式（bitmap）保存到UIImage中
@@ -843,24 +843,24 @@
 #pragma mark UIWindow相关
 /// 获取keywindow
 +(nullable UIWindow *)fan_keyWindow{
-    UIWindow *kWindow=[UIApplication sharedApplication].keyWindow;
-    if (kWindow) {
-    }else{
-        if([[UIApplication sharedApplication] windows].count>0){
-            kWindow=[[[UIApplication sharedApplication] windows] objectAtIndex:0];
+    UIWindow *kWindow = nil;
+    if (@available(iOS 13.0, *)) {
+        if (@available(iOS 15.0, *)) {
+            kWindow=[FanUIKit fan_activeWindowScene].keyWindow;
+        } else {
+            kWindow=[FanUIKit fan_activeWindowScene].windows.firstObject;
+        }
+    } else {
+        kWindow = [UIApplication sharedApplication].keyWindow;
+        if (kWindow == nil) {
+            if([[UIApplication sharedApplication] windows].count>0){
+                kWindow=[[[UIApplication sharedApplication] windows] objectAtIndex:0];
+            }
         }
     }
     if (kWindow==nil) {
-        if (@available(iOS 13.0, *)) {
-            if (@available(iOS 15.0, *)) {
-                kWindow=[FanUIKit fan_activeWindowScene].keyWindow;
-            } else {
-                kWindow=[FanUIKit fan_activeWindowScene].windows.firstObject;
-            }
-        } else {
-            if ([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(window)]) {
-                kWindow = [[[UIApplication sharedApplication] delegate] window];
-            }
+        if ([[[UIApplication sharedApplication] delegate] respondsToSelector:@selector(window)]) {
+            kWindow = [[[UIApplication sharedApplication] delegate] window];
         }
     }
     return kWindow;
@@ -876,9 +876,6 @@
             }
         }
         if (actWindowScene==nil) {
-            actWindowScene = UIApplication.sharedApplication.keyWindow.windowScene;
-        }
-        if (actWindowScene==nil) {
             for (UIWindowScene *windowScene in [UIApplication sharedApplication].connectedScenes) {
                 if ([windowScene isKindOfClass:[UIWindowScene class]]) {
                     actWindowScene = windowScene;
@@ -889,6 +886,19 @@
         return actWindowScene;
     }
     return nil;
+}
+/// 适配screen
++(nullable UIScreen *)fan_mainScreen{
+    if (@available(iOS 13.0, *)) {
+        UIWindowScene *wScene = [FanUIKit fan_activeWindowScene];
+        if(wScene){
+            return wScene.screen;
+        }else{
+            return [UIScreen mainScreen];
+        }
+    }else{
+        return [UIScreen mainScreen];
+    }
 }
 @end
 

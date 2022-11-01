@@ -18,10 +18,10 @@
 //系统版本号
 #define Fan_iOS_Version [[[UIDevice currentDevice] systemVersion] floatValue]
 //屏幕宽高
-#define FanScreenWidth [UIScreen mainScreen].bounds.size.width
-#define FanScreenHeight [UIScreen mainScreen].bounds.size.height
-#define FanWidth [UIScreen mainScreen].bounds.size.width
-#define FanHeight [UIScreen mainScreen].bounds.size.height
+#define FanScreenWidth [FanUIKit fan_mainScreen].bounds.size.width
+#define FanScreenHeight [FanUIKit fan_mainScreen].bounds.size.height
+#define FanWidth [FanUIKit fan_mainScreen].bounds.size.width
+#define FanHeight [FanUIKit fan_mainScreen].bounds.size.height
 //强制取长边为宽
 #define FanScreenWidthRotion  (FanScreenWidth>FanScreenHeight?FanScreenWidth:FanScreenHeight)
 #define FanScreenHeightRotion (FanScreenWidth>FanScreenHeight?FanScreenHeight:FanScreenWidth)

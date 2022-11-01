@@ -8,6 +8,7 @@
 
 #import "NSBundle+FanKit.h"
 #import "FanAnyObject.h"
+#import "FanUIKit.h"
 
 @implementation NSBundle (FanKit)
 + (instancetype)fan_bundle
@@ -32,7 +33,7 @@
 }
 +(UIImage *)fan_bundleImageName:(NSString *)imageName extName:(NSString *)extName{
     NSMutableString *imgName=[imageName mutableCopy];
-    CGFloat scale = [UIScreen mainScreen].scale;
+    CGFloat scale = [FanUIKit fan_mainScreen].scale;
     NSInteger scaleType=0;
     if (ABS(scale-3.0f) <= 0.001) {
         [imgName appendString:@"@3x"];
