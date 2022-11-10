@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 +(NSInteger)albumAuthorizationStatus;
 
 #pragma mark - 相机麦克风权限
+// ???: 为什么权限回调不执行
+// 请求权限与dispatch_group_wait有冲突，导致回调不执行，请使用嵌套权限处理
 /// 请求相机权限
 /// @param avBlock 【-1=不允许 -2 =用户点击不允许 0 = 弹窗询问 1=允许】
 +(void)requestAVAuthorizationBlock:(void(^)(NSInteger status))avBlock;

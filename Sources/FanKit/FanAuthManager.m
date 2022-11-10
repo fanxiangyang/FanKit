@@ -43,27 +43,31 @@
         //获取用户对是否允许访问相册的操作
         if (@available(iOS 14, *)) {
             [PHPhotoLibrary requestAuthorizationForAccessLevel:PHAccessLevelReadWrite handler:^(PHAuthorizationStatus status) {
-                if (status == PHAuthorizationStatusAuthorized||status== PHAuthorizationStatusLimited) {
-                    if (albumBlock) {
-                        albumBlock(1);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (status == PHAuthorizationStatusAuthorized||status== PHAuthorizationStatusLimited) {
+                        if (albumBlock) {
+                            albumBlock(1);
+                        }
+                    }else{
+                        if (albumBlock) {
+                            albumBlock(-2);
+                        }
                     }
-                }else{
-                    if (albumBlock) {
-                        albumBlock(-2);
-                    }
-                }
+                });
             }];
         } else {
             [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-                if (status==PHAuthorizationStatusAuthorized) {
-                    if (albumBlock) {
-                        albumBlock(1);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (status==PHAuthorizationStatusAuthorized) {
+                        if (albumBlock) {
+                            albumBlock(1);
+                        }
+                    }else{
+                        if (albumBlock) {
+                            albumBlock(-2);
+                        }
                     }
-                }else{
-                    if (albumBlock) {
-                        albumBlock(-2);
-                    }
-                }
+                });
             }];
         }
         if (albumBlock) {
