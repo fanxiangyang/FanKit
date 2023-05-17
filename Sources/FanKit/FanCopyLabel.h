@@ -11,8 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FanCopyLabel : UILabel
-//用来记录label原来的颜色(这个必须设置，背景颜色)
-@property(nonatomic,strong)UIColor *fan_originalColor;
+
 //选中时的背景颜色
 @property(nonatomic,strong)UIColor *fan_copyBgColor;
 

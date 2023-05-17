@@ -7,6 +7,7 @@
 //
 
 #import "UIViewController+FanRoot.h"
+#import "FanUIKit.h"
 
 @implementation UIViewController (FanRoot)
 
@@ -26,10 +27,18 @@
     self.navigationItem.titleView = label;
 }
 -(CGFloat)fan_statusbarHeight{
-    return [[UIApplication sharedApplication] statusBarFrame].size.height;
+    if (@available(iOS 13.0, *)) {
+        return [FanUIKit fan_activeWindowScene].statusBarManager.statusBarFrame.size.height ;
+    } else {
+        return [[UIApplication sharedApplication] statusBarFrame].size.height;
+    }
 }
 -(CGFloat)fan_navigationHeight{
-    return [[UIApplication sharedApplication] statusBarFrame].size.height+self.navigationController.navigationBar.frame.size.height;
+    if (@available(iOS 13.0, *)) {
+        return [FanUIKit fan_activeWindowScene].statusBarManager.statusBarFrame.size.height+self.navigationController.navigationBar.frame.size.height ;
+    } else {
+        return [[UIApplication sharedApplication] statusBarFrame].size.height+self.navigationController.navigationBar.frame.size.height;
+    }
 }
 -(CGFloat)fan_tabBarHeight{
     return self.tabBarController.tabBar.frame.size.height;

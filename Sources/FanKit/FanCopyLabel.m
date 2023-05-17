@@ -8,23 +8,45 @@
 
 #import "FanCopyLabel.h"
 
+@interface FanCopyLabel()
+
+/// 用来过滤多次添加长按
+@property (nonatomic,assign) BOOL addLongGesture;
+
+//用来记录label原来的颜色(背景颜色)
+@property(nonatomic,strong,nullable)UIColor *fan_originalColor;
+
+@end
+
 @implementation FanCopyLabel
 #pragma mark - 初始化
--(id)init{
+-(instancetype)init{
     self=[super init];
     if (self) {
-        [self addLongGuest];
+        [self addLongGestur];
+    }
+    return self;
+}
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self addLongGestur];
     }
     return self;
 }
 //实现xib的的扩展
 -(void)awakeFromNib{
     [super awakeFromNib];
-    [self addLongGuest];
+    [self addLongGestur];
 }
 #pragma mark - 长按手势
 //添加长按手势
--(void)addLongGuest{
+-(void)addLongGestur{
+    if(self.addLongGesture){
+        return;
+    }
+    self.addLongGesture = YES;
     self.userInteractionEnabled=YES;
     UILongPressGestureRecognizer *longGuest=[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
     [self addGestureRecognizer:longGuest];
@@ -37,12 +59,24 @@
     //[self setOriginalColor:self.backgroundColor];
     
     UIMenuController *menu=[UIMenuController sharedMenuController];
-    [menu setTargetRect:self.frame inView:self.superview];
+    if (@available(iOS 13.0, *)) {
+        [menu showMenuFromView:self.superview rect:self.frame];
+    } else {
+        [menu setTargetRect:self.frame inView:self.superview];
+        [menu setMenuVisible:YES animated:YES];
+    }
+   
     //这里可以实现自定制菜单，但是不能给系统重名
     //    UIMenuItem *copy=[[UIMenuItem alloc]initWithTitle:@"copy" action:@selector(copy:)];
     //    UIMenuItem *past=[[UIMenuItem alloc]initWithTitle:@"paste" action:@selector(paste:)];
     //    [menu setMenuItems:@[copy,past]];
-    [menu setMenuVisible:YES animated:YES];
+    
+    if(self.fan_originalColor == nil){
+        self.fan_originalColor = self.backgroundColor;
+        if(self.fan_originalColor == nil){
+            self.fan_originalColor = [UIColor clearColor];
+        }
+    }
     self.backgroundColor=self.fan_copyBgColor;
 }
 //通知中心的，菜单消失时执行
