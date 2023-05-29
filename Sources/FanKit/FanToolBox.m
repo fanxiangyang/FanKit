@@ -353,7 +353,6 @@
 //3、应用程序已安装有效的VPN配置;
 +(NSString *)fan_wifiInfo_ssid{
     NSString *ssid;
-#if TARGET_OS_IOS
     NSArray *ifs=(__bridge_transfer id)CNCopySupportedInterfaces();
     id info = nil;
     for (NSString *ifnam in ifs) {
@@ -367,7 +366,6 @@
             break;
         }
     }
-#endif
     return ssid;
 }
 //必须在有网的情况下才能获取手机的IP地址
