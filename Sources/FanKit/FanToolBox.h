@@ -67,7 +67,11 @@
 /** 获取WiFi ssid*/
 +(NSString *)fan_wifiInfo_ssid;
 ///必须在有网的情况下才能获取手机的IP地址
-+ (NSString *)fan_IPAdress;
++ (NSString *)fan_IPAdress NS_UNAVAILABLE;
+///必须在有网的情况下才能获取手机的IP地址
++ (NSString *)fan_hostAdress;
+//获取大概路由地址
++ (NSString *)fan_routeAdress;
 ///获取是否打开WiFi
 + (BOOL)fan_isOpenWiFi;
 #pragma mark 返回设备类型

@@ -46,6 +46,7 @@
     //测试资源调用
     NSLog(@"文案：%@",[NSBundle fan_localizedStringForKey:@"FanKit_Confirm"]);
     NSLog(@"文案：%@",[NSString fan_stringFromTimeStamp:1500000000]);
+    NSLog(@"获取路由地址：%@",[FanToolBox fan_routeAdress]);
 }
 
 - (void)didReceiveMemoryWarning {

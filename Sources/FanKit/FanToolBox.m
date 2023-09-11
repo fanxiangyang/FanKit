@@ -368,9 +368,14 @@
     }
     return ssid;
 }
+
 //必须在有网的情况下才能获取手机的IP地址
-+ (NSString *)fan_IPAdress {
-    NSString *address = @"0.0.0.0";
++ (NSString *)fan_IPAdress  NS_UNAVAILABLE{
+    return [FanToolBox fan_hostAdress];
+}
+///必须在有网的情况下才能获取手机的IP地址
++ (NSString *)fan_hostAdress{
+    NSString *address = @"";
     struct ifaddrs *interfaces = NULL;
     struct ifaddrs *temp_addr = NULL;
     int success = 0;
@@ -399,7 +404,18 @@
     freeifaddrs(interfaces);
     return address;
 }
-
+//获取大概路由地址
++ (NSString *)fan_routeAdress {
+    NSString *host = [FanToolBox fan_hostAdress];
+    if(host.length<=0){
+        return @"";
+    }
+    NSMutableArray *hArr = [[host componentsSeparatedByString:@"."] mutableCopy];
+    if(hArr.count>0){
+         hArr[hArr.count-1] = @"1";
+    }
+    return [hArr componentsJoinedByString:@"."];
+}
 + (BOOL)fan_isOpenWiFi{
     NSCountedSet * cset = [NSCountedSet new];
     struct ifaddrs *interfaces;
