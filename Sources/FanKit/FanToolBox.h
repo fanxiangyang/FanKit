@@ -59,7 +59,7 @@
 ///随机生成len长度的字符串(a-zA-Z0-9) 避免0开头
 +(NSString *)fan_randomStringWithLength:(NSInteger)len;
 
-#pragma mark - 其他
+#pragma mark - 获取WiFi相关信息
 //if(@available(iOS 13.0,*))特殊设置
 //1、使用定位功能，并且获得了定位服务权限的应用;
 //2、使用NEHotspotConfiguration配置过的Wi-Fi;
@@ -68,12 +68,22 @@
 +(NSString *)fan_wifiInfo_ssid;
 ///必须在有网的情况下才能获取手机的IP地址
 + (NSString *)fan_IPAdress NS_UNAVAILABLE;
-///必须在有网的情况下才能获取手机的IP地址
-+ (NSString *)fan_hostAdress;
+///必须在有网的情况下才能获取手机的WiFiIP地址
++ (NSString *)fan_wifiAdress;
 //获取大概路由地址
 + (NSString *)fan_routeAdress;
 ///获取是否打开WiFi
 + (BOOL)fan_isOpenWiFi;
+#pragma mark - 获取设备当前网络IP地址
+///获取蜂窝数据IP地址
++ (NSString *)fan_cellularAddress:(BOOL)preferIPv4;
+///获取IP地址（wifi或者蜂窝数据wifi>cellular(暂时不考虑VPN）
++ (NSString *)fan_wifiOrCellularAddress:(BOOL)preferIPv4;
+
+///获取VPN IP地址
++ (NSString *)fan_vpnAddress:(BOOL)preferIPv4;
+///获取所有IP地址(0-全部 1=IPV4 2=IPV6
++ (NSDictionary *)fan_allIPAddresses:(NSInteger)ipType;
 #pragma mark 返回设备类型
 +(NSString *)fan_platformString;
 

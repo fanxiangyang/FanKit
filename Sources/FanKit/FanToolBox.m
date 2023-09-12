@@ -15,6 +15,12 @@
 //获取设备信息
 #import <sys/sysctl.h>
 
+#define IOS_CELLULAR    @"pdp_ip0"
+#define IOS_WIFI        @"en0"
+#define IOS_VPN         @"utun0"
+#define IP_ADDR_IPv4    @"ipv4"
+#define IP_ADDR_IPv6    @"ipv6"
+
 @implementation FanToolBox
 #pragma mark - 类，数据操作
 
@@ -346,7 +352,7 @@
     }
     return randomString;
 }
-#pragma mark - 其他
+#pragma mark - 获取WiFi相关信息
 //if(@available(iOS 13.0,*))特殊设置
 //1、使用定位功能，并且获得了定位服务权限的应用;
 //2、使用NEHotspotConfiguration配置过的Wi-Fi;
@@ -371,10 +377,10 @@
 
 //必须在有网的情况下才能获取手机的IP地址
 + (NSString *)fan_IPAdress  NS_UNAVAILABLE{
-    return [FanToolBox fan_hostAdress];
+    return [FanToolBox fan_wifiAdress];
 }
-///必须在有网的情况下才能获取手机的IP地址
-+ (NSString *)fan_hostAdress{
+///必须在有网的情况下才能获取手机的WiFiIP地址
++ (NSString *)fan_wifiAdress{
     NSString *address = @"";
     struct ifaddrs *interfaces = NULL;
     struct ifaddrs *temp_addr = NULL;
@@ -406,7 +412,7 @@
 }
 //获取大概路由地址
 + (NSString *)fan_routeAdress {
-    NSString *host = [FanToolBox fan_hostAdress];
+    NSString *host = [FanToolBox fan_wifiAdress];
     if(host.length<=0){
         return @"";
     }
@@ -427,6 +433,158 @@
         }
     }
     return [cset countForObject:@"awdl0"] > 1 ? YES : NO;
+}
+
+#pragma mark - 获取设备当前网络IP地址
+///获取蜂窝数据IP地址
++ (NSString *)fan_cellularAddress:(BOOL)preferIPv4{
+    NSArray *searchArray = preferIPv4 ?
+    @[ IOS_CELLULAR @"/" IP_ADDR_IPv4] :
+    @[ IOS_CELLULAR @"/" IP_ADDR_IPv6] ;
+    
+    NSDictionary *addresses = [self fan_allIPAddresses:0];
+//    NSLog(@"addresses: %@", addresses);
+    __block NSString *address;
+    [searchArray enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop)
+     {
+        NSString *host = addresses[key];
+        //筛选出IP地址格式
+        if([self isValidatIP:host preferIPv4:preferIPv4]) {
+            address = host;
+            *stop = YES;
+        }
+    }];
+    return address ? address : @"";
+}
+///获取IP地址（wifi或者蜂窝数据wifi>cellular(暂时不考虑VPN）
++ (NSString *)fan_wifiOrCellularAddress:(BOOL)preferIPv4{
+    NSArray *searchArray = preferIPv4 ?
+    @[IOS_WIFI @"/" IP_ADDR_IPv4, IOS_CELLULAR @"/" IP_ADDR_IPv4] :
+    @[IOS_WIFI @"/" IP_ADDR_IPv6, IOS_CELLULAR @"/" IP_ADDR_IPv6] ;
+    
+    NSDictionary *addresses = [self fan_allIPAddresses:0];
+//    NSLog(@"addresses: %@", addresses);
+    
+    __block NSString *address;
+    [searchArray enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop){
+        NSString *host = addresses[key];
+        //筛选出IP地址格式
+        if([self isValidatIP:host preferIPv4:preferIPv4]) {
+            address = host;
+            *stop = YES;
+        }
+    }];
+    return address ? address : @"";
+}
+///获取VPN IP地址
++ (NSString *)fan_vpnAddress:(BOOL)preferIPv4{
+    NSArray *searchArray = preferIPv4 ?
+    @[ IOS_VPN @"/" IP_ADDR_IPv4] :
+    @[ IOS_VPN @"/" IP_ADDR_IPv6] ;
+    
+    NSDictionary *addresses = [self fan_allIPAddresses:0];
+    //    NSLog(@"addresses: %@", addresses);
+    __block NSString *address;
+    [searchArray enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop){
+        NSString *host = addresses[key];
+        //筛选出IP地址格式
+        if([self isValidatIP:host preferIPv4:preferIPv4]) {
+            address = host;
+            *stop = YES;
+        }
+    }];
+    return address ? address : @"";
+}
++ (BOOL)isValidatIP:(NSString *)ipAddress preferIPv4:(BOOL)preferIPv4{
+    if (ipAddress.length == 0) {
+        return NO;
+    }
+    if(preferIPv4){
+        NSString *urlRegEx = @"^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+        "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+        "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+        "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+        
+        NSError *error;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:urlRegEx options:0 error:&error];
+        
+        if (regex != nil) {
+            NSTextCheckingResult *firstMatch=[regex firstMatchInString:ipAddress options:0 range:NSMakeRange(0, [ipAddress length])];
+            
+            if (firstMatch) {
+                NSRange resultRange = [firstMatch rangeAtIndex:0];
+                NSString *result=[ipAddress substringWithRange:resultRange];
+                //输出结果
+//                NSLog(@"isValidatIP:%@",result);
+                return YES;
+            }
+        }
+    }else{
+        if(ipAddress.length>=13&&[ipAddress hasPrefix:@"fe80::"]){
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+//{
+//    "anpi0/ipv6" = "fe80::649c:a5ff:fe8f:b40e";
+//    "awdl0/ipv6" = "fe80::42a:c1ff:fe55:d7ac";
+//    "en0/ipv4" = "192.168.0.121";
+//    "en0/ipv6" = "fe80::40e:ed13:3ea8:e62a";
+//    "en2/ipv4" = "169.254.55.168";
+//    "en2/ipv6" = "fe80::47b:7c31:9c6e:334a";
+//    "llw0/ipv6" = "fe80::42a:c1ff:fe55:d7ac";
+//    "lo0/ipv4" = "127.0.0.1";
+//    "lo0/ipv6" = "fe80::1";
+//    "utun0/ipv6" = "fe80::fe55:fdca:3566:ece";
+//    "utun1/ipv6" = "fe80::8d29:272b:a68b:8aed";
+//    "utun2/ipv6" = "fe80::5c2e:fb12:4723:bfb0";
+//    "utun3/ipv6" = "fe80::ce81:b1c:bd2c:69e";
+//    "utun4/ipv6" = "fe80::864a:3c84:aeec:7b03";
+//    "utun5/ipv6" = "fe80::8894:9db9:bcd2:b7f0";
+//    "utun6/ipv6" = "fe80::7261:d871:96cb:e3e1";
+//}
+///获取所有IP地址(0-全部 1=IPV4 2=IPV6
++ (NSDictionary *)fan_allIPAddresses:(NSInteger)ipType{
+    NSMutableDictionary *addresses = [NSMutableDictionary dictionaryWithCapacity:8];
+        //检索当前接口-成功时返回0
+    struct ifaddrs *interfaces;
+    if(!getifaddrs(&interfaces)) {
+        //循环通过接口的链接列表
+        struct ifaddrs *interface;
+        for(interface=interfaces; interface; interface=interface->ifa_next) {
+            if(!(interface->ifa_flags & IFF_UP) /* || (interface->ifa_flags & IFF_LOOPBACK) */ ) {
+                continue; 
+            }
+            const struct sockaddr_in *addr = (const struct sockaddr_in*)interface->ifa_addr;
+            char addrBuf[ MAX(INET_ADDRSTRLEN, INET6_ADDRSTRLEN) ];
+            if(addr && (addr->sin_family==AF_INET || addr->sin_family==AF_INET6)) {
+                NSString *name = [NSString stringWithUTF8String:interface->ifa_name];
+                NSString *type;
+                if(addr->sin_family == AF_INET) {
+                    if(ipType==0||ipType==1){
+                        if(inet_ntop(AF_INET, &addr->sin_addr, addrBuf, INET_ADDRSTRLEN)) {
+                            type = IP_ADDR_IPv4;
+                        }
+                    }
+                } else {
+                    if(ipType==0||ipType==2){
+                        const struct sockaddr_in6 *addr6 = (const struct sockaddr_in6*)interface->ifa_addr;
+                        if(inet_ntop(AF_INET6, &addr6->sin6_addr, addrBuf, INET6_ADDRSTRLEN)) {
+                            type = IP_ADDR_IPv6;
+                        }
+                    }
+                }
+                if(type) {
+                    NSString *key = [NSString stringWithFormat:@"%@/%@", name, type];
+                    addresses[key] = [NSString stringWithUTF8String:addrBuf];
+                }
+            }
+        }
+        freeifaddrs(interfaces);
+    }
+    return [addresses count] ? addresses : nil;
 }
 #pragma mark 返回设备类型
 
