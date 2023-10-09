@@ -9,14 +9,13 @@
 #import "FanDeviceOrientation.h"
 #import <CoreMotion/CoreMotion.h>
 
-@interface FanDeviceOrientation () {
-    
-    CMMotionManager *_motionManager;
-    FanDirection _direction;
-    
-}
+@interface FanDeviceOrientation ()
+
+@property (nonatomic,assign) FanDirection direction;
+@property (nonatomic,strong) CMMotionManager *motionManager;
+
 @end
-//sensitive 灵敏度
+//sensitive 灵敏度（模仿实际屏幕旋转)
 static const float sensitive = 0.77;
 
 @implementation FanDeviceOrientation
@@ -25,7 +24,7 @@ static const float sensitive = 0.77;
     self = [super init];
     if (self) {
         
-        _delegate = delegate;
+        self.delegate = delegate;
     }
     return self;
 }
@@ -36,21 +35,21 @@ static const float sensitive = 0.77;
 
 - (void)stop {
     
-    [_motionManager stopDeviceMotionUpdates];
+    [self.motionManager stopDeviceMotionUpdates];
 }
 
 
 //陀螺仪 每隔一个间隔做轮询
 - (void)start{
     
-    if (_motionManager == nil) {
+    if (self.motionManager == nil) {
         
-        _motionManager = [[CMMotionManager alloc] init];
+        self.motionManager = [[CMMotionManager alloc] init];
     }
-    _motionManager.deviceMotionUpdateInterval = 1/40.f;
-    if (_motionManager.deviceMotionAvailable) {
+    self.motionManager.deviceMotionUpdateInterval = 1/40.f;
+    if (self.motionManager.deviceMotionAvailable) {
         
-        [_motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue]
+        [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue]
                                             withHandler: ^(CMDeviceMotion *motion, NSError *error){
             [self performSelectorOnMainThread:@selector(deviceMotion:) withObject:motion waitUntilDone:YES];
         }];
@@ -60,40 +59,44 @@ static const float sensitive = 0.77;
     
     double x = motion.gravity.x;
     double y = motion.gravity.y;
-    if (y < 0 ) {
-        if (fabs(y) > sensitive) {
-            if (_direction != FanDirectionPortrait) {
-                _direction = FanDirectionPortrait;
-                if ([self.delegate respondsToSelector:@selector(directionChange:)]) {
-                    [self.delegate directionChange:_direction];
+//    NSLog(@"陀螺仪：x:%f,y:%f",x,y);
+    if(fabs(x)<fabs(y)){
+        if (y < 0 ) {
+            if (self.simulateRotation == NO || (fabs(y) > sensitive)) {
+                if (self.direction != FanDirectionPortrait) {
+                    self.direction = FanDirectionPortrait;
+                    if ([self.delegate respondsToSelector:@selector(directionChange:)]) {
+                        [self.delegate directionChange:self.direction];
+                    }
+                }
+            }
+        }else {
+            if (self.simulateRotation == NO ||  y > sensitive) {
+                if (self.direction != FanDirectionDown) {
+                    self.direction = FanDirectionDown;
+                    if ([self.delegate respondsToSelector:@selector(directionChange:)]) {
+                        [self.delegate directionChange:self.direction];
+                    }
                 }
             }
         }
-    }else {
-        if (y > sensitive) {
-            if (_direction != FanDirectionDown) {
-                _direction = FanDirectionDown;
-                if ([self.delegate respondsToSelector:@selector(directionChange:)]) {
-                    [self.delegate directionChange:_direction];
+    }else{
+        if (x < 0 ) {
+            if (self.simulateRotation == NO || fabs(x) > sensitive) {
+                if (self.direction != FanDirectionleft) {
+                    self.direction = FanDirectionleft;
+                    if ([self.delegate respondsToSelector:@selector(directionChange:)]) {
+                        [self.delegate directionChange:self.direction];
+                    }
                 }
             }
-        }
-    }
-    if (x < 0 ) {
-        if (fabs(x) > sensitive) {
-            if (_direction != FanDirectionleft) {
-                _direction = FanDirectionleft;
-                if ([self.delegate respondsToSelector:@selector(directionChange:)]) {
-                    [self.delegate directionChange:_direction];
-                }
-            }
-        }
-    }else {
-        if (x > sensitive) {
-            if (_direction != FanDirectionRight) {
-                _direction = FanDirectionRight;
-                if ([self.delegate respondsToSelector:@selector(directionChange:)]) {
-                    [self.delegate directionChange:_direction];
+        }else {
+            if (self.simulateRotation == NO || x > sensitive) {
+                if (self.direction != FanDirectionRight) {
+                    self.direction = FanDirectionRight;
+                    if ([self.delegate respondsToSelector:@selector(directionChange:)]) {
+                        [self.delegate directionChange:self.direction];
+                    }
                 }
             }
         }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6614C8752AD3EFF700E12ED0 /* FanDeviceOrientationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6614C8742AD3EFF700E12ED0 /* FanDeviceOrientationVC.m */; };
 		6617410D1D2B637C005A5221 /* FanRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6617410C1D2B637C005A5221 /* FanRootViewController.m */; };
 		661741101D2B63EE005A5221 /* FanNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6617410F1D2B63EE005A5221 /* FanNavigationController.m */; };
 		661741131D2B66D5005A5221 /* FanKitTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 661741121D2B66D5005A5221 /* FanKitTableViewController.m */; };
@@ -81,6 +82,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6614C8732AD3EFF700E12ED0 /* FanDeviceOrientationVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FanDeviceOrientationVC.h; sourceTree = "<group>"; };
+		6614C8742AD3EFF700E12ED0 /* FanDeviceOrientationVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FanDeviceOrientationVC.m; sourceTree = "<group>"; };
 		6617410B1D2B637C005A5221 /* FanRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanRootViewController.h; sourceTree = "<group>"; };
 		6617410C1D2B637C005A5221 /* FanRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanRootViewController.m; sourceTree = "<group>"; };
 		6617410E1D2B63EE005A5221 /* FanNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanNavigationController.h; sourceTree = "<group>"; };
@@ -215,18 +218,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6614C8722AD3EFAC00E12ED0 /* TestVC */ = {
+			isa = PBXGroup;
+			children = (
+				66E81A531E7253B8008E887E /* FanTestViewController.h */,
+				66E81A541E7253B8008E887E /* FanTestViewController.m */,
+				664AA55D253A8DBA003845D9 /* FanRgbViewController.h */,
+				664AA55E253A8DBA003845D9 /* FanRgbViewController.m */,
+				6614C8732AD3EFF700E12ED0 /* FanDeviceOrientationVC.h */,
+				6614C8742AD3EFF700E12ED0 /* FanDeviceOrientationVC.m */,
+			);
+			path = TestVC;
+			sourceTree = "<group>";
+		};
 		661741091D2B6268005A5221 /* Viewcontrollers */ = {
 			isa = PBXGroup;
 			children = (
+				6614C8722AD3EFAC00E12ED0 /* TestVC */,
 				66E81A5C1E72A775008E887E /* CommonViewController */,
 				66E81A581E7261CC008E887E /* LibsViewController */,
 				6617410A1D2B6315005A5221 /* RootViewcontroller */,
 				661741111D2B66D5005A5221 /* FanKitTableViewController.h */,
 				661741121D2B66D5005A5221 /* FanKitTableViewController.m */,
-				66E81A531E7253B8008E887E /* FanTestViewController.h */,
-				66E81A541E7253B8008E887E /* FanTestViewController.m */,
-				664AA55D253A8DBA003845D9 /* FanRgbViewController.h */,
-				664AA55E253A8DBA003845D9 /* FanRgbViewController.m */,
 			);
 			path = Viewcontrollers;
 			sourceTree = "<group>";
@@ -667,6 +680,7 @@
 				661741101D2B63EE005A5221 /* FanNavigationController.m in Sources */,
 				669A28192886BC86001EBFCB /* FanAnimationToll.m in Sources */,
 				669A28072886BC86001EBFCB /* FanUIKit.m in Sources */,
+				6614C8752AD3EFF700E12ED0 /* FanDeviceOrientationVC.m in Sources */,
 				66B396871D2A532000A40A06 /* FanGesturePasswordView.m in Sources */,
 				66E81A5F1E72A791008E887E /* FanCommonViewController.m in Sources */,
 				667A9FCA1CFEC619009B1D53 /* AppDelegate.m in Sources */,

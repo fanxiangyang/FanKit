@@ -33,8 +33,8 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     //@"UIKit",@"Core",@"Libs
-    self.dataArray=[@[@[@"Create Control",@"AutoLayout",@"VC Category",@"RGB-HSV"] ,@[@"Animation",@"Byte Core/File Operation",@"Time/Date",@"Audio->.aac"] ,@[@"Swiperble",@"GesturePassword",@"Alert",@"DragBubble",@"sideslip"],@[@"Test"] ] mutableCopy];
-    self.detailArray=[@[@[@"FanUIKit.h",@"UIView+FanAutoLayout.h",@"UIViewController+FanRoot.h",@"FanRgbView.h"] ,@[@"FanAnimationToll.h",@"FanDataTool.h",@"NSString+FanTime.h",@"FanAudioConverter.h"] ,@[@"FanSwiperbleView.h",@"FanGesturePasswordView.h",@"FanShowView",@"FanDragBubbleView.h",@"FanSideslipManager.h"],@[@"FanTestViewController.h"] ] mutableCopy];
+    self.dataArray=[@[@[@"Create Control",@"AutoLayout",@"VC Category",@"RGB-HSV"] ,@[@"Animation",@"Byte Core/File Operation",@"Time/Date",@"Audio->.aac",@"陀螺仪"] ,@[@"Swiperble",@"GesturePassword",@"Alert",@"DragBubble",@"sideslip"],@[@"Test"] ] mutableCopy];
+    self.detailArray=[@[@[@"FanUIKit.h",@"UIView+FanAutoLayout.h",@"UIViewController+FanRoot.h",@"FanRgbView.h"] ,@[@"FanAnimationToll.h",@"FanDataTool.h",@"NSString+FanTime.h",@"FanAudioConverter.h",@"FanDeviceOrientation.h"] ,@[@"FanSwiperbleView.h",@"FanGesturePasswordView.h",@"FanShowView",@"FanDragBubbleView.h",@"FanSideslipManager.h"],@[@"FanTestViewController.h"] ] mutableCopy];
 
 //    [self.tableView registerNib:[UINib nibWithNibName:@"" bundle:nil] forCellReuseIdentifier:@"Cell"];
 //    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
@@ -122,6 +122,8 @@
     }else if (indexPath.section==1){
         if (indexPath.row==0) {
             [self fan_jumpCommonViewController:@{@"Title":@"Animation",@"Class":@"FanAnimationToll.h/m",@"Demo":@"https://github.com/fanxiangyang/FanAnimationToll"}];
+        }else if (indexPath.row == 4){
+            [self fan_jumpVCWithName:@"FanDeviceOrientationVC"];
         }
     }else if (indexPath.section==2){
         if (indexPath.row==0) {
