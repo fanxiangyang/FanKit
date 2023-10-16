@@ -8,6 +8,7 @@
 
 #import "FanRgbViewController.h"
 #import "FanRgbView.h"
+#import "FanColorView.h"
 
 @interface FanRgbViewController ()
 
@@ -21,8 +22,8 @@
     [self configUI];
 }
 -(void)configUI{
-    CGFloat w=FanScreenWidth;
-    CGFloat h=FanScreenHeight;
+    CGFloat w=FanWidth;
+//    CGFloat h=FanHeight;
     CGFloat top=0;
     
     //圆形  色域+饱和度 H+S
@@ -65,7 +66,7 @@
     top+=50;
     
     //矩形  饱和度+亮度 S+L
-    FanRgbView *rgbView4=[[FanRgbView alloc]initWithFrame:CGRectMake(w*0.3, top, w*0.4, w*0.6)];
+    FanRgbView *rgbView4=[[FanRgbView alloc]initWithFrame:CGRectMake(20, top, w*0.4, w*0.6)];
     rgbView4.backgroundColor=[UIColor clearColor];
     rgbView4.rgbColor=[UIColor redColor];
     [self.view addSubview:rgbView4];
@@ -99,6 +100,11 @@
             self.view.backgroundColor=rgbColor;
         }
     }];
+    
+    FanColorView *cView = [[FanColorView alloc]initWithFrame:CGRectMake(40+w*0.4, top, w*0.3, w*0.3)];
+//    cView.startDepthColor = [UIColor redColor];
+    [cView initWithColorType:0];
+    [self.view addSubview:cView];
 
 }
 /*

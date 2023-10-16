@@ -187,11 +187,9 @@
     }
     return @{@"r":@(1.0),@"g":@(1.0),@"b":@(1.0),@"a":@(1.0)};
 }
-/** 等比例缩放图片到指定大小
- 
- *  CGSize  :   缩放后的大小
- *  return  :   更改后的图片对象
- */
+/// 等比例缩放图片到指定大小（包含透明通道）会裁剪图片
+/// @param sourceImage 原图片
+/// @param targetSize 缩放后的大小
 +(UIImage*)fan_scalImage:(UIImage *)sourceImage scalingForSize:(CGSize)targetSize{
     CGSize imageSize = sourceImage.size;
     CGFloat width = imageSize.width;
@@ -221,18 +219,22 @@
         }
     }
     //把图片画在等比例的区域内
-    UIGraphicsBeginImageContext(targetSize); // this will crop
     CGRect thumbnailRect = CGRectZero;
     thumbnailRect.origin = thumbnailPoint;
     thumbnailRect.size.width= scaledWidth;
     thumbnailRect.size.height = scaledHeight;
-    [sourceImage drawInRect:thumbnailRect];
-    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
+    format.opaque = NO;//默认NO
+//    format.scale = 2.0;//默认好像给屏幕缩放倍数一样 2,0
+    UIGraphicsImageRenderer *render = [[UIGraphicsImageRenderer alloc] initWithSize:targetSize format:format];
+    //默认生成两倍图
+    UIImage *scaledImage = [render imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+        [sourceImage drawInRect:thumbnailRect];
+    }];
     if ( scaledImage == nil ){
-        NSLog(@"UIImageRetinal:could not scale image!!!");
+        NSLog(@"UIImageRetinal:could not scale image!!!-fill");
         return nil;
     }
-    UIGraphicsEndImageContext();
     return scaledImage;
 }
 ///等比适配到固定大小里面(图片不超过maxsize)
@@ -258,14 +260,18 @@
     }
     CGRect contextFrame = CGRectMake(0, 0, scaledWidth, scaledHeight);
     //把图片画在等比例的区域内
-    UIGraphicsBeginImageContext(contextFrame.size);
-    [sourceImage drawInRect:contextFrame];
-    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
+    format.opaque = NO;//默认NO
+//    format.scale = 2.0;//默认好像给屏幕缩放倍数一样 2,0
+    UIGraphicsImageRenderer *render = [[UIGraphicsImageRenderer alloc] initWithSize:contextFrame.size format:format];
+    //默认生成两倍图
+    UIImage *scaledImage = [render imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+        [sourceImage drawInRect:contextFrame];
+    }];
     if ( scaledImage == nil ){
-        NSLog(@"UIImageRetinal:could not scale image!!!");
+        NSLog(@"UIImageRetinal:could not scale image!!!-fit");
         return nil;
     }
-    UIGraphicsEndImageContext();
     return scaledImage;
 }
 /// 不变形裁剪图片
@@ -278,80 +284,66 @@
     CGFloat hScale=image.size.height/size.height;
 
     CGRect rec = CGRectMake(rect.origin.x*wScale, rect.origin.y*hScale,rect.size.width*wScale,rect.size.height*hScale);
-    //竖屏照片有偏移，而且方向也是错的
-//    CGImageRef imageRef =CGImageCreateWithImageInRect([image CGImage],rec);
-//    UIImage * image = [[UIImage alloc]initWithCGImage:imageRef];
-//    CGImageRelease(imageRef);
-    
     //把图片画在等比例的区域内
-    UIGraphicsBeginImageContext(rec.size); // this will crop
-    if (isOval) {
-        UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, rec.size.width, rec.size.height)];
-        //把圆形的路径设置在指定区域 超过裁剪区域以外的内容都给裁剪掉
-        [path addClip];
+    UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
+    format.opaque = NO;//默认NO
+//    format.scale = 2.0;//默认好像给屏幕缩放倍数一样 2,0
+    UIGraphicsImageRenderer *render = [[UIGraphicsImageRenderer alloc] initWithSize:rec.size format:format];
+    //默认生成两倍图
+    UIImage *clipImage = [render imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+        if (isOval) {
+            UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, rec.size.width, rec.size.height)];
+            //把圆形的路径设置在指定区域 超过裁剪区域以外的内容都给裁剪掉
+            [path addClip];
+        }
+        [image drawAtPoint:CGPointMake(-rec.origin.x, -rec.origin.y)];
+    }];
+    if ( clipImage == nil ){
+        NSLog(@"图片裁剪失败");
+        return nil;
     }
-    [image drawAtPoint:CGPointMake(-rec.origin.x, -rec.origin.y)];
-    UIImage *clipImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
     return clipImage;
 }
 /** 通过UIcolor获取一张图片 */
-+ (UIImage *)fan_imageWithColor:(UIColor *)color frame:(CGRect)rect{
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, rect);
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return img;
++ (UIImage *)fan_imageWithColor:(UIColor *)color size:(CGSize)size{
+    return [self fan_imageWithColor:color size:size cornerRadius:-0.0];
 }
 /** 通过UIcolor获取一张图片圆角 */
-+ (UIImage *)fan_imageWithColor:(UIColor *)color frame:(CGRect)rect cornerRadius:(CGFloat)cornerRadius{
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    int w  = rect.size.width;
-    int h = rect.size.height;
-    int c = cornerRadius;
-    CGContextMoveToPoint(context, 0, c);
-    CGContextAddArcToPoint(context, 0, 0, c, 0, c);
-    CGContextAddLineToPoint(context, w-c, 0);
-    CGContextAddArcToPoint(context, w, 0, w, c, c);
-    CGContextAddLineToPoint(context, w, h-c);
-    CGContextAddArcToPoint(context, w, h, w-c, h, c);
-    CGContextAddLineToPoint(context, c, h);
-    CGContextAddArcToPoint(context, 0, h, 0, h-c, c);
-    CGContextAddLineToPoint(context, 0, c);
-    CGContextClosePath(context);
-    // 先裁剪 context，再画图，就会在裁剪后的 path 中画
-    CGContextClip(context);
-    CGContextDrawPath(context, kCGPathFill);
-    CGContextFillRect(context, rect);
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return img;
++ (UIImage *)fan_imageWithColor:(UIColor *)color size:(CGSize)size cornerRadius:(CGFloat)cornerRadius{
+    UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
+    format.opaque = NO;//默认NO
+//    format.scale = 2.0;//默认好像给屏幕缩放倍数一样 2,0
+    UIGraphicsImageRenderer *render = [[UIGraphicsImageRenderer alloc] initWithSize:size format:format];
+    //默认生成两倍图
+    UIImage *image = [render imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+        CGRect fillFrame = CGRectMake(0, 0, size.width, size.height);
+        [color setFill];
+        if(cornerRadius>0.0f){
+            UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:fillFrame cornerRadius:20];
+            [path addClip];
+        }
+        UIRectFill(fillFrame);
+    }];
+    return image;
 }
 /** 截屏View*/
 +(UIImage*)fan_beginImageContextView:(UIView*)view
 {
-    //currentView 当前的view
-    UIGraphicsBeginImageContextWithOptions(view.frame.size, NO, [FanUIKit fan_mainScreen].scale);
-    //取得当前画布的上下文UIGraphicsGetCurrentContext  render渲染
-    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
+    format.opaque = NO;//默认NO
+//    format.scale = 2.0;//默认好像给屏幕缩放倍数一样 2,0
+    UIGraphicsImageRenderer *render = [[UIGraphicsImageRenderer alloc] initWithSize:view.frame.size format:format];
+    //默认生成两倍图
+    UIImage *viewImage = [render imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+        //取得当前画布的上下文UIGraphicsGetCurrentContext  render渲染
+        [view.layer renderInContext:rendererContext.CGContext];
+    }];
     return viewImage;
 }
-/** 一倍截屏*/
+/** 截屏View内裁剪区域*/
 +(UIImage*)fan_beginImageContext:(CGRect)rect fromView:(UIView*)view
 {
-    
-    UIGraphicsBeginImageContext(view.frame.size); //currentView 当前的view
-    //取得当前画布的上下文UIGraphicsGetCurrentContext  render渲染
-    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
+    UIImage *viewImage = [self fan_beginImageContextView:view];
     //从全屏中截取指定的范围
     CGImageRef imageRef = viewImage.CGImage;
     
@@ -367,13 +359,18 @@
 + (UIImage *)fan_snapshotLayerImage:(UIView *)view{
     //图片位图的大小
     CGSize size = view.frame.size;
-    UIGraphicsBeginImageContextWithOptions(size, NO, [FanUIKit fan_mainScreen].scale);
-    //View 内的图像放到size位图的位置
-    CGRect rect = view.bounds;
-    //  自iOS7开始它允许你截取一个UIView或者其子类中的内容，并且以位图的形式（bitmap）保存到UIImage中
-    [view drawViewHierarchyInRect:rect afterScreenUpdates:YES];
-    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    
+    UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
+    format.opaque = NO;//默认NO
+//    format.scale = 2.0;//默认好像给屏幕缩放倍数一样 2,0
+    UIGraphicsImageRenderer *render = [[UIGraphicsImageRenderer alloc] initWithSize:size format:format];
+    //默认生成两倍图
+    UIImage *snapshotImage = [render imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+        //View 内的图像放到size位图的位置
+        CGRect rect = view.bounds;
+        //  自iOS7开始它允许你截取一个UIView或者其子类中的内容，并且以位图的形式（bitmap）保存到UIImage中
+        [view drawViewHierarchyInRect:rect afterScreenUpdates:YES];
+    }];
     return snapshotImage;
     //AVCaptureVideoPreviewLayer 和 AVSampleBufferDisplayLayer可以用这个获取一个View，但是能添加，不能再截图
     //    UIView *snapView = [self snapshotViewAfterScreenUpdates:YES];

@@ -12,6 +12,8 @@
 		661741101D2B63EE005A5221 /* FanNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6617410F1D2B63EE005A5221 /* FanNavigationController.m */; };
 		661741131D2B66D5005A5221 /* FanKitTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 661741121D2B66D5005A5221 /* FanKitTableViewController.m */; };
 		664AA55F253A8DBA003845D9 /* FanRgbViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 664AA55E253A8DBA003845D9 /* FanRgbViewController.m */; };
+		666977712AD8FB4400990902 /* FanKit_circleColor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 669A277328869CA6001EBFCB /* FanKit_circleColor@2x.png */; };
+		666977742AD9183B00990902 /* FanTestVC2.m in Sources */ = {isa = PBXBuildFile; fileRef = 666977732AD9183B00990902 /* FanTestVC2.m */; };
 		667A9FC71CFEC619009B1D53 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FC61CFEC619009B1D53 /* main.m */; };
 		667A9FCA1CFEC619009B1D53 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FC91CFEC619009B1D53 /* AppDelegate.m */; };
 		667A9FCD1CFEC619009B1D53 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 667A9FCC1CFEC619009B1D53 /* ViewController.m */; };
@@ -92,6 +94,8 @@
 		661741121D2B66D5005A5221 /* FanKitTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanKitTableViewController.m; sourceTree = "<group>"; };
 		664AA55D253A8DBA003845D9 /* FanRgbViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FanRgbViewController.h; sourceTree = "<group>"; };
 		664AA55E253A8DBA003845D9 /* FanRgbViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FanRgbViewController.m; sourceTree = "<group>"; };
+		666977722AD9183B00990902 /* FanTestVC2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FanTestVC2.h; sourceTree = "<group>"; };
+		666977732AD9183B00990902 /* FanTestVC2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FanTestVC2.m; sourceTree = "<group>"; };
 		667A9FC21CFEC619009B1D53 /* FanKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FanKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		667A9FC61CFEC619009B1D53 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		667A9FC81CFEC619009B1D53 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -110,7 +114,7 @@
 		667A9FEC1CFEC619009B1D53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6683108F22842F1500444009 /* FanColorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanColorView.h; sourceTree = "<group>"; };
 		6683109022842F1500444009 /* FanColorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FanColorView.m; sourceTree = "<group>"; };
-		669A277328869CA6001EBFCB /* FanKit_palette.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FanKit_palette.png; sourceTree = "<group>"; };
+		669A277328869CA6001EBFCB /* FanKit_circleColor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FanKit_circleColor@2x.png"; sourceTree = "<group>"; };
 		669A27D32886BC86001EBFCB /* NSObject+FanDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+FanDictionary.m"; sourceTree = "<group>"; };
 		669A27D42886BC86001EBFCB /* FanProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanProgressHUD.h; sourceTree = "<group>"; };
 		669A27D52886BC86001EBFCB /* FanDrawLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FanDrawLayer.h; sourceTree = "<group>"; };
@@ -223,6 +227,8 @@
 			children = (
 				66E81A531E7253B8008E887E /* FanTestViewController.h */,
 				66E81A541E7253B8008E887E /* FanTestViewController.m */,
+				666977722AD9183B00990902 /* FanTestVC2.h */,
+				666977732AD9183B00990902 /* FanTestVC2.m */,
 				664AA55D253A8DBA003845D9 /* FanRgbViewController.h */,
 				664AA55E253A8DBA003845D9 /* FanRgbViewController.m */,
 				6614C8732AD3EFF700E12ED0 /* FanDeviceOrientationVC.h */,
@@ -324,7 +330,7 @@
 		669A277228869B5C001EBFCB /* FanColor */ = {
 			isa = PBXGroup;
 			children = (
-				669A277328869CA6001EBFCB /* FanKit_palette.png */,
+				669A277328869CA6001EBFCB /* FanKit_circleColor@2x.png */,
 				6683108F22842F1500444009 /* FanColorView.h */,
 				6683109022842F1500444009 /* FanColorView.m */,
 			);
@@ -637,6 +643,7 @@
 				667A9FD21CFEC619009B1D53 /* Assets.xcassets in Resources */,
 				667A9FD01CFEC619009B1D53 /* Main.storyboard in Resources */,
 				66E81A691E72C319008E887E /* swip2.jpg in Resources */,
+				666977712AD8FB4400990902 /* FanKit_circleColor@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -695,6 +702,7 @@
 				66B396611D2A3F0C00A40A06 /* FanSideslipManager.m in Sources */,
 				667A9FC71CFEC619009B1D53 /* main.m in Sources */,
 				66B3968C1D2A536400A40A06 /* FanSwiperbleView.m in Sources */,
+				666977742AD9183B00990902 /* FanTestVC2.m in Sources */,
 				669A28092886BC86001EBFCB /* FanDeviceOrientation.m in Sources */,
 				66B3967E1D2A52B400A40A06 /* FanActionSheetView.m in Sources */,
 				669A280D2886BC86001EBFCB /* NSBundle+FanKit.m in Sources */,

@@ -174,11 +174,16 @@
 }
 - (UIImage *)fan_scalImage:(UIImage *)image scalSize:(CGSize)scalSize {
     CGSize imageSize = scalSize;
-    UIGraphicsBeginImageContextWithOptions(imageSize, NO,0.0);
-    CGRect imageRect = CGRectMake(0.0, 0.0, imageSize.width, imageSize.height);
-    [image drawInRect:imageRect];
-    UIImage *scalImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
+    format.opaque = NO;//默认NO
+//    format.scale = 2.0;//默认好像给屏幕缩放倍数一样 2,0
+    UIGraphicsImageRenderer *render = [[UIGraphicsImageRenderer alloc] initWithSize:scalSize format:format];
+    //默认生成两倍图
+    UIImage *scalImage = [render imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+        CGRect imageRect = CGRectMake(0.0, 0.0, imageSize.width, imageSize.height);
+        [image drawInRect:imageRect];
+    }];
+//    NSLog(@"%d==%f",format.opaque,format.scale);
     return scalImage;
 }
 #pragma mark - 颜色选择器Layer和图片赋值
@@ -223,7 +228,8 @@
     self.layer.cornerRadius = self.frame.size.width/2.0;
     self.layer.masksToBounds = YES;
 //    self.image = [NSBundle fan_bundleImageName:@"FanKit_palette"];
-    self.image = FanImageName(@"FanKit_palette");
+    UIImage *cImage = FanImageName(@"FanKit_circleColor");
+    self.image = cImage;
 }
 /*
 // Only override drawRect: if you perform custom drawing.

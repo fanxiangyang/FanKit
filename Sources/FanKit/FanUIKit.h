@@ -68,10 +68,9 @@
 ///color转换成rgb字典 @{@"r":@(1.0),@"g":@(1.0),@"b":@(1.0),@"a":@(1.0)}
 +(nullable NSDictionary *)fan_rgbDicFromColor:(nullable UIColor *)rgbColor;
 #pragma mark - 图片的处理
-/** 等比例缩放图片到指定大小
- *  CGSize  :   缩放后的大小
- *  return  :   更改后的图片对象
- */
+/// 等比例缩放图片到指定大小（包含透明通道）会裁剪图片
+/// @param sourceImage 原图片
+/// @param targetSize 缩放后的大小
 +(nullable UIImage*)fan_scalImage:(nullable UIImage *)sourceImage scalingForSize:(CGSize)targetSize;
 ///等比适配到固定大小里面(图片不超过maxsize)
 /// @param sourceImage 图片
@@ -84,12 +83,12 @@
 /// @param isOval 是否是圆形
 +(nullable UIImage *)fan_clipImage:(nullable UIImage *)image imageViewSize:(CGSize)size clipRect:(CGRect)rect isOval:(BOOL)isOval;
 /** 通过UIcolor获取一张图片 */
-+ (nullable UIImage *)fan_imageWithColor:(nullable UIColor *)color frame:(CGRect)rect;
++ (nullable UIImage *)fan_imageWithColor:(nullable UIColor *)color size:(CGSize)size;
 /** 通过UIcolor获取一张图片圆角 */
-+ (nullable UIImage *)fan_imageWithColor:(nullable UIColor *)color frame:(CGRect)rect cornerRadius:(CGFloat)cornerRadius;
++ (nullable UIImage *)fan_imageWithColor:(nullable UIColor *)color size:(CGSize)size cornerRadius:(CGFloat)cornerRadius;
 /** 截屏View*/
 +(nullable UIImage*)fan_beginImageContextView:(nullable UIView*)view;
-/** 一倍截屏*/
+/** 截屏View内裁剪区域*/
 +(nullable UIImage*)fan_beginImageContext:(CGRect)rect fromView:(nullable UIView*)view;
 /** Layer动画的View或者Metal渲染的，或者视频播放器截图*/
 + (nullable UIImage *)fan_snapshotLayerImage:(nullable UIView *)view;
