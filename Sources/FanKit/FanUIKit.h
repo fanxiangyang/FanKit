@@ -86,6 +86,8 @@
 + (nullable UIImage *)fan_imageWithColor:(nullable UIColor *)color size:(CGSize)size;
 /** 通过UIcolor获取一张图片圆角 */
 + (nullable UIImage *)fan_imageWithColor:(nullable UIColor *)color size:(CGSize)size cornerRadius:(CGFloat)cornerRadius;
+/** 普通Layer截屏-renderSize渲染大小*/
++(nullable UIImage*)fan_beginImageLayer:(nullable CALayer*)layer renderSize:(CGSize)renderSize;
 /** 截屏View*/
 +(nullable UIImage*)fan_beginImageContextView:(nullable UIView*)view;
 /** 截屏View内裁剪区域*/

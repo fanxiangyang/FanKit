@@ -326,19 +326,24 @@
     }];
     return image;
 }
-/** 截屏View*/
-+(UIImage*)fan_beginImageContextView:(UIView*)view
+/** 普通Layer截屏-renderSize渲染大小*/
++(UIImage*)fan_beginImageLayer:(CALayer*)layer renderSize:(CGSize)renderSize
 {
     UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
     format.opaque = NO;//默认NO
 //    format.scale = 2.0;//默认好像给屏幕缩放倍数一样 2,0
-    UIGraphicsImageRenderer *render = [[UIGraphicsImageRenderer alloc] initWithSize:view.frame.size format:format];
+    UIGraphicsImageRenderer *render = [[UIGraphicsImageRenderer alloc] initWithSize:renderSize format:format];
     //默认生成两倍图
     UIImage *viewImage = [render imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
         //取得当前画布的上下文UIGraphicsGetCurrentContext  render渲染
-        [view.layer renderInContext:rendererContext.CGContext];
+        [layer renderInContext:rendererContext.CGContext];
     }];
     return viewImage;
+}
+/** 截屏View*/
++(UIImage*)fan_beginImageContextView:(UIView*)view
+{
+    return [FanUIKit fan_beginImageLayer:view.layer renderSize:view.frame.size];
 }
 /** 截屏View内裁剪区域*/
 +(UIImage*)fan_beginImageContext:(CGRect)rect fromView:(UIView*)view
