@@ -49,6 +49,9 @@
 #import "FanTextField.h"
 #import "FanVideoRecord.h"
 #import "NSNull+FanNull.h"
+#import "UIStackView+FanCategory.h"
+#import "UIButton+FanCategory.h"
+#import "NSMutableAttributedString+FanTool.h"
 
 
 #endif /* FanKit_h */

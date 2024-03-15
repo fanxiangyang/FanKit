@@ -72,16 +72,33 @@
 /// @param sourceImage 原图片
 /// @param targetSize 缩放后的大小
 +(nullable UIImage*)fan_scalImage:(nullable UIImage *)sourceImage scalingForSize:(CGSize)targetSize;
+/// 等比例缩放图片到指定大小（包含透明通道）会裁剪图片
+/// @param sourceImage 原图片
+/// @param targetSize 缩放后的大小
+/// @param scale 图片缩放倍数 <=0默认屏幕
++(nullable UIImage*)fan_scalImage:(nullable UIImage *)sourceImage scalingForSize:(CGSize)targetSize scale:(CGFloat)scale;
 ///等比适配到固定大小里面(图片不超过maxsize)
 /// @param sourceImage 图片
 /// @param maxSize 最大边的尺寸
 +(nullable UIImage*)fan_scalImage:(nullable UIImage *)sourceImage scaleAspectFitSize:(CGSize)maxSize;
+///等比适配到固定大小里面(图片不超过maxsize)
+/// @param sourceImage 图片
+/// @param maxSize 最大边的尺寸
+/// @param scale 图片缩放倍数 <=0默认屏幕
++(nullable UIImage*)fan_scalImage:(nullable UIImage *)sourceImage scaleAspectFitSize:(CGSize)maxSize scale:(CGFloat)scale;
 /// 不变形裁剪图片
 /// @param image 图片
 /// @param size 图片View的控件大小
 /// @param rect 相对于图片View的裁剪框尺寸
 /// @param isOval 是否是圆形
 +(nullable UIImage *)fan_clipImage:(nullable UIImage *)image imageViewSize:(CGSize)size clipRect:(CGRect)rect isOval:(BOOL)isOval;
+/// 不变形裁剪图片
+/// @param image 图片
+/// @param size 图片View的控件大小
+/// @param rect 相对于图片View的裁剪框尺寸
+/// @param isOval 是否是圆形
+/// @param scale 图片缩放倍数 <=0默认屏幕
++(nullable UIImage *)fan_clipImage:(nullable UIImage *)image imageViewSize:(CGSize)size clipRect:(CGRect)rect isOval:(BOOL)isOval scale:(CGFloat)scale;
 /** 通过UIcolor获取一张图片 */
 + (nullable UIImage *)fan_imageWithColor:(nullable UIColor *)color size:(CGSize)size;
 /** 通过UIcolor获取一张图片圆角 */
