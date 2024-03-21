@@ -34,13 +34,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 ///段落格式
-@interface NSMutableParagraphStyle (CRTool)
+@interface NSMutableParagraphStyle (FanTool)
 ///或者居中，靠左等 默认段落格式
 +(instancetype)fan_paragraphStyleWithTextAlignment:(NSTextAlignment)textAlignment;
 
 @end
 
-@interface NSAttributedString (CRTool)
+@interface NSAttributedString (FanTool)
 ///获取限定size的字符宽高
 -(CGSize)fan_stringSizeWithMax:(CGSize)maxSize;
 

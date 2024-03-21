@@ -14,7 +14,7 @@
 //MARK: - 新的按钮创建方式
 
 /// 创建只有文本的按钮+内间距 （文本只支持单行和多行，不支持固定2行）
-+(instancetype)cr_btnTitle:(NSString *)title textColor:(UIColor *)textColor font:(UIFont*)font edge:(UIEdgeInsets)edge{
++(instancetype)fan_btnTitle:(NSString *)title textColor:(UIColor *)textColor font:(UIFont*)font edge:(UIEdgeInsets)edge{
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.titleLabel.font = font;
@@ -36,7 +36,7 @@
     return btn;
 }
 /// 创建只有图片的按钮+内间距
-+(instancetype)cr_btnImageName:(NSString *)imageName edge:(UIEdgeInsets)edge{
++(instancetype)fan_btnImageName:(NSString *)imageName edge:(UIEdgeInsets)edge{
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
     if (@available(iOS 15.0, *)) {
@@ -51,7 +51,7 @@
     return btn;
 }
 ///适配iOS15 UIButtonConfiguration设置字体颜色和大小
--(void)cr_setTextColor:(UIColor *)textColor font:(UIFont*)font{
+-(void)fan_setTextColor:(UIColor *)textColor font:(UIFont*)font{
     if (@available(iOS 15.0, *)) {
         UIButtonConfiguration *config = self.configuration;
         if(config){
@@ -67,7 +67,7 @@
     [self setTitleColor:textColor forState:UIControlStateNormal];
 }
 ///设置内边距，支持iOS15的方法
--(void)cr_setMargins:(UIEdgeInsets)margins{
+-(void)fan_setMargins:(UIEdgeInsets)margins{
     if (@available(iOS 15.0, *)) {
         UIButtonConfiguration *config = self.configuration;
         if(config){
@@ -79,7 +79,7 @@
     self.contentEdgeInsets = margins;
 }
 ///设置图片与文本间距(支持旧的左图右文结构，与iOS15之后的UIButtonConfiguration)
--(void)cr_setImagePadding:(CGFloat)imagePadding{
+-(void)fan_setImagePadding:(CGFloat)imagePadding{
     if (@available(iOS 15.0, *)) {
         UIButtonConfiguration *config = self.configuration;
         if(config){
@@ -97,7 +97,7 @@
     self.imageEdgeInsets = imageInsets;
 }
 ///设置图片与文本间距(支持旧的图文结构，与iOS15之后的UIButtonConfiguration)
--(void)cr_setImagePadding:(CGFloat)imagePadding postion:(FanButtonEdgeStyle)postion{
+-(void)fan_setImagePadding:(CGFloat)imagePadding postion:(FanButtonEdgeStyle)postion{
     if (@available(iOS 15.0, *)) {
         UIButtonConfiguration *config = self.configuration;
         if(config){
