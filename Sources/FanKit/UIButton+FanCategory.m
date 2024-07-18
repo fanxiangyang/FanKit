@@ -102,6 +102,15 @@
         UIButtonConfiguration *config = self.configuration;
         if(config){
             config.imagePadding = imagePadding;
+            if(postion == FanButtonEdgeStyleLeft){
+                config.imagePlacement = NSDirectionalRectEdgeLeading;
+            }else if (postion == FanButtonEdgeStyleRight){
+                config.imagePlacement = NSDirectionalRectEdgeTrailing;
+            }else if (postion == FanButtonEdgeStyleTop){
+                config.imagePlacement = NSDirectionalRectEdgeTop;
+            }else if (postion == FanButtonEdgeStyleBottom){
+                config.imagePlacement = NSDirectionalRectEdgeBottom;
+            }
             self.configuration = config;
             return;
         }
