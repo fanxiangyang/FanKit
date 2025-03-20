@@ -16,13 +16,11 @@
 /// 创建只有文本的按钮+内间距 （文本只支持单行和多行，不支持固定2行）
 +(instancetype)fan_btnTitle:(NSString *)title textColor:(UIColor *)textColor font:(UIFont*)font edge:(UIEdgeInsets)edge{
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn setTitle:title forState:UIControlStateNormal];
-    btn.titleLabel.font = font;
-    [btn setTitleColor:textColor forState:UIControlStateNormal];
     if (@available(iOS 15.0, *)) {
         UIButtonConfiguration *config = [UIButtonConfiguration plainButtonConfiguration];
         config.contentInsets = NSDirectionalEdgeInsetsMake(edge.top, edge.left, edge.bottom, edge.right);
         config.imagePadding = 8;
+        config.title = title;
         config.titleTextAttributesTransformer = ^NSDictionary<NSAttributedStringKey,id> * _Nonnull(NSDictionary<NSAttributedStringKey,id> * _Nonnull textAttributes) {
             return @{NSFontAttributeName:font,NSForegroundColorAttributeName:textColor};
         };
@@ -31,6 +29,9 @@
 //        config.imagePlacement = NSDirectionalRectEdgeLeading;
         btn.configuration = config;
     } else {
+        [btn setTitle:title forState:UIControlStateNormal];
+        btn.titleLabel.font = font;
+        [btn setTitleColor:textColor forState:UIControlStateNormal];
         [btn setContentEdgeInsets:edge];
     }
     return btn;
@@ -38,17 +39,52 @@
 /// 创建只有图片的按钮+内间距
 +(instancetype)fan_btnImageName:(NSString *)imageName edge:(UIEdgeInsets)edge{
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    UIImage *image = [UIImage imageNamed:imageName];
     if (@available(iOS 15.0, *)) {
         UIButtonConfiguration *config = [UIButtonConfiguration plainButtonConfiguration];
         config.contentInsets = NSDirectionalEdgeInsetsMake(edge.top, edge.left, edge.bottom, edge.right);
         config.imagePadding = 8;
+        config.image = image;
 //        config.imagePlacement = NSDirectionalRectEdgeLeading;
         btn.configuration = config;
     } else {
+        [btn setImage:image forState:UIControlStateNormal];
         [btn setContentEdgeInsets:edge];
     }
     return btn;
+}
+/// 创建只有图片的按钮+内间距
++(instancetype)fan_btnImage:(nullable UIImage *)image edge:(UIEdgeInsets)edge{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    if (@available(iOS 15.0, *)) {
+        UIButtonConfiguration *config = [UIButtonConfiguration plainButtonConfiguration];
+        config.contentInsets = NSDirectionalEdgeInsetsMake(edge.top, edge.left, edge.bottom, edge.right);
+        config.image = image;
+        config.imagePadding = 8;
+//        config.imagePlacement = NSDirectionalRectEdgeLeading;
+        btn.configuration = config;
+    } else {
+        [btn setImage:image forState:UIControlStateNormal];
+        [btn setContentEdgeInsets:edge];
+    }
+    return btn;
+}
+///适配iOS15 UIButtonConfiguration设置字体颜色和大小
+-(void)fan_setTitle:(NSString *)title textColor:(UIColor *)textColor font:(UIFont*)font{
+    if (@available(iOS 15.0, *)) {
+        UIButtonConfiguration *config = self.configuration;
+        if(config){
+            config.title = title;
+            config.titleTextAttributesTransformer = ^NSDictionary<NSAttributedStringKey,id> * _Nonnull(NSDictionary<NSAttributedStringKey,id> * _Nonnull textAttributes) {
+                return @{NSFontAttributeName:font,NSForegroundColorAttributeName:textColor};
+            };
+            self.configuration = config;
+            return;
+        }
+
+    }
+    self.titleLabel.font = font;
+    [self setTitleColor:textColor forState:UIControlStateNormal];
 }
 ///适配iOS15 UIButtonConfiguration设置字体颜色和大小
 -(void)fan_setTextColor:(UIColor *)textColor font:(UIFont*)font{
@@ -137,7 +173,43 @@
     self.contentEdgeInsets = contentInsets;
     self.imageEdgeInsets = imageInsets;
 }
-
-
+/// 添加图标
+-(void)fan_setImage:(nullable UIImage *)image{
+    if (@available(iOS 15.0, *)) {
+        UIButtonConfiguration *config = self.configuration;
+        if(config){
+            config.image = image;
+            self.configuration = config;
+            return;
+        }
+    }
+    [self setImage:image forState:UIControlStateNormal];
+}
+/// 设置背景图片
+- (void)fan_setBgImage:(nullable UIImage *)bgImage{
+    if (@available(iOS 15.0, *)) {
+        UIButtonConfiguration *config = self.configuration;
+        if(config){
+            UIBackgroundConfiguration *bgConfig = [UIBackgroundConfiguration clearConfiguration];
+            bgConfig.image = bgImage;
+            config.background = bgConfig;
+            self.configuration = config;
+            return;
+        }
+    }
+    [self setBackgroundImage:bgImage forState:UIControlStateNormal];
+}
+// MARK: - 富文本
+-(void)fan_setAttributedTitle:(nullable NSAttributedString *)attributedTitle{
+    if (@available(iOS 15.0, *)) {
+        UIButtonConfiguration *config = self.configuration;
+        if(config){
+            config.attributedTitle = attributedTitle;
+            self.configuration = config;
+            return;
+        }
+    }
+    self.titleLabel.attributedText = attributedTitle;
+}
 @end
 

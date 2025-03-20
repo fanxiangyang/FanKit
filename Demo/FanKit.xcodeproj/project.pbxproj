@@ -618,6 +618,7 @@
 					};
 					667A9FDA1CFEC619009B1D53 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = T9SQ7V3YQP;
 						TestTargetID = 667A9FC11CFEC619009B1D53;
 					};
 					667A9FE51CFEC619009B1D53 = {
@@ -923,6 +924,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = T9SQ7V3YQP;
 				INFOPLIST_FILE = FanKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fan.FanKitTests;
@@ -935,6 +937,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = T9SQ7V3YQP;
 				INFOPLIST_FILE = FanKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fan.FanKitTests;

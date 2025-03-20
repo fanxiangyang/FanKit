@@ -25,6 +25,9 @@ typedef NS_ENUM(NSUInteger, FanButtonEdgeStyle) {
 +(instancetype)fan_btnTitle:(NSString *)title textColor:(UIColor *)textColor font:(UIFont*)font edge:(UIEdgeInsets)edge;
 /// 创建只有图片的按钮+内间距
 +(instancetype)fan_btnImageName:(NSString *)imageName edge:(UIEdgeInsets)edge;
++(instancetype)fan_btnImage:(nullable UIImage *)image edge:(UIEdgeInsets)edge;
+///适配iOS15 UIButtonConfiguration设置字体颜色和大小
+-(void)fan_setTitle:(NSString *)title textColor:(UIColor *)textColor font:(UIFont*)font;
 ///适配iOS15 UIButtonConfiguration设置字体颜色和大小
 -(void)fan_setTextColor:(UIColor *)textColor font:(UIFont*)font;
 ///设置内边距，支持iOS15的方法
@@ -33,6 +36,12 @@ typedef NS_ENUM(NSUInteger, FanButtonEdgeStyle) {
 -(void)fan_setImagePadding:(CGFloat)imagePadding;
 ///设置图片与文本间距(支持旧的图文结构，与iOS15之后的UIButtonConfiguration)
 -(void)fan_setImagePadding:(CGFloat)imagePadding postion:(FanButtonEdgeStyle)postion;
+/// 添加图标
+-(void)fan_setImage:(nullable UIImage *)image;
+/// 设置背景图片
+- (void)fan_setBgImage:(nullable UIImage *)bgImage;
+// MARK: - 富文本
+-(void)fan_setAttributedTitle:(nullable NSAttributedString *)attributedTitle;
 
 @end
 
