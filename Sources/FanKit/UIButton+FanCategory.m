@@ -83,8 +83,21 @@
         }
 
     }
+    [self setTitle:title forState:UIControlStateNormal];
     self.titleLabel.font = font;
     [self setTitleColor:textColor forState:UIControlStateNormal];
+}
+///只设置标题
+-(void)fan_setTitle:(NSString *)title{
+    if (@available(iOS 15.0, *)) {
+        UIButtonConfiguration *config = self.configuration;
+        if(config){
+            config.title = title;
+            self.configuration = config;
+            return;
+        }
+    }
+    [self setTitle:title forState:UIControlStateNormal];
 }
 ///适配iOS15 UIButtonConfiguration设置字体颜色和大小
 -(void)fan_setTextColor:(UIColor *)textColor font:(UIFont*)font{

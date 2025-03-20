@@ -28,6 +28,8 @@ typedef NS_ENUM(NSUInteger, FanButtonEdgeStyle) {
 +(instancetype)fan_btnImage:(nullable UIImage *)image edge:(UIEdgeInsets)edge;
 ///适配iOS15 UIButtonConfiguration设置字体颜色和大小
 -(void)fan_setTitle:(NSString *)title textColor:(UIColor *)textColor font:(UIFont*)font;
+///只设置标题
+-(void)fan_setTitle:(NSString *)title;
 ///适配iOS15 UIButtonConfiguration设置字体颜色和大小
 -(void)fan_setTextColor:(UIColor *)textColor font:(UIFont*)font;
 ///设置内边距，支持iOS15的方法
