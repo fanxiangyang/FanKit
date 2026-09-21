@@ -18,6 +18,7 @@
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     if (@available(iOS 15.0, *)) {
         UIButtonConfiguration *config = [UIButtonConfiguration plainButtonConfiguration];
+        config.cornerStyle = UIButtonConfigurationCornerStyleFixed;
         config.contentInsets = NSDirectionalEdgeInsetsMake(edge.top, edge.left, edge.bottom, edge.right);
         config.imagePadding = 8;
         config.title = title;
@@ -42,6 +43,7 @@
     UIImage *image = [UIImage imageNamed:imageName];
     if (@available(iOS 15.0, *)) {
         UIButtonConfiguration *config = [UIButtonConfiguration plainButtonConfiguration];
+        config.cornerStyle = UIButtonConfigurationCornerStyleFixed;
         config.contentInsets = NSDirectionalEdgeInsetsMake(edge.top, edge.left, edge.bottom, edge.right);
         config.imagePadding = 8;
         config.image = image;
@@ -58,6 +60,7 @@
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     if (@available(iOS 15.0, *)) {
         UIButtonConfiguration *config = [UIButtonConfiguration plainButtonConfiguration];
+        config.cornerStyle = UIButtonConfigurationCornerStyleFixed;
         config.contentInsets = NSDirectionalEdgeInsetsMake(edge.top, edge.left, edge.bottom, edge.right);
         config.image = image;
         config.imagePadding = 8;
